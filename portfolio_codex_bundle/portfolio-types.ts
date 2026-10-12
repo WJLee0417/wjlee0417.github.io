@@ -69,7 +69,7 @@ export interface PortfolioData {
     designReferences: Array<{name:string;url:string;adopt:string}>;
   };
   profile: {
-    nameKo:string; nameEn:string; role:string; eyebrow:string; headline:string; intro:string;
+    nameKo:string; nameEn:string; role:string; eyebrow:string; headline:string;
     shortKeywords:string[];
     education:Array<{institution:string;major:string;degree:string}>;
     training:Array<{institution:string;track:string;display:string}>;

@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
-import { data, getAlgorithmsByProject, getCapabilitiesByProject, getDesignFocusByProject, getFeaturedTechnologiesByProject, getHeroTechnologies, getProjectsByTechnology, getTechnologyGroups, projectPath, sortTechnologies } from '../data';
+import { data, getAlgorithmsByProject, getCapabilitiesByProject, getDesignFocusByProject, getFeaturedTechnologiesByProject, getProjectsByTechnology, getTechnologyGroups, projectPath, sortTechnologies } from '../data';
 import { SectionHeading, CategoryTag, TechnologyTags } from '../ui';
 
 function ProjectMark({ index }: { index: number }) {
@@ -36,10 +36,8 @@ export default function Home({ explorer }: { explorer: ReactNode }) {
   const projects = [...data.dimensions.projects].sort((a, b) => a.sortOrder - b.sortOrder);
   const contact = data.profile.contact;
   const hasContact = Boolean(contact.phone || contact.email || contact.resumeUrl || contact.githubUrl || contact.otherUrls.length);
-  const heroTechnologies = getHeroTechnologies(data);
-  const heroGroups = getTechnologyGroups(data).map(group => heroTechnologies.filter(t => t.group === group.label)).filter(group => group.length > 0);
   return <main>
-    <section className="hero wrap" id="home"><div className="hero-copy"><p className="eyebrow">{data.profile.eyebrow}</p><p className="hero-name">{data.profile.nameKo} <span>/ {data.profile.role}</span></p><h1>{data.profile.headline}</h1><p className="hero-intro">{data.profile.intro}</p><div className="hero-actions"><Link className="button primary" to={{ pathname: "/", hash: "#projects" }}>프로젝트 살펴보기 <span aria-hidden="true">↗</span></Link><Link className="button secondary" to={{ pathname: "/", hash: "#explore" }}>역량 관계 탐색하기 <span aria-hidden="true">→</span></Link></div></div><div className="hero-bottom"><span>01 — PORTFOLIO INDEX</span><div><span>{data.profile.shortKeywords[0]}</span>{heroGroups.map(group => <span key={group[0].group}>{group.map(t => t.label).join(' · ')}</span>)}</div></div></section>
+    <section className="hero wrap" id="home"><div className="hero-copy"><p className="eyebrow">{data.profile.eyebrow}</p><p className="hero-name">{data.profile.nameKo} <span>/ {data.profile.role}</span></p><h1>{data.profile.headline}</h1><div className="hero-actions"><Link className="button primary" to={{ pathname: "/", hash: "#projects" }}>프로젝트 살펴보기 <span aria-hidden="true">↗</span></Link><Link className="button secondary" to={{ pathname: "/", hash: "#explore" }}>역량 관계 탐색하기 <span aria-hidden="true">→</span></Link></div></div></section>
 
     <About/>
 
