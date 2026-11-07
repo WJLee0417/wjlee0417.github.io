@@ -2,11 +2,12 @@ import { useEffect } from 'react';
 import { Link, useParams, useSearchParams } from 'react-router-dom';
 import {
   data, displayCopy, getAlgorithmsByProject, getCapabilitiesByProject, getContributionsByProject,
-  getDesignFocusByProject, getDetailTechnologiesByProject, getFeaturedTechnologiesByProject,
+  getDesignFocusByProject, getDetailTechnologiesByProject, getEvidenceByContribution, getFeaturedTechnologiesByProject,
   getTechnologiesByContribution, projectPath,
 } from '../data';
-import { MetricList, TechnologyTags } from '../ui';
+import { ContributionContext, MetricList, ProjectScope, TechnologyTags } from '../ui';
 import DiagramFrame from './Diagrams';
+import EvidenceList from './EvidenceList';
 
 export default function ProjectDetail() {
   const { slug } = useParams();
@@ -31,7 +32,7 @@ export default function ProjectDetail() {
     <Link className="text-link" to={{ pathname: '/', hash: '#projects' }}>프로젝트 목록으로 ↗</Link>
   </main>;
 
-  const sections = data.pages[project.id].sections.filter(s => s.id !== 'evidence');
+  const sections = data.pages[project.id].sections;
   const contributions = getContributionsByProject(data, project.id);
   const diagrams = data.diagrams.filter(d => d.projectId === project.id);
   const ordered = [...data.dimensions.projects].sort((a, b) => a.sortOrder - b.sortOrder);
@@ -41,7 +42,6 @@ export default function ProjectDetail() {
   const detailTechnologies = getDetailTechnologiesByProject(data, project.id);
   const algorithms = getAlgorithmsByProject(project.id);
   const designFocus = getDesignFocusByProject(project.id);
-  const sectionTitle = (id: string, title: string) => id === 'api-evidence' ? 'Persistence & API' : title;
 
   return <main className="project-page"><div className="wrap">
     <nav className="breadcrumb" aria-label="현재 위치">
@@ -69,6 +69,8 @@ export default function ProjectDetail() {
       </div>
     </div>
 
+    <ProjectScope project={project}/>
+
     <div className="project-summary-grid">
       <div><span>01 / PROBLEM</span><p>{project.problemSummary}</p></div>
       <div><span>02 / DECISION</span><p>{featured[0]?.decision}</p></div>
@@ -78,7 +80,7 @@ export default function ProjectDetail() {
 
     <div className="project-content">
       <aside className="project-toc"><p>ON THIS PAGE</p>
-        {sections.map((s, i) => <Link to={`?section=${s.id}`} key={s.id}><span>{String(i + 1).padStart(2, '0')}</span>{sectionTitle(s.id, s.title)}</Link>)}
+        {sections.map((s, i) => <Link to={`?section=${s.id}`} key={s.id}><span>{String(i + 1).padStart(2, '0')}</span>{s.title}</Link>)}
         <Link className="toc-back" to={{ pathname: '/', hash: '#projects' }}>← 프로젝트 목록</Link>
       </aside>
       <div className="project-article">
@@ -88,7 +90,7 @@ export default function ProjectDetail() {
           return <section className="article-section" id={s.id} key={s.id}>
             <div className="article-section-heading">
               <span>{String(i + 1).padStart(2, '0')} / {project.id}</span>
-              <h2>{sectionTitle(s.id, s.title)}</h2>
+              <h2>{s.title}</h2>
               <p>{displayCopy(s.body)}</p>
             </div>
             {i === 0 && <>
@@ -96,7 +98,7 @@ export default function ProjectDetail() {
                 <div><small>ROLE</small><strong>{project.role}</strong></div>
                 <div><small>RESULT</small><strong>{displayCopy(project.outcomeSummary)}</strong></div>
               </div>
-              {project.id === 'P001' && <MetricList projectId={project.id}/>}
+              <MetricList projectId={project.id}/>
             </>}
             {currentDiagrams.map(d => <DiagramFrame diagram={d} sectionDescription={displayCopy(s.body)} key={d.id}/>)}
             {current.length > 0 && <div className="section-contributions">
@@ -109,14 +111,17 @@ export default function ProjectDetail() {
                   <div><b>수행</b><p>{displayCopy(c.action)}</p></div>
                   <div><b>결과</b><p>{displayCopy(c.output)}</p></div>
                 </div>
-                {getTechnologiesByContribution(data, c.id).length > 0 && <details className="technical-detail">
-                  <summary>기술 내용 더 보기 <span aria-hidden="true">+</span></summary>
+                <ContributionContext contribution={c}/>
+                {(getTechnologiesByContribution(data, c.id).length > 0 || getEvidenceByContribution(data, c.id).length > 0) && <details className="technical-detail">
+                  <summary>{getTechnologiesByContribution(data, c.id).length > 0 ? '사용 기술·근거 자료 보기' : '근거 자료 보기'} <span aria-hidden="true">+</span></summary>
                   <div>
-                    <p><strong>사용 기술</strong> {getTechnologiesByContribution(data, c.id).map(t => t.label).join(' · ')}</p>
+                    {getTechnologiesByContribution(data, c.id).length > 0 && <p><strong>사용 기술</strong> {getTechnologiesByContribution(data, c.id).map(t => t.label).join(' · ')}</p>}
+                    <ul className="contribution-sources">{getEvidenceByContribution(data, c.id).map(e => <li key={e.id}><Link to={`?section=evidence-${e.id}`}>{e.label} ↗</Link></li>)}</ul>
                   </div>
                 </details>}
               </article>)}
             </div>}
+            {(s.id === 'evidence' || s.id === 'api-evidence') && <EvidenceList projectId={project.id}/>}
           </section>;
         })}
       </div>

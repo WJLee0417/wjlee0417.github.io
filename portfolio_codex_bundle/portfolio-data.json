@@ -88,7 +88,11 @@
           "FC003",
           "FC006"
         ],
-        "sortOrder": 1
+        "sortOrder": 1,
+        "scopeNotes": [
+          "개인 담당: 데이터 정제, Excel 업종 매핑, MySQL 설계, Python 연동 및 SQL 후보 조회.",
+          "추천 점수 계산·유사도 분석·지도 시각화는 개인 담당 범위에서 제외됩니다."
+        ]
       },
       {
         "id": "P002",
@@ -112,7 +116,11 @@
           "FC010",
           "FC012"
         ],
-        "sortOrder": 2
+        "sortOrder": 2,
+        "scopeNotes": [
+          "검증 범위는 소규모 2문제와 대규모 2문제입니다. 대규모 문제에서는 시간창 준수 여부를 확인했으며 최적성을 입증한 결과는 아닙니다.",
+          "당시 Python 원본 코드와 재현 가능한 실행 로그는 현재 미확보 상태입니다. 검증 결과는 본인이 직접 확인한 경험에 근거합니다."
+        ]
       },
       {
         "id": "P003",
@@ -136,7 +144,12 @@
           "FC017",
           "FC018"
         ],
-        "sortOrder": 3
+        "sortOrder": 3,
+        "scopeNotes": [
+          "개인 담당 범위는 러닝 기록 집계와 외부 LLM 연동, 응답 처리, 결과 재사용 및 저장·조회 API입니다.",
+          "분기 테스트 코드의 존재가 자료에 기록되어 있으나, 테스트 실행 성공 여부와 개인 작성 범위는 추가 확인이 필요합니다.",
+          "실제 Provider 활성화 환경과 외부 호출 실행 결과는 현재 공개 자료에 연결되어 있지 않습니다."
+        ]
       },
       {
         "id": "P004",
@@ -161,7 +174,11 @@
           "FC024"
         ],
         "sortOrder": 4,
-        "provenanceNote": "대화 기반 재구성 설계 사례. 원래 팀 경험과 이후 설계 표현을 혼합해 구현 완료로 단정하지 않음."
+        "provenanceNote": "과거 팀 프로젝트 경험을 바탕으로 재구성한 개념 설계이며, 실제 구현 범위는 추가 확인이 필요합니다.",
+        "scopeNotes": [
+          "계약 A/B/C와 손상 변화는 설계 취지를 설명하기 위한 가상 사례입니다.",
+          "현재 도식은 공개용으로 재구성한 개념 모델입니다. 손상 자동 판정이나 법적 책임 확정 기능을 제시하지 않습니다."
+        ]
       }
     ],
     "capabilities": [
@@ -252,7 +269,9 @@
         "group": "Interface / Tools",
         "groupOrder": 5,
         "displayOrder": 3,
-        "featuredOrderByProject": {"P001": 1},
+        "featuredOrderByProject": {
+          "P001": 1
+        },
         "description": "업종 분류 대응표 작성에 사용한 스프레드시트 도구"
       },
       {
@@ -263,7 +282,10 @@
         "groupOrder": 2,
         "displayOrder": 1,
         "heroOrder": 3,
-        "featuredOrderByProject": {"P001": 2, "P002": 1},
+        "featuredOrderByProject": {
+          "P001": 2,
+          "P002": 1
+        },
         "description": "데이터 처리와 최적화 탐색에 사용한 언어"
       },
       {
@@ -274,7 +296,9 @@
         "groupOrder": 2,
         "displayOrder": 2,
         "heroOrder": 4,
-        "featuredOrderByProject": {"P002": 2},
+        "featuredOrderByProject": {
+          "P002": 2
+        },
         "description": "표 형태 데이터 처리 라이브러리"
       },
       {
@@ -285,7 +309,10 @@
         "groupOrder": 3,
         "displayOrder": 2,
         "heroOrder": 6,
-        "featuredOrderByProject": {"P001": 4, "P003": 4},
+        "featuredOrderByProject": {
+          "P001": 4,
+          "P003": 4
+        },
         "description": "데이터 저장과 조회에 사용한 관계형 데이터베이스"
       },
       {
@@ -296,7 +323,9 @@
         "groupOrder": 3,
         "displayOrder": 1,
         "heroOrder": 5,
-        "featuredOrderByProject": {"P001": 3},
+        "featuredOrderByProject": {
+          "P001": 3
+        },
         "description": "관계형 데이터 조회와 테이블 정의에 사용한 질의 언어"
       },
       {
@@ -315,7 +344,9 @@
         "group": "Python / Data",
         "groupOrder": 2,
         "displayOrder": 3,
-        "featuredOrderByProject": {"P002": 3},
+        "featuredOrderByProject": {
+          "P002": 3
+        },
         "description": "수치 데이터 처리 라이브러리"
       },
       {
@@ -325,7 +356,9 @@
         "group": "Optimization",
         "groupOrder": 4,
         "displayOrder": 1,
-        "featuredOrderByProject": {"P002": 4},
+        "featuredOrderByProject": {
+          "P002": 4
+        },
         "description": "최적화 수리모형 작성 도구"
       },
       {
@@ -336,7 +369,9 @@
         "groupOrder": 1,
         "displayOrder": 1,
         "heroOrder": 1,
-        "featuredOrderByProject": {"P003": 1},
+        "featuredOrderByProject": {
+          "P003": 1
+        },
         "description": "AI 리포트 Backend 구현 언어"
       },
       {
@@ -347,7 +382,9 @@
         "groupOrder": 1,
         "displayOrder": 2,
         "heroOrder": 2,
-        "featuredOrderByProject": {"P003": 2},
+        "featuredOrderByProject": {
+          "P003": 2
+        },
         "description": "AI 리포트 Backend 프레임워크"
       },
       {
@@ -357,7 +394,9 @@
         "group": "Java / Backend",
         "groupOrder": 1,
         "displayOrder": 3,
-        "featuredOrderByProject": {"P003": 3},
+        "featuredOrderByProject": {
+          "P003": 3
+        },
         "description": "리포트 저장·조회에 사용한 영속성 프레임워크"
       },
       {
@@ -895,7 +934,8 @@
         "ownership": "DIRECT",
         "evidenceStatus": "USER_CONFIRMED",
         "origin": "HISTORICAL_PROJECT",
-        "note": "당시 Python 원본 코드 미보유. UI에서 설명용 재구성 도식만 제공."
+        "note": "당시 Python 원본 코드 미보유. UI에서 설명용 재구성 도식만 제공.",
+        "publicNote": "당시 Python 원본 코드는 현재 미확보 상태이며, 탐색 도식은 알고리즘 설명을 위해 재구성했습니다."
       },
       {
         "id": "FC011",
@@ -912,7 +952,8 @@
         "ownership": "DIRECT",
         "evidenceStatus": "USER_CONFIRMED",
         "origin": "HISTORICAL_PROJECT",
-        "note": "원본 구현 코드가 남아 있지 않음. 개선율을 임의 생성하지 않음."
+        "note": "원본 구현 코드가 남아 있지 않음. 개선율을 임의 생성하지 않음.",
+        "publicNote": "당시 원본 구현 코드가 남아 있지 않아 실제 구현과 개선율을 재검증할 수 있는 자료는 현재 미확보 상태입니다."
       },
       {
         "id": "FC012",
@@ -929,7 +970,8 @@
         "ownership": "DIRECT",
         "evidenceStatus": "USER_CONFIRMED",
         "origin": "HISTORICAL_PROJECT",
-        "note": "재현 가능한 원본 결과 로그는 미확보."
+        "note": "재현 가능한 원본 결과 로그는 미확보.",
+        "publicNote": "재현 가능한 원본 결과 로그는 미확보 상태입니다."
       },
       {
         "id": "FC013",
@@ -997,7 +1039,8 @@
         "ownership": "DIRECT",
         "evidenceStatus": "SOURCE_SUPPORTED",
         "origin": "HISTORICAL_PROJECT",
-        "note": "제공자 명칭은 외부 LLM API로 통일. 설정 기본 비활성 등 런타임 제약은 별도로 표시."
+        "note": "제공자 명칭은 외부 LLM API로 통일. 설정 기본 비활성 등 런타임 제약은 별도로 표시.",
+        "publicNote": "Provider 활성화 설정과 실제 외부 API 호출 실행 결과는 현재 공개 자료에서 확인할 수 없습니다."
       },
       {
         "id": "FC017",
@@ -1116,7 +1159,8 @@
         "ownership": "DIRECT",
         "evidenceStatus": "USER_CONFIRMED",
         "origin": "RECONSTRUCTED_DESIGN",
-        "note": "손상 자동 판정이나 법적 책임 확정 기능 아님."
+        "note": "손상 자동 판정이나 법적 책임 확정 기능 아님.",
+        "publicNote": "인수·반납 기록 비교를 위한 설계이며, 손상 자동 판정이나 법적 책임 확정까지 다루지는 않습니다."
       },
       {
         "id": "FC024",
@@ -1150,7 +1194,8 @@
         "ownership": "DIRECT",
         "evidenceStatus": "USER_CONFIRMED",
         "origin": "HISTORICAL_TEAM_EXPERIENCE",
-        "note": "현재 공개 사이트용 설계 도식은 별도로 재구성되며 과거 구현 완료를 증명하는 자료가 아님."
+        "note": "현재 공개 사이트용 설계 도식은 별도로 재구성되며 과거 구현 완료를 증명하는 자료가 아님.",
+        "publicNote": "현재 공개 도식은 과거 팀 경험을 바탕으로 재구성한 설계 표현입니다. 당시 구현 완료 여부는 이 자료만으로 확인할 수 없습니다."
       }
     ],
     "metricRecords": [
@@ -1758,7 +1803,7 @@
         {
           "id": "api-evidence",
           "title": "Persistence, API & Evidence",
-          "body": "리포트 저장·조회, 관련 서비스 및 테스트 코드입니다."
+          "body": "리포트 저장·조회 구현과 관련 자료 목록입니다. 원본 코드 연결 여부와 테스트 검증 범위를 함께 표시합니다."
         }
       ],
       "sectionNavigation": "Contributions use sectionAnchor, derived from these section ids."
@@ -2051,7 +2096,34 @@
         "DamageRecord",
         "ReturnInspection"
       ],
-      "description": "상품↔계약 1:N, 계약↔상태기록, 상태기록↔사진·손상, 계약↔검수"
+      "description": "상품↔계약 1:N, 계약↔상태기록, 상태기록↔사진·손상, 계약↔검수",
+      "relationships": [
+        [
+          "RentalProduct",
+          "RentalContract",
+          "1:N"
+        ],
+        [
+          "RentalContract",
+          "ConditionRecord",
+          "계약별 상태 기록"
+        ],
+        [
+          "ConditionRecord",
+          "ConditionImage",
+          "상태 기록의 사진"
+        ],
+        [
+          "ConditionRecord",
+          "DamageRecord",
+          "상태 기록의 손상"
+        ],
+        [
+          "RentalContract",
+          "ReturnInspection",
+          "계약별 검수"
+        ]
+      ]
     },
     {
       "id": "D012",

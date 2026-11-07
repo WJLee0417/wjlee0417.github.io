@@ -70,3 +70,31 @@
 .hero{min-height:0;justify-content:flex-start;padding-bottom:clamp(64px,8vh,110px)}
 .about-section{max-width:1280px}
 @media(max-width:767px){.hero-bottom>div{row-gap:8px}.tech-groups button{font-size:10px}}
+
+/* Source context remains visible beside claims and reconstructed diagrams. */
+.project-scope{margin-top:25px;padding:20px 22px;border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:8px;background:var(--surface);font-size:13px;line-height:1.7}
+.project-scope>strong{display:block;color:var(--title);font-size:13px}
+.project-scope ul{margin:10px 0 0;padding-left:18px}
+.project-scope li+li{margin-top:6px}
+.project-scope .provenance-note{margin-top:9px;color:var(--title);font-weight:650}
+.explorer-detail .project-scope{padding:14px;font-size:12px;margin-top:15px}
+.card-provenance{font-size:11px;line-height:1.6;color:var(--muted);margin-top:10px;border-left:2px solid var(--border);padding-left:9px}
+.claim-context{margin-top:18px;display:flex;flex-direction:column;align-items:flex-start;gap:9px}
+.claim-context p{font-size:12px;line-height:1.7;color:var(--muted);padding-left:11px;border-left:2px solid var(--border)}
+.claim-context p strong{display:block;color:var(--title);font-size:11px;margin-bottom:4px}
+.contribution-body .claim-context{margin-bottom:15px}
+.contribution-sources{margin:12px 0 0;padding-left:17px;display:grid;gap:7px;font-size:12px}
+.contribution-sources a{color:var(--accent-dark);overflow-wrap:anywhere}
+.contribution-sources a:hover{text-decoration:underline}
+.evidence-row{scroll-margin-top:100px}
+.evidence-row strong{overflow-wrap:anywhere}
+.evidence-row .text-link{font-size:11px}
+.evidence-tag.source_supported{color:var(--text);background:var(--surface)}
+.evidence-tag.user_confirmed{color:#854d0e;background:#fefce8;border-color:#fde68a}
+.evidence-tag.review_required,.evidence-tag.reconstructed_design{color:#9a3412;background:#fff7ed;border-color:#fed7aa}
+.detail-metric>span:not(.evidence-tag){font-size:11px;line-height:1.5;color:var(--muted)}
+.report-branches{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.report-branches>div{min-width:0}
+.report-branches .pipeline-steps{margin-top:10px}
+@media(max-width:767px){.project-scope{padding:16px;font-size:12px}.evidence-row{scroll-margin-top:80px}.evidence-row .evidence-tag{justify-self:start}.evidence-section>p{line-height:1.7}}
+@media(max-width:767px){.report-branches{grid-template-columns:1fr}}

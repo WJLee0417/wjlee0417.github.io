@@ -16,6 +16,7 @@ export interface Project {
   role: string; summary: string; problemSummary: string; outcomeSummary: string;
   cardLabel: string; cardLabelKind: MetricCategory | 'IMPLEMENTATION' | 'DESIGN';
   featuredContributionIds: string[]; sortOrder: number; provenanceNote?: string;
+  scopeNotes?: string[];
 }
 export interface Capability { id: string; label: string; description: string; noConfirmedContribution?: boolean }
 export interface Process { id: string; label: string; description: string }
@@ -40,7 +41,7 @@ export interface Contribution {
   title: string; problem: string; decision: string; action: string; output: string;
   verification: string | null; sectionAnchor: string;
   ownership: Ownership; evidenceStatus: EvidenceStatus;
-  origin: WorkOrigin; note: string | null;
+  origin: WorkOrigin; note: string | null; publicNote?: string;
 }
 export interface MetricRecord {
   id: string; projectId: string; metricId: string; numericValue: number;

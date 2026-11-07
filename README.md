@@ -22,6 +22,14 @@ npm run dev
 - 데이터 타입/관계 계산: 같은 폴더의 `portfolio-types.ts`, `portfolio-selectors.ts`
 - 출처, 개인 기여, 지표, 기술 연결, 링크 등은 원본 JSON에 의존합니다. UI 코드에 새 실적을 추가하지 않습니다.
 - 연락처는 `profile.contact`에서 관리합니다. 원본 파일 URL이 `null`이면 링크를 표시하지 않습니다.
+- 담당 범위와 자료 한계는 프로젝트의 `scopeNotes`·`provenanceNote`, 수행 작업의 `verification`·`publicNote`, 도식의 `disclosure`에서 관리합니다. 증빙 유형과 원본 연결 여부를 구분해 표시합니다.
+- 리뷰 반영 사항과 사용자가 제공할 자료는 [추가 자료 목록](docs/portfolio-evidence-needed.md)에 우선순위별로 정리했습니다.
+
+## 프로젝트 전용 AI 스킬
+
+[Career-Skills](https://github.com/techeer-sv/Career-Skills)의 스킬 12개와 공통 자료를 `.agents/skills/`에 설치했습니다. 사용 예시와 전체 목록은 [스킬 안내](.agents/skills/README.md)를 참고하세요.
+
+다음 대화 턴부터 `$hiring-sim-portfolio-review 이 프로젝트의 포트폴리오를 리뷰해줘`처럼 호출할 수 있습니다. 포트폴리오 제작·리뷰·레드팀, 이력서 피드백, 코딩테스트와 면접 준비를 지원합니다.
 
 ## 구현 확인
 

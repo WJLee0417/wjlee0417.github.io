@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { data, displayCopy, getCapabilityProjectEdges, getTechnologyProjectEdges, getTechnologyGroups, getContributionsByConnection, getContributionsByTechnologyProject, getMetricsByProject, getProjectsByCapability, getProjectsByTechnology, projectPath, sectionPath, sortTechnologies, type Contribution, type Technology } from '../data';
-import { CategoryTag } from '../ui';
+import { CategoryTag, ContributionContext, EvidenceTag, ProjectScope } from '../ui';
 
 type Mode = 'capability' | 'technology';
 const modeNames: Record<Mode, string> = { capability: 'Capability View', technology: 'Technology View' };
@@ -15,7 +15,7 @@ const technologyGroups = getTechnologyGroups(data);
 function Contributions({ items }: { items: Contribution[] }) {
   return <div className="contribution-list">{items.map(c => {
     const project = projects.find(p => p.id === c.projectId)!;
-    return <details className="contribution-disclosure" key={c.id}><summary><span>{c.title}</span><span className="disclosure-plus" aria-hidden="true">+</span></summary><div className="contribution-body"><dl><dt>Problem</dt><dd>{c.problem}</dd><dt>Decision</dt><dd>{c.decision}</dd><dt>Action</dt><dd>{displayCopy(c.action)}</dd><dt>Outcome</dt><dd>{displayCopy(c.output)}</dd></dl><Link className="text-link" to={sectionPath(project.slug, c.sectionAnchor)}>{project.name} · 해당 섹션 보기 ↗</Link></div></details>;
+    return <details className="contribution-disclosure" key={c.id}><summary><span>{c.title}</span><span className="disclosure-plus" aria-hidden="true">+</span></summary><div className="contribution-body"><dl><dt>Problem</dt><dd>{c.problem}</dd><dt>Decision</dt><dd>{c.decision}</dd><dt>Action</dt><dd>{displayCopy(c.action)}</dd><dt>Outcome</dt><dd>{displayCopy(c.output)}</dd></dl><ContributionContext contribution={c}/><Link className="text-link" to={sectionPath(project.slug, c.sectionAnchor)}>{project.name} · 해당 섹션 보기 ↗</Link></div></details>;
   })}</div>;
 }
 
@@ -28,8 +28,8 @@ function ExplorerDetail({ mode, selected }: { mode: Mode; selected: string }) {
     const project = projects.find(p => p.id === id);
     if (!project) return null;
     const featured = project.featuredContributionIds.map(cid => data.facts.contributions.find(c => c.id === cid)!).filter(Boolean);
-    const metrics = project.id === 'P001' ? getMetricsByProject(data, project.id) : [];
-    return <><p className="eyebrow">PROJECT / {project.id}</p><h3>{project.name}</h3><p className="detail-lead">{project.summary}</p><div className="detail-keyline"><b>개인 역할</b><span>{project.role}</span></div><h4>대표 수행 작업</h4><Contributions items={featured} />{metrics.length > 0 && <><h4>정량 기록</h4>{metrics.map(m => <div className="detail-metric" key={m.id}><CategoryTag category={m.category}/><strong>{m.numericValue.toLocaleString('ko-KR')} {m.unit}</strong><span>{m.label} · {displayCopy(m.context)}</span></div>)}</>}<Link className="button primary panel-link" to={projectPath(project.slug)}>프로젝트 사례 보기 ↗</Link></>;
+    const metrics = getMetricsByProject(data, project.id);
+    return <><p className="eyebrow">PROJECT / {project.id}</p><h3>{project.name}</h3><p className="detail-lead">{project.summary}</p><div className="detail-keyline"><b>개인 역할</b><span>{project.role}</span></div><ProjectScope project={project}/><h4>대표 수행 작업</h4><Contributions items={featured} />{metrics.length > 0 && <><h4>규모·설정·검증 범위</h4>{metrics.map(m => <div className="detail-metric" key={m.id}><CategoryTag category={m.category}/><strong>{m.numericValue.toLocaleString('ko-KR')} {m.unit}</strong><span>{m.label} · {displayCopy(m.context)}</span><EvidenceTag status={m.evidenceStatus}/></div>)}</>}<Link className="button primary panel-link" to={projectPath(project.slug)}>프로젝트 사례 보기 ↗</Link></>;
   }
   if (mode === 'capability') {
     if (kind === 'c') {

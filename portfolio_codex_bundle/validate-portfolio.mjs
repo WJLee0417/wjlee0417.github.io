@@ -80,6 +80,17 @@ for(const x of d.diagrams){
   assert(projects.has(x.projectId),`diagram unknown project ${x.id}`);
   assert(d.pages[x.projectId].sections.some(s=>s.id===x.sectionAnchor),`diagram bad anchor ${x.id}`);
   assert(typeof x.disclosure==='string' && x.disclosure.trim(),`diagram disclosure missing ${x.id}`);
+  if(x.relationships){
+    const entities=new Set(x.entities??[]);
+    const pairs=new Set();
+    for(const r of x.relationships){
+      assert(r.length===3 && r.every(v=>typeof v==='string' && v.trim()),`invalid diagram relationship ${x.id}`);
+      assert(entities.has(r[0]) && entities.has(r[1]),`diagram relationship references missing entity ${x.id}`);
+      const pair=[r[0],r[1]].sort().join('::');
+      assert(!pairs.has(pair),`duplicate diagram relationship ${x.id}/${pair}`);
+      pairs.add(pair);
+    }
+  }
 }
 const edges = new Set(fact.contributions.map(c=>`${c.capabilityId}:${c.projectId}`));
 const wanted=['C001:P001','C002:P001','C002:P004','C003:P001','C003:P002','C003:P003','C005:P002','C006:P002','C006:P003','C007:P003','C008:P004'];

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { data, categoryLabel, displayCopy, type Technology } from './data';
+import { data, categoryLabel, displayCopy, type Contribution, type EvidenceVerificationStatus, type Project, type Technology } from './data';
 
 const nav = [
   ['about', 'About'], ['projects', 'Projects'], ['explore', 'Explore'], ['contact', 'Contact'],
@@ -52,6 +52,33 @@ export function SectionHeading({ number, eyebrow, title, description }: { number
 
 export function CategoryTag({ category }: { category: string }) { return <span className="category-tag">{categoryLabel[category] ?? category}</span>; }
 
+export function EvidenceTag({ status }: { status: EvidenceVerificationStatus }) {
+  const labels: Record<EvidenceVerificationStatus, string> = {
+    SOURCE_SUPPORTED: '소스 자료로 기록',
+    USER_CONFIRMED: '본인 확인 경험',
+    REVIEW_REQUIRED: '추가 확인 필요',
+    RECONSTRUCTED_DESIGN: '재구성 설계',
+  };
+  return <span className={`evidence-tag ${status.toLowerCase()}`}>{labels[status]}</span>;
+}
+
+export function ProjectScope({ project }: { project: Project }) {
+  if (!project.provenanceNote && !project.scopeNotes?.length) return null;
+  return <aside className="project-scope" aria-label="담당 범위와 자료 한계">
+    <strong>담당 범위와 자료 한계</strong>
+    {project.provenanceNote && <p className="provenance-note">{project.provenanceNote}</p>}
+    {project.scopeNotes && <ul>{project.scopeNotes.map(note => <li key={note}>{note}</li>)}</ul>}
+  </aside>;
+}
+
+export function ContributionContext({ contribution }: { contribution: Contribution }) {
+  return <div className="claim-context">
+    <EvidenceTag status={contribution.origin === 'RECONSTRUCTED_DESIGN' ? 'RECONSTRUCTED_DESIGN' : contribution.evidenceStatus}/>
+    {contribution.verification && <p><strong>검증 범위</strong>{contribution.verification}</p>}
+    {contribution.publicNote && <p>{contribution.publicNote}</p>}
+  </div>;
+}
+
 export function TechnologyTags({ technologies }: { technologies: Technology[] }) {
   return <div className="technology-tags">{technologies.map(t => <span key={t.id} title={`${t.label} · ${t.category}`}>{t.label}</span>)}</div>;
 }
@@ -61,6 +88,6 @@ export function MetricList({ projectId }: { projectId: string }) {
   if (!records.length) return null;
   return <div className="metric-list">{records.map(r => {
     const metric = data.dimensions.metrics.find(m => m.id === r.metricId)!;
-    return <div className="metric-item" key={r.id}><div><CategoryTag category={metric.category} /><strong>{r.numericValue.toLocaleString('ko-KR')}<small>{metric.unit}</small></strong></div><p>{metric.label}</p><span>{displayCopy(r.context)}</span></div>;
+    return <div className="metric-item" key={r.id}><div><CategoryTag category={metric.category} /><strong>{r.numericValue.toLocaleString('ko-KR')}<small>{metric.unit}</small></strong></div><p>{metric.label}</p><span>{displayCopy(r.context)}</span><EvidenceTag status={r.evidenceStatus}/></div>;
   })}</div>;
 }
