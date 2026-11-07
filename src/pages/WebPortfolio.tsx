@@ -30,7 +30,7 @@ function SiteHeader() {
     const close=(event:KeyboardEvent)=>{if(event.key==='Escape')setOpen(false);};
     window.addEventListener('keydown',close);return()=>window.removeEventListener('keydown',close);
   },[]);
-  return <header className="web-header"><div className="web-wrap web-header-inner"><Link className="web-brand" to="/">LEE WONJUN<span>DATA ENGINEER</span></Link><button type="button" className="web-menu" aria-expanded={open} aria-controls="web-navigation" onClick={()=>setOpen(!open)}>{open?'닫기 ×':'메뉴 ☰'}</button><nav id="web-navigation" className={open?'is-open':''} aria-label="주 메뉴"><Link to={{pathname:'/',hash:'#about'}}>About</Link><Link to={{pathname:'/',hash:'#projects'}}>Projects</Link><Link to={{pathname:'/',hash:'#contact'}}>Contact</Link><Link className="web-deck-link" to="/deck">슬라이드로 보기 <span>↗</span></Link></nav></div></header>;
+  return <header className="web-header"><div className="web-wrap web-header-inner"><Link className="web-brand" to="/">LEE WONJUN<span>{data.profile.role.toUpperCase()}</span></Link><button type="button" className="web-menu" aria-expanded={open} aria-controls="web-navigation" onClick={()=>setOpen(!open)}>{open?'닫기 ×':'메뉴 ☰'}</button><nav id="web-navigation" className={open?'is-open':''} aria-label="주 메뉴"><Link to={{pathname:'/',hash:'#about'}}>About</Link><Link to={{pathname:'/',hash:'#projects'}}>Projects</Link><Link to={{pathname:'/',hash:'#contact'}}>Contact</Link><Link className="web-deck-link" to="/deck">슬라이드로 보기 <span>↗</span></Link></nav></div></header>;
 }
 
 export function WebLayout() {
@@ -50,7 +50,7 @@ export function WebLayout() {
     }
     if(!new URLSearchParams(location.search).has('section')) window.scrollTo({top:0,behavior:'instant'});
   },[location.pathname,location.search,location.hash,location.key]);
-  return <div className="web-shell"><SiteHeader/><Outlet/><footer className="web-footer"><div className="web-wrap"><span>© {data.meta.lastUpdated.slice(0,4)} {data.profile.nameEn}</span><span>DATA ENGINEERING PORTFOLIO</span><Link to="/deck">슬라이드 덱 ↗</Link></div></footer></div>;
+  return <div className="web-shell"><SiteHeader/><Outlet/><footer className="web-footer"><div className="web-wrap"><span>© {data.meta.lastUpdated.slice(0,4)} {data.profile.nameEn}</span><span>{data.profile.eyebrow}</span><Link to="/deck">슬라이드 덱 ↗</Link></div></footer></div>;
 }
 
 export function WebHome() {

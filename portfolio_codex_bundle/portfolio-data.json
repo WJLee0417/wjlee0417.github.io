@@ -3,7 +3,7 @@
     "version": "1.0.0",
     "lastUpdated": "2026-11-07",
     "locale": "ko-KR",
-    "portfolioTitle": "LEE WONJUN · DATA ENGINEERING PORTFOLIO",
+    "portfolioTitle": "LEE WONJUN · SOFTWARE DEVELOPMENT PORTFOLIO",
     "purpose": "채용 포트폴리오: 개인 수행 작업 중심, 증빙 수준 구분, 정적 인터랙티브 웹",
     "contentLock": "LOCKED",
     "notProductionData": true,
@@ -35,9 +35,9 @@
   "profile": {
     "nameKo": "이원준",
     "nameEn": "LEE WONJUN",
-    "role": "Data Engineer",
-    "eyebrow": "DATA ENGINEERING PORTFOLIO",
-    "headline": "데이터 연결부터 서비스 처리 흐름 구현까지",
+    "role": "Software Developer",
+    "eyebrow": "SOFTWARE DEVELOPMENT PORTFOLIO",
+    "headline": "문제 정의부터 설계와 구현까지",
     "shortKeywords": [
       "Industrial Engineering",
       "Java",
@@ -70,7 +70,7 @@
       "otherUrls": []
     },
     "contactPlaceholderPolicy": "연락처가 비어 있으면 버튼과 가짜 주소를 렌더링하지 않는다.",
-    "intro": "SQL 기반 상권·프랜차이즈 데이터 통합\n러닝 기록 집계·AI 리포트 생성·저장 API 구현\nPython ALNS·2-opt 기반 차량 경로 탐색"
+    "intro": "Java·Spring Boot 기반 Backend·REST API 구현\nMySQL 데이터 모델링·SQL 데이터 연동\nPython 기반 차량 경로 탐색 알고리즘 구현\n서비스 업무 흐름·계약별 상태 이력 설계"
   },
   "dimensions": {
     "projects": [
@@ -2609,7 +2609,7 @@
   "presentation": {
     "theme": "warm-ivory-cobalt",
     "title": "LEE WONJUN / PORTFOLIO",
-    "coverTitle": "데이터 연결부터\n서비스 구현까지",
+    "coverTitle": "문제 정의부터\n설계와 구현까지",
     "closingTitle": "다음 프로젝트를\n함께 만들겠습니다.",
     "slides": [
       {
@@ -2617,7 +2617,7 @@
         "type": "cover",
         "title": "이원준 포트폴리오",
         "chapter": "PORTFOLIO",
-        "eyebrow": "DATA ENGINEERING",
+        "eyebrow": "SOFTWARE DEVELOPMENT",
         "projectId": null,
         "contributionIds": [],
         "diagramId": null

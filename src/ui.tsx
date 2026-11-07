@@ -27,7 +27,7 @@ export function Header() {
   }, [location.pathname]);
   return <header className="site-header">
     <div className="wrap header-inner">
-      <Link to={{ pathname: "/", hash: "#home" }} className="wordmark" aria-label="LEE WONJUN, 홈으로 이동"><strong>LEE WONJUN</strong><span>/ DATA ENGINEER</span></Link>
+      <Link to={{ pathname: "/", hash: "#home" }} className="wordmark" aria-label="LEE WONJUN, 홈으로 이동"><strong>LEE WONJUN</strong><span>/ {data.profile.role.toUpperCase()}</span></Link>
       <nav id="mobile-menu" className={open ? 'header-nav open' : 'header-nav'} aria-label="주 메뉴">
         {nav.map(([id, label]) => <Link key={id} onClick={() => setOpen(false)} className={active === id && location.pathname === '/' ? 'active' : ''} to={{ pathname: "/", hash: `#${id}` }}>{label}</Link>)}
       </nav>
