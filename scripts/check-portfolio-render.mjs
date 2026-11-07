@@ -56,6 +56,15 @@ try {
     for(const c of work)for(const field of ['problem','decision','action','output'])for(const item of c[field].split('\n'))assert.ok(page.includes(`<li>${escape(item)}</li>`),`web/${c.id}: missing bullet`);
     for(const metric of data.facts.metricRecords.filter(r=>r.projectId===project.id))assert.ok(page.includes(escape(metric.context)),`web/${metric.id}: missing metric context`);
     assert.ok(page.includes(project.kind));
+    if(project.comparison){
+      const result=project.comparison;
+      assert.ok(page.includes(escape(result.title)) && page.includes(result.artifactPath));
+      assert.ok(page.includes('입력별 5개 시드 결과'));
+      for(const row of result.rows){
+        assert.ok(page.replace(/<!--[\s\S]*?-->/g,'').includes(`${row.feasibleRuns}/${row.runs}`));
+        assert.ok(page.includes(row.cost===null?'완료해 없음':row.cost.toLocaleString('ko-KR')));
+      }
+    }
     assert.ok(!/검증·추가 설명|담당 범위·자료 출처|소스 자료로 기록|미확보|추가 확인 필요/.test(page));
   }
   if(existsSync('dist/portfolio.html')){

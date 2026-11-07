@@ -1,0 +1,2 @@
+# Keep the published numerical summary bytes identical on every OS.
+public/experiments/drt/** -text whitespace=cr-at-eol

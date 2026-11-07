@@ -1,0 +1,604 @@
+{
+  "experiment_date": "2026-11-07",
+  "archive_sha256": "0b2fbf7b23968915e515868d38a9696508a40196dc8aa071b0372df63fef10dd",
+  "source_sha256": "1914e9effdc005786fc92d809e76e08828fa7c3c419de9cfc375202124edb4a7",
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    42
+  ],
+  "iterations": 5000,
+  "environment": {
+    "python": "3.11.16",
+    "numpy": "2.4.6",
+    "os": "Windows",
+    "release": "10",
+    "machine": "AMD64"
+  },
+  "fleet": 2,
+  "cost_unit": "input cost units",
+  "time_unit": "input time units",
+  "change": "destination time-window check before service; other solver functions unchanged",
+  "excluded": [
+    {
+      "file": "Project2_largedata1.txt",
+      "sha256": "28dfd1e7309e241c25baf66f2369c2eb749d39d9520d37eeb53b4ab3360c43e4",
+      "reason": "Q and U absent; original values unknown"
+    },
+    {
+      "file": "Project2_largedata2.txt",
+      "sha256": "25b075840181cbf3f6fea75f06af2cd1d4c06c0233b9482b095e1f7c83060ff9",
+      "reason": "Q and U absent; original values unknown"
+    }
+  ],
+  "visibility": "numeric_summary_only",
+  "private_measurement_sha256": "68a5f5fa92d23bb529023eb76e95c5bbf024a85385c19b9e38050206c005b986",
+  "cases": [
+    {
+      "id": "Project2_data1_v2",
+      "input_sha256": "d7e56a086df02d90f3a676e6aa50baea0b2598e9b78b650bb9ea054e447a4b7c",
+      "nodes_including_depot": 11,
+      "demand_groups": 3,
+      "passengers": 7,
+      "Q": 5.0,
+      "U": 30.0,
+      "summary": [
+        {
+          "variant": "archive-original",
+          "stage": "final",
+          "runs": 5,
+          "feasible_runs": 0,
+          "objective_mean": null,
+          "objective_min": null,
+          "objective_max": null,
+          "unassigned_groups_min": 1,
+          "unassigned_groups_max": 1,
+          "served_passengers_min": 6,
+          "served_passengers_max": 6,
+          "seconds_mean": 0.001218960015103221
+        },
+        {
+          "variant": "arrival-fixed",
+          "stage": "initial",
+          "runs": 5,
+          "feasible_runs": 5,
+          "objective_mean": 107.0,
+          "objective_min": 107.0,
+          "objective_max": 107.0,
+          "unassigned_groups_min": 0,
+          "unassigned_groups_max": 0,
+          "served_passengers_min": 7,
+          "served_passengers_max": 7,
+          "seconds_mean": 0.0005520599661394954,
+          "gap_to_reference_percent": 0.0
+        },
+        {
+          "variant": "arrival-fixed",
+          "stage": "final",
+          "runs": 5,
+          "feasible_runs": 5,
+          "objective_mean": 107.0,
+          "objective_min": 107.0,
+          "objective_max": 107.0,
+          "unassigned_groups_min": 0,
+          "unassigned_groups_max": 0,
+          "served_passengers_min": 7,
+          "served_passengers_max": 7,
+          "seconds_mean": 1.7398085999768227,
+          "gap_to_reference_percent": 0.0
+        }
+      ],
+      "reference": {
+        "objective": 107.0,
+        "examined_route_orders": 17922,
+        "scope": "same Python stop-event model; exhaustive boarding/order/vehicle partition; not Xpress"
+      },
+      "runs": [
+        {
+          "seed": 0,
+          "variant": "archive-original",
+          "initial_seconds": 0.0012178000761196017,
+          "total_seconds": 0.0013000000035390258,
+          "initial": {
+            "feasible": false,
+            "missing_passengers": 1,
+            "served_passengers": 6,
+            "objective": null,
+            "issue_count": 0,
+            "unassigned_groups": 1
+          },
+          "final": {
+            "feasible": false,
+            "missing_passengers": 1,
+            "served_passengers": 6,
+            "objective": null,
+            "issue_count": 0,
+            "unassigned_groups": 1
+          }
+        },
+        {
+          "seed": 0,
+          "variant": "arrival-fixed",
+          "initial_seconds": 0.00043169991113245487,
+          "total_seconds": 1.7343656999291852,
+          "initial": {
+            "feasible": true,
+            "missing_passengers": 0,
+            "served_passengers": 7,
+            "objective": 107.0,
+            "issue_count": 0,
+            "unassigned_groups": 0
+          },
+          "final": {
+            "feasible": true,
+            "missing_passengers": 0,
+            "served_passengers": 7,
+            "objective": 107.0,
+            "issue_count": 0,
+            "unassigned_groups": 0
+          }
+        },
+        {
+          "seed": 1,
+          "variant": "archive-original",
+          "initial_seconds": 0.0010803000768646598,
+          "total_seconds": 0.001155500067397952,
+          "initial": {
+            "feasible": false,
+            "missing_passengers": 1,
+            "served_passengers": 6,
+            "objective": null,
+            "issue_count": 0,
+            "unassigned_groups": 1
+          },
+          "final": {
+            "feasible": false,
+            "missing_passengers": 1,
+            "served_passengers": 6,
+            "objective": null,
+            "issue_count": 0,
+            "unassigned_groups": 1
+          }
+        },
+        {
+          "seed": 1,
+          "variant": "arrival-fixed",
+          "initial_seconds": 0.0005845000268891454,
+          "total_seconds": 1.7191908999811858,
+          "initial": {
+            "feasible": true,
+            "missing_passengers": 0,
+            "served_passengers": 7,
+            "objective": 107.0,
+            "issue_count": 0,
+            "unassigned_groups": 0
+          },
+          "final": {
+            "feasible": true,
+            "missing_passengers": 0,
+            "served_passengers": 7,
+            "objective": 107.0,
+            "issue_count": 0,
+            "unassigned_groups": 0
+          }
+        },
+        {
+          "seed": 2,
+          "variant": "archive-original",
+          "initial_seconds": 0.0011105999583378434,
+          "total_seconds": 0.0011866999557241797,
+          "initial": {
+            "feasible": false,
+            "missing_passengers": 1,
+            "served_passengers": 6,
+            "objective": null,
+            "issue_count": 0,
+            "unassigned_groups": 1
+          },
+          "final": {
+            "feasible": false,
+            "missing_passengers": 1,
+            "served_passengers": 6,
+            "objective": null,
+            "issue_count": 0,
+            "unassigned_groups": 1
+          }
+        },
+        {
+          "seed": 2,
+          "variant": "arrival-fixed",
+          "initial_seconds": 0.00043709995225071907,
+          "total_seconds": 1.7150360000086948,
+          "initial": {
+            "feasible": true,
+            "missing_passengers": 0,
+            "served_passengers": 7,
+            "objective": 107.0,
+            "issue_count": 0,
+            "unassigned_groups": 0
+          },
+          "final": {
+            "feasible": true,
+            "missing_passengers": 0,
+            "served_passengers": 7,
+            "objective": 107.0,
+            "issue_count": 0,
+            "unassigned_groups": 0
+          }
+        },
+        {
+          "seed": 3,
+          "variant": "archive-original",
+          "initial_seconds": 0.0011486000148579478,
+          "total_seconds": 0.0012872000224888325,
+          "initial": {
+            "feasible": false,
+            "missing_passengers": 1,
+            "served_passengers": 6,
+            "objective": null,
+            "issue_count": 0,
+            "unassigned_groups": 1
+          },
+          "final": {
+            "feasible": false,
+            "missing_passengers": 1,
+            "served_passengers": 6,
+            "objective": null,
+            "issue_count": 0,
+            "unassigned_groups": 1
+          }
+        },
+        {
+          "seed": 3,
+          "variant": "arrival-fixed",
+          "initial_seconds": 0.0004403999773785472,
+          "total_seconds": 1.7933389999670908,
+          "initial": {
+            "feasible": true,
+            "missing_passengers": 0,
+            "served_passengers": 7,
+            "objective": 107.0,
+            "issue_count": 0,
+            "unassigned_groups": 0
+          },
+          "final": {
+            "feasible": true,
+            "missing_passengers": 0,
+            "served_passengers": 7,
+            "objective": 107.0,
+            "issue_count": 0,
+            "unassigned_groups": 0
+          }
+        },
+        {
+          "seed": 42,
+          "variant": "archive-original",
+          "initial_seconds": 0.0010899000335484743,
+          "total_seconds": 0.0011654000263661146,
+          "initial": {
+            "feasible": false,
+            "missing_passengers": 1,
+            "served_passengers": 6,
+            "objective": null,
+            "issue_count": 0,
+            "unassigned_groups": 1
+          },
+          "final": {
+            "feasible": false,
+            "missing_passengers": 1,
+            "served_passengers": 6,
+            "objective": null,
+            "issue_count": 0,
+            "unassigned_groups": 1
+          }
+        },
+        {
+          "seed": 42,
+          "variant": "arrival-fixed",
+          "initial_seconds": 0.0008665999630466104,
+          "total_seconds": 1.737111399997957,
+          "initial": {
+            "feasible": true,
+            "missing_passengers": 0,
+            "served_passengers": 7,
+            "objective": 107.0,
+            "issue_count": 0,
+            "unassigned_groups": 0
+          },
+          "final": {
+            "feasible": true,
+            "missing_passengers": 0,
+            "served_passengers": 7,
+            "objective": 107.0,
+            "issue_count": 0,
+            "unassigned_groups": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "Project2_data2_v2",
+      "input_sha256": "490c72512bf9d5b013e3003aa59e51ec042683f3f2e6a009e2a524a039aba901",
+      "nodes_including_depot": 11,
+      "demand_groups": 3,
+      "passengers": 7,
+      "Q": 5.0,
+      "U": 30.0,
+      "summary": [
+        {
+          "variant": "archive-original",
+          "stage": "final",
+          "runs": 5,
+          "feasible_runs": 0,
+          "objective_mean": null,
+          "objective_min": null,
+          "objective_max": null,
+          "unassigned_groups_min": 1,
+          "unassigned_groups_max": 1,
+          "served_passengers_min": 6,
+          "served_passengers_max": 6,
+          "seconds_mean": 0.0016541799996048212
+        },
+        {
+          "variant": "arrival-fixed",
+          "stage": "initial",
+          "runs": 5,
+          "feasible_runs": 5,
+          "objective_mean": 107.0,
+          "objective_min": 107.0,
+          "objective_max": 107.0,
+          "unassigned_groups_min": 0,
+          "unassigned_groups_max": 0,
+          "served_passengers_min": 7,
+          "served_passengers_max": 7,
+          "seconds_mean": 0.0004732800181955099,
+          "gap_to_reference_percent": 0.0
+        },
+        {
+          "variant": "arrival-fixed",
+          "stage": "final",
+          "runs": 5,
+          "feasible_runs": 5,
+          "objective_mean": 107.0,
+          "objective_min": 107.0,
+          "objective_max": 107.0,
+          "unassigned_groups_min": 0,
+          "unassigned_groups_max": 0,
+          "served_passengers_min": 7,
+          "served_passengers_max": 7,
+          "seconds_mean": 2.017829480022192,
+          "gap_to_reference_percent": 0.0
+        }
+      ],
+      "reference": {
+        "objective": 107.0,
+        "examined_route_orders": 20106,
+        "scope": "same Python stop-event model; exhaustive boarding/order/vehicle partition; not Xpress"
+      },
+      "runs": [
+        {
+          "seed": 0,
+          "variant": "archive-original",
+          "initial_seconds": 0.0013902999926358461,
+          "total_seconds": 0.0015072999522089958,
+          "initial": {
+            "feasible": false,
+            "missing_passengers": 1,
+            "served_passengers": 6,
+            "objective": null,
+            "issue_count": 0,
+            "unassigned_groups": 1
+          },
+          "final": {
+            "feasible": false,
+            "missing_passengers": 1,
+            "served_passengers": 6,
+            "objective": null,
+            "issue_count": 0,
+            "unassigned_groups": 1
+          }
+        },
+        {
+          "seed": 0,
+          "variant": "arrival-fixed",
+          "initial_seconds": 0.00046870007645338774,
+          "total_seconds": 2.055993500049226,
+          "initial": {
+            "feasible": true,
+            "missing_passengers": 0,
+            "served_passengers": 7,
+            "objective": 107.0,
+            "issue_count": 0,
+            "unassigned_groups": 0
+          },
+          "final": {
+            "feasible": true,
+            "missing_passengers": 0,
+            "served_passengers": 7,
+            "objective": 107.0,
+            "issue_count": 0,
+            "unassigned_groups": 0
+          }
+        },
+        {
+          "seed": 1,
+          "variant": "archive-original",
+          "initial_seconds": 0.0022374000400304794,
+          "total_seconds": 0.002389600034803152,
+          "initial": {
+            "feasible": false,
+            "missing_passengers": 1,
+            "served_passengers": 6,
+            "objective": null,
+            "issue_count": 0,
+            "unassigned_groups": 1
+          },
+          "final": {
+            "feasible": false,
+            "missing_passengers": 1,
+            "served_passengers": 6,
+            "objective": null,
+            "issue_count": 0,
+            "unassigned_groups": 1
+          }
+        },
+        {
+          "seed": 1,
+          "variant": "arrival-fixed",
+          "initial_seconds": 0.0004662000574171543,
+          "total_seconds": 2.007151999976486,
+          "initial": {
+            "feasible": true,
+            "missing_passengers": 0,
+            "served_passengers": 7,
+            "objective": 107.0,
+            "issue_count": 0,
+            "unassigned_groups": 0
+          },
+          "final": {
+            "feasible": true,
+            "missing_passengers": 0,
+            "served_passengers": 7,
+            "objective": 107.0,
+            "issue_count": 0,
+            "unassigned_groups": 0
+          }
+        },
+        {
+          "seed": 2,
+          "variant": "archive-original",
+          "initial_seconds": 0.001375199994072318,
+          "total_seconds": 0.0014476000797003508,
+          "initial": {
+            "feasible": false,
+            "missing_passengers": 1,
+            "served_passengers": 6,
+            "objective": null,
+            "issue_count": 0,
+            "unassigned_groups": 1
+          },
+          "final": {
+            "feasible": false,
+            "missing_passengers": 1,
+            "served_passengers": 6,
+            "objective": null,
+            "issue_count": 0,
+            "unassigned_groups": 1
+          }
+        },
+        {
+          "seed": 2,
+          "variant": "arrival-fixed",
+          "initial_seconds": 0.000471399980597198,
+          "total_seconds": 2.0113772000186145,
+          "initial": {
+            "feasible": true,
+            "missing_passengers": 0,
+            "served_passengers": 7,
+            "objective": 107.0,
+            "issue_count": 0,
+            "unassigned_groups": 0
+          },
+          "final": {
+            "feasible": true,
+            "missing_passengers": 0,
+            "served_passengers": 7,
+            "objective": 107.0,
+            "issue_count": 0,
+            "unassigned_groups": 0
+          }
+        },
+        {
+          "seed": 3,
+          "variant": "archive-original",
+          "initial_seconds": 0.0013835999416187406,
+          "total_seconds": 0.0014579999260604382,
+          "initial": {
+            "feasible": false,
+            "missing_passengers": 1,
+            "served_passengers": 6,
+            "objective": null,
+            "issue_count": 0,
+            "unassigned_groups": 1
+          },
+          "final": {
+            "feasible": false,
+            "missing_passengers": 1,
+            "served_passengers": 6,
+            "objective": null,
+            "issue_count": 0,
+            "unassigned_groups": 1
+          }
+        },
+        {
+          "seed": 3,
+          "variant": "arrival-fixed",
+          "initial_seconds": 0.0004759000148624182,
+          "total_seconds": 2.0129177001072094,
+          "initial": {
+            "feasible": true,
+            "missing_passengers": 0,
+            "served_passengers": 7,
+            "objective": 107.0,
+            "issue_count": 0,
+            "unassigned_groups": 0
+          },
+          "final": {
+            "feasible": true,
+            "missing_passengers": 0,
+            "served_passengers": 7,
+            "objective": 107.0,
+            "issue_count": 0,
+            "unassigned_groups": 0
+          }
+        },
+        {
+          "seed": 42,
+          "variant": "archive-original",
+          "initial_seconds": 0.001394100021570921,
+          "total_seconds": 0.0014684000052511692,
+          "initial": {
+            "feasible": false,
+            "missing_passengers": 1,
+            "served_passengers": 6,
+            "objective": null,
+            "issue_count": 0,
+            "unassigned_groups": 1
+          },
+          "final": {
+            "feasible": false,
+            "missing_passengers": 1,
+            "served_passengers": 6,
+            "objective": null,
+            "issue_count": 0,
+            "unassigned_groups": 1
+          }
+        },
+        {
+          "seed": 42,
+          "variant": "arrival-fixed",
+          "initial_seconds": 0.0004841999616473913,
+          "total_seconds": 2.001706999959424,
+          "initial": {
+            "feasible": true,
+            "missing_passengers": 0,
+            "served_passengers": 7,
+            "objective": 107.0,
+            "issue_count": 0,
+            "unassigned_groups": 0
+          },
+          "final": {
+            "feasible": true,
+            "missing_passengers": 0,
+            "served_passengers": 7,
+            "objective": 107.0,
+            "issue_count": 0,
+            "unassigned_groups": 0
+          }
+        }
+      ]
+    }
+  ]
+}

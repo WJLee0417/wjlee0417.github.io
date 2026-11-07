@@ -1,4 +1,5 @@
 import fs from 'node:fs';
+import { createHash } from 'node:crypto';
 const path = new URL('./portfolio-data.json', import.meta.url);
 const d = JSON.parse(fs.readFileSync(path, 'utf8'));
 const evidenceLock = JSON.parse(fs.readFileSync(new URL('./evidence-artifacts.lock.json', import.meta.url), 'utf8'));
@@ -67,6 +68,45 @@ for (const p of dim.projects){
   for(const link of p.links??[]){
     assert(link.label?.trim() && /^https:\/\/(github\.com\/WJLee0417\/|wjlee0417\.github\.io\/)/.test(link.url),`invalid project link ${p.id}`);
   }
+  if(p.comparison){
+    const c=p.comparison;
+    const safe=/^experiments\/drt\/\d{4}-\d{2}-\d{2}\/results\.json$/.test(c.artifactPath);
+    assert(safe,`unsafe comparison artifact ${p.id}`);
+    if(safe){
+      const bytes=fs.readFileSync(new URL('../public/'+c.artifactPath,import.meta.url));
+      assert(createHash('sha256').update(bytes).digest('hex')===c.artifactSha256,`comparison hash mismatch ${p.id}`);
+      const result=JSON.parse(bytes);
+      assert(result.visibility==='numeric_summary_only',`comparison must publish numerical summaries only ${p.id}`);
+      assert(!/"(?:routes|events|logs|inputs|c_vhl|c_user|delta)"/.test(bytes.toString('utf8')),`private measurement fields in public comparison ${p.id}`);
+      const folder=new URL('../public/'+c.artifactPath.replace('results.json',''),import.meta.url);
+      assert(fs.readdirSync(folder).every(name=>['results.json','time-window.svg','time-window.png'].includes(name)),`raw inputs/logs must remain local ${p.id}`);
+      assert(result.experiment_date===c.date && result.seeds.length===5 && result.iterations===5000 && result.fleet===2,`comparison conditions changed ${p.id}`);
+      assert(new Set(result.seeds).size===result.seeds.length,`duplicate experiment seeds ${p.id}`);
+      assert(c.rows.length===result.cases.length*3,`comparison row count mismatch ${p.id}`);
+      const keys=new Set();
+      for(const row of c.rows){
+        const key=[row.caseId,row.variant,row.stage].join('/');assert(!keys.has(key),`duplicate comparison row ${key}`);keys.add(key);
+        const entry=result.cases.find(item=>item.id===row.caseId);
+        assert(Boolean(entry),`unknown comparison input ${row.caseId}`);if(!entry)continue;
+        const runs=entry.runs.filter(run=>run.variant===row.variant);
+        assert(JSON.stringify(runs.map(run=>run.seed).sort((a,b)=>a-b))===JSON.stringify([...result.seeds].sort((a,b)=>a-b)),`comparison seed mismatch ${key}`);
+        const values=runs.map(run=>run[row.stage]);
+        assert(values.every(Boolean) && values.length===row.runs,`comparison run count ${key}`);if(!values.every(Boolean))continue;
+        const valid=values.filter(value=>value.feasible);
+        const mean=valid.length?valid.reduce((s,v)=>s+v.objective,0)/valid.length:null;
+        assert(row.feasibleRuns===valid.length && row.cost===mean,`comparison cost/validity mismatch ${key}`);
+        assert(row.unassignedPassengers===Math.max(...values.map(v=>v.missing_passengers)) && row.servedPassengers===Math.min(...values.map(v=>v.served_passengers)) && row.totalPassengers===entry.passengers,`comparison coverage mismatch ${key}`);
+        assert(valid.every(v=>v.issue_count===0 && v.unassigned_groups===0),`invalid feasible comparison ${key}`);
+      }
+      for(const entry of result.cases){
+        assert(/^[A-Za-z0-9_]+$/.test(entry.id),`unsafe input name ${entry.id}`);
+        if(/^[A-Za-z0-9_]+$/.test(entry.id)){
+          assert(/^[0-9a-f]{64}$/.test(entry.input_sha256),`comparison input digest missing ${entry.id}`);
+        }
+      }
+    }
+    assert(/^experiments\/drt\/\d{4}-\d{2}-\d{2}\/time-window\.svg$/.test(c.figurePath) && fs.existsSync(new URL('../public/'+c.figurePath,import.meta.url)),`comparison image missing ${p.id}`);
+  }
   assert(Object.hasOwn(d.pages,p.id),`page missing: ${p.id}`);
   const pages=new Set(d.pages[p.id]?.sections.map(s=>s.id));
   for(const id of p.featuredContributionIds) assert(cmap.get(id)?.projectId===p.id,`featured contribution invalid ${p.id}/${id}`);
@@ -104,6 +144,11 @@ for(const e of dim.evidence){
       assert(/^[0-9a-f]{40}$/.test(source.revision) && /^[0-9a-f]{64}$/.test(source.sourceSha256),`invalid direct source provenance ${e.id}`);
       assert(/^[A-Za-z0-9_./-]+$/.test(source.path) && !source.path.split('/').includes('..'),`unsafe direct source path ${e.id}`);
       assert(e.url===`${source.repositoryUrl}/blob/${source.revision}/${source.path}` && !e.artifact,`direct source link mismatch ${e.id}`);
+    }else if(e.result){
+      assert(e.kind==='SOURCE' && e.verificationStatus==='SOURCE_SUPPORTED',`invalid result evidence ${e.id}`);
+      const comparison=dim.projects.find(p=>p.id===e.projectId)?.comparison;
+      assert(comparison && e.result.path===comparison.artifactPath && e.result.sha256===comparison.artifactSha256 && e.result.experimentDate===comparison.date,`result evidence provenance mismatch ${e.id}`);
+      assert(e.url===`https://wjlee0417.github.io/${e.result.path}`,`result evidence URL mismatch ${e.id}`);
     }else assert(e.url===null && !e.artifact,`unregistered evidence link: ${e.id}`);
     continue;
   }

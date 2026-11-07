@@ -60,11 +60,11 @@ export function DeckDiagram({ diagram }: { diagram: Diagram }) {
     <div className="deck-state-options" role="group" aria-label="처리 사례 선택">{states.map((item, index) => <button type="button" key={String(item.label)} aria-pressed={index === selected} data-state-index={index} onClick={() => setSelected(index)}>{item.label}</button>)}</div>
     <div className="deck-state-output" aria-live="polite">{state && <>
       <small>{state.label}</small>
-      {typeof state.numericCount === 'number' && <strong className="diagram-count">{state.numericCount}<span> 문제</span></strong>}
+      {typeof state.numericCount === 'number' && <strong className="diagram-count">{state.numericCount}<span> {state.numericUnit ?? '문제'}</span></strong>}
       <strong>{state.statement ?? state.outcome ?? `${state.before} → ${state.after}`}</strong>
     </>}</div>
     {/* Offline HTML uses the same source states without embedding a second data model. */}
-    <div className="offline-states" hidden>{states.map((item, index) => <div key={index} data-state-content={index}><small>{item.label}</small>{typeof item.numericCount === 'number' && <strong className="diagram-count">{item.numericCount}<span> 문제</span></strong>}<strong>{item.statement ?? item.outcome ?? `${item.before} → ${item.after}`}</strong></div>)}</div>
+    <div className="offline-states" hidden>{states.map((item, index) => <div key={index} data-state-content={index}><small>{item.label}</small>{typeof item.numericCount === 'number' && <strong className="diagram-count">{item.numericCount}<span> {item.numericUnit ?? '문제'}</span></strong>}<strong>{item.statement ?? item.outcome ?? `${item.before} → ${item.after}`}</strong></div>)}</div>
     <figcaption>{diagram.caption}</figcaption>
   </figure>;
   return <figure className={`deck-diagram ${diagram.id === 'D005' ? 'search-diagram' : 'compact-diagram'}`}>
@@ -130,7 +130,7 @@ export function SlideContent({ slide, index, go = () => {} }: { slide: DeckSlide
   return <section className={`portfolio-slide slide-${slide.type}`} data-slide-id={slide.id} aria-label={`${slideNumber(index)}. ${slide.title}`}>
     <div className="slide-rail"><span>{slide.chapter}</span></div>
     {slide.type === 'cover' ? <Cover go={go}/> : slide.type === 'closing' ? <Closing go={go}/> : <div className="slide-paper">
-      <header className="slide-heading"><div><p>{slide.eyebrow}</p><h2>{slide.title}</h2></div><span>{project ? project.followUpPeriod && !work.some(item=>item.origin==='HISTORICAL_TEAM_EXPERIENCE') ? `${project.followUpPeriod.slice(0,7).replace('-','.')} / UPDATE` : project.periodStart.slice(0,4) : data.profile.role}</span></header>
+      <header className="slide-heading"><div><p>{slide.eyebrow}</p><h2>{slide.title}</h2></div><span>{project ? project.followUpPeriod && (slide.type==='overview' || work.some(item=>item.origin==='FOLLOW_UP_IMPLEMENTATION')) ? `${project.followUpPeriod.slice(0,7).replace('-','.')} / UPDATE` : project.periodStart.slice(0,4) : data.profile.role}</span></header>
       <div className={`slide-body ${slide.type === 'work' ? `work-layout ${work.length === 1 ? 'single-work' : ''} ${diagram && work.length > 1 ? 'with-diagram-strip' : ''}` : ''}`}>
         {slide.type === 'contents' && <Contents go={go}/>}
         {slide.type === 'overview' && project && <Overview project={project} slide={slide}/>}

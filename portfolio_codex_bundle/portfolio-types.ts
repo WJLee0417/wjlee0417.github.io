@@ -21,6 +21,14 @@ export interface Project {
   implementationStack?: string[];
   implementationNotes?: Array<{ title: string; body: string }>;
   links?: Array<{ label: string; url: string }>;
+  comparison?: ProjectComparison;
+}
+export interface ProjectComparison {
+  date: string; title: string; setup: string; change: string; interpretation: string; scope: string;
+  artifactPath: string; artifactSha256: string; figurePath: string; figureAlt: string;
+  rows: Array<{caseId: string; label: string; variant: string; stage: string; phase: string;
+    feasibleRuns: number; runs: number; unassignedPassengers: number; servedPassengers: number;
+    totalPassengers: number; cost: number | null}>;
 }
 export interface Capability { id: string; label: string; description: string; noConfirmedContribution?: boolean }
 export interface Process { id: string; label: string; description: string }
@@ -40,6 +48,7 @@ export interface Evidence {
   projectId: string; description: string;
   url: string | null; publicAssetPath: string | null;
   source?: { repositoryUrl: string; revision: string; path: string; sourceSha256: string };
+  result?: { path: string; sha256: string; experimentDate: string };
   artifact?: {
     path: string; sha256: string; createdOn: string;
     origin: 'RECONSTRUCTED_DESIGN' | 'UPSTREAM_SOURCE';

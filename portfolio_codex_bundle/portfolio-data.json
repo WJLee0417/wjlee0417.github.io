@@ -116,7 +116,7 @@
         "role": "운행 제약·수리모형 설계, ALNS·2-opt 구현",
         "summary": "도보거리·차량 용량·시간창을 반영한 Xpress 모형\nPython 승객 제거·재삽입 탐색\n이동 비용·운행 제약 평가",
         "problemSummary": "탑승 지점·차량 배정·방문 순서의 상호 의존\n차량 용량·도착 시간창의 동시 충족 필요",
-        "outcomeSummary": "Xpress 수리모형·Python 탐색 로직 구현\n소규모 2문제: 목적함수 값 일치\n대규모 2문제: 도착 시간창 충족",
+        "outcomeSummary": "도착 시각 기준 시간창 검사로 미배정 승객 1→0\n소규모 2입력 × 5개 시드에서 7명 전원 배정\n초기해·5,000회 탐색 비용 모두 107",
         "cardLabel": "Xpress 모형 · 제거·재삽입 · 경로 조정",
         "cardLabelKind": "IMPLEMENTATION",
         "featuredContributionIds": [
@@ -126,7 +126,7 @@
         ],
         "sortOrder": 2,
         "scopeNotes": [
-          "검증 범위는 소규모 2문제와 대규모 2문제입니다. 대규모 문제에서는 시간창 준수 여부를 확인했으며 최적성을 입증한 결과는 아닙니다.",
+          "2025년의 소규모 2문제·대규모 2문제 비교 경험과 2026-11 후속 재실행을 구분. 이번 측정은 Q·U가 명시된 소규모 2입력만 포함.",
           "ZIP의 2025-06-09 코드 공유 텍스트에서 Python 코드를 추출. 개인 작성 범위·C++ 포트 시점은 후속 확인 대상."
         ],
         "implementationNotes": [
@@ -142,7 +142,100 @@
             "title": "C++ · 경로 내부 2-opt",
             "body": "구간 반전 후보의 선후관계·기본 비용 검사\n지역 탐색 후 용량·시간창 위반량 재계산"
           }
-        ]
+        ],
+        "followUpPeriod": "2026-11 · 원본 입력 재실행·시간창 검사 수정",
+        "comparison": {
+          "date": "2026-11-07",
+          "title": "도착 시각과 서비스 시간을 분리한 시간창 검사",
+          "setup": "소규모 2개 입력 · 승객 7명(수요 그룹 3개) · 차량 2대 · Q=5 · U=30\n시드 0·1·2·3·42 · 최대 5,000회 탐색 · 차량 이동 비용 + 도보 비용",
+          "change": "서비스 종료 시각 대신 목적지 도착 시각을 시간창과 비교\n원본 공유본·검사 시점 수정 후 초기해·수정 후 탐색 결과 비교",
+          "interpretation": "두 입력 모두 미배정 승객 1명 → 0명, 7명 전원 배정\n수정 후 초기해와 5,000회 탐색 비용은 모두 107 · 추가 비용 개선 없음\n동일 Python 경로 모델의 소규모 전수열거 기준값 107과 일치",
+          "scope": "2026-11 후속 재실행 · 입력 비용 단위 · Xpress 실행 결과와 구분\n대규모 입력은 Q·U 미상으로 이번 비교에서 제외",
+          "artifactPath": "experiments/drt/2026-11-07/results.json",
+          "artifactSha256": "5a87029583779175d7164cde412753d761773002319f103817bc65834fabd239",
+          "figurePath": "experiments/drt/2026-11-07/time-window.svg",
+          "figureAlt": "데이터 1에서 도착 시각과 서비스 종료 시각의 시간창 비교",
+          "rows": [
+            {
+              "caseId": "Project2_data1_v2",
+              "label": "입력 1",
+              "variant": "archive-original",
+              "stage": "final",
+              "phase": "공유본 · 초기 배정 중단",
+              "feasibleRuns": 0,
+              "runs": 5,
+              "unassignedPassengers": 1,
+              "servedPassengers": 6,
+              "totalPassengers": 7,
+              "cost": null
+            },
+            {
+              "caseId": "Project2_data1_v2",
+              "label": "입력 1",
+              "variant": "arrival-fixed",
+              "stage": "initial",
+              "phase": "검사 수정 · 초기해",
+              "feasibleRuns": 5,
+              "runs": 5,
+              "unassignedPassengers": 0,
+              "servedPassengers": 7,
+              "totalPassengers": 7,
+              "cost": 107
+            },
+            {
+              "caseId": "Project2_data1_v2",
+              "label": "입력 1",
+              "variant": "arrival-fixed",
+              "stage": "final",
+              "phase": "검사 수정 · 탐색 후",
+              "feasibleRuns": 5,
+              "runs": 5,
+              "unassignedPassengers": 0,
+              "servedPassengers": 7,
+              "totalPassengers": 7,
+              "cost": 107
+            },
+            {
+              "caseId": "Project2_data2_v2",
+              "label": "입력 2",
+              "variant": "archive-original",
+              "stage": "final",
+              "phase": "공유본 · 초기 배정 중단",
+              "feasibleRuns": 0,
+              "runs": 5,
+              "unassignedPassengers": 1,
+              "servedPassengers": 6,
+              "totalPassengers": 7,
+              "cost": null
+            },
+            {
+              "caseId": "Project2_data2_v2",
+              "label": "입력 2",
+              "variant": "arrival-fixed",
+              "stage": "initial",
+              "phase": "검사 수정 · 초기해",
+              "feasibleRuns": 5,
+              "runs": 5,
+              "unassignedPassengers": 0,
+              "servedPassengers": 7,
+              "totalPassengers": 7,
+              "cost": 107
+            },
+            {
+              "caseId": "Project2_data2_v2",
+              "label": "입력 2",
+              "variant": "arrival-fixed",
+              "stage": "final",
+              "phase": "검사 수정 · 탐색 후",
+              "feasibleRuns": 5,
+              "runs": 5,
+              "unassignedPassengers": 0,
+              "servedPassengers": 7,
+              "totalPassengers": 7,
+              "cost": 107
+            }
+          ]
+        }
       },
       {
         "id": "P003",
@@ -516,7 +609,7 @@
       },
       {
         "id": "M005",
-        "label": "소규모 비교 실험 문제 수",
+        "label": "2025 소규모 비교 범위",
         "unit": "개",
         "category": "VALIDATION_CONTEXT",
         "aggregationRule": "DO_NOT_AGGREGATE",
@@ -524,7 +617,7 @@
       },
       {
         "id": "M006",
-        "label": "대규모 시간창 검증 문제 수",
+        "label": "2025 대규모 검사 범위",
         "unit": "개",
         "category": "VALIDATION_CONTEXT",
         "aggregationRule": "DO_NOT_AGGREGATE",
@@ -1070,6 +1163,21 @@
           "path": "backend/src/test/java/com/rentaltrack/core/WorkflowIntegrationTest.java",
           "sourceSha256": "eed44abc8581ff8b8b17f3da70013e8e0a40ffd2d0165e33850602881050fe67"
         }
+      },
+      {
+        "id": "E033",
+        "projectId": "P002",
+        "label": "2026.11 원본 입력 비교 결과",
+        "kind": "SOURCE",
+        "verificationStatus": "SOURCE_SUPPORTED",
+        "description": "입력·시드별 유효성·비용·배정 인원·검사 집계와 실험 조건",
+        "url": "https://wjlee0417.github.io/experiments/drt/2026-11-07/results.json",
+        "publicAssetPath": null,
+        "result": {
+          "path": "experiments/drt/2026-11-07/results.json",
+          "sha256": "5a87029583779175d7164cde412753d761773002319f103817bc65834fabd239",
+          "experimentDate": "2026-11-07"
+        }
       }
     ]
   },
@@ -1267,18 +1375,17 @@
         "projectId": "P002",
         "capabilityId": "C006",
         "processId": "PR006",
-        "title": "소규모 목적함수 비교와 대규모 도착 시간 검사",
-        "problem": "탐색 결과의 비용 타당성·운행 조건 충족 여부 점검 필요",
-        "decision": "소규모: Xpress와 목적함수 값 비교\n대규모: 도착 시간창 충족 여부 검사",
-        "action": "소규모 2문제의 Xpress·ALNS 목적함수 비교\n대규모 2문제의 도착 시간·허용 시간창 검사",
-        "output": "소규모 2문제: Xpress·ALNS 목적함수 값 일치\n대규모 2문제: 도착 시간창을 충족하는 경로 확보",
-        "verification": "소규모 2문제에서 목적함수 값 일치, 대규모 2문제에서 시간창 위반 없는 경로 확인. 대규모 최적해 증명 아님.",
+        "title": "시간창 검사 수정과 동일 입력 비교",
+        "problem": "원본 공유본이 두 소규모 입력에서 승객 1명 미배정\n도착 시각과 서비스 종료 시각의 시간창 해석 차이",
+        "decision": "Mosel의 도착 시각 정의에 시간창 검사 시점 정렬\n비용 비교 전 전체 배정·운행 제약을 독립 검사",
+        "action": "동일 차량 수·Q·U·입력에서 검사 시점 전후 비교\n입력별 5개 시드·최대 5,000회 탐색\n정차 순서·용량·도보 거리·시간창·비용 독립 재계산",
+        "output": "두 입력에서 미배정 승객 1→0 · 7명 전원 배정\n초기해와 탐색 후 비용 모두 107 · 추가 비용 개선 없음",
+        "verification": "2026-11 후속 실험. 각 입력·각 수정 후 단계에서 5/5 유효. 동일 Python stop-event 모델 전수열거 기준 107과 일치. Xpress 실행 아님.",
         "sectionAnchor": "validation",
         "ownership": "DIRECT",
-        "evidenceStatus": "USER_CONFIRMED",
-        "origin": "HISTORICAL_PROJECT",
-        "note": "재현 가능한 원본 결과 로그는 미확보.",
-        "publicNote": "재현 가능한 원본 결과 로그는 미확보 상태입니다."
+        "evidenceStatus": "SOURCE_SUPPORTED",
+        "origin": "FOLLOW_UP_IMPLEMENTATION",
+        "note": "5,000회 탐색은 원본 설정. 알고리즘 변경은 compute_route_time의 시간창 검사 시점뿐. 2025년 비교 경험과 별도."
       },
       {
         "id": "FC013",
@@ -1548,8 +1655,8 @@
         "projectId": "P002",
         "metricId": "M005",
         "numericValue": 2,
-        "context": "Xpress·ALNS 목적함수 값 비교",
-        "qualifier": "USER_CONFIRMED",
+        "context": "2025 프로젝트 당시 Xpress·ALNS 목적함수 값 비교",
+        "qualifier": "HISTORICAL_CONTEXT",
         "evidenceStatus": "USER_CONFIRMED"
       },
       {
@@ -1557,8 +1664,8 @@
         "projectId": "P002",
         "metricId": "M006",
         "numericValue": 2,
-        "context": "도착 시간창 충족 여부 검사",
-        "qualifier": "USER_CONFIRMED",
+        "context": "2025 프로젝트 당시 도착 시간창 충족 여부 검사",
+        "qualifier": "HISTORICAL_CONTEXT",
         "evidenceStatus": "USER_CONFIRMED"
       },
       {
@@ -1681,100 +1788,100 @@
         "technologyId": "T002"
       },
       {
+        "contributionId": "FC013",
+        "technologyId": "T009"
+      },
+      {
+        "contributionId": "FC013",
+        "technologyId": "T010"
+      },
+      {
+        "contributionId": "FC013",
+        "technologyId": "T011"
+      },
+      {
+        "contributionId": "FC014",
+        "technologyId": "T009"
+      },
+      {
+        "contributionId": "FC014",
+        "technologyId": "T010"
+      },
+      {
+        "contributionId": "FC015",
+        "technologyId": "T009"
+      },
+      {
+        "contributionId": "FC015",
+        "technologyId": "T010"
+      },
+      {
+        "contributionId": "FC015",
+        "technologyId": "T012"
+      },
+      {
+        "contributionId": "FC016",
+        "technologyId": "T009"
+      },
+      {
+        "contributionId": "FC016",
+        "technologyId": "T010"
+      },
+      {
+        "contributionId": "FC016",
+        "technologyId": "T013"
+      },
+      {
+        "contributionId": "FC017",
+        "technologyId": "T009"
+      },
+      {
+        "contributionId": "FC017",
+        "technologyId": "T010"
+      },
+      {
+        "contributionId": "FC017",
+        "technologyId": "T012"
+      },
+      {
+        "contributionId": "FC018",
+        "technologyId": "T009"
+      },
+      {
+        "contributionId": "FC018",
+        "technologyId": "T010"
+      },
+      {
+        "contributionId": "FC018",
+        "technologyId": "T011"
+      },
+      {
+        "contributionId": "FC018",
+        "technologyId": "T004"
+      },
+      {
+        "contributionId": "FC019",
+        "technologyId": "T009"
+      },
+      {
+        "contributionId": "FC019",
+        "technologyId": "T010"
+      },
+      {
+        "contributionId": "FC019",
+        "technologyId": "T011"
+      },
+      {
+        "contributionId": "FC019",
+        "technologyId": "T004"
+      },
+      {
+        "contributionId": "FC019",
+        "technologyId": "T013"
+      },
+      {
         "contributionId": "FC012",
-        "technologyId": "T008"
-      },
-      {
-        "contributionId": "FC013",
-        "technologyId": "T009"
-      },
-      {
-        "contributionId": "FC013",
-        "technologyId": "T010"
-      },
-      {
-        "contributionId": "FC013",
-        "technologyId": "T011"
-      },
-      {
-        "contributionId": "FC014",
-        "technologyId": "T009"
-      },
-      {
-        "contributionId": "FC014",
-        "technologyId": "T010"
-      },
-      {
-        "contributionId": "FC015",
-        "technologyId": "T009"
-      },
-      {
-        "contributionId": "FC015",
-        "technologyId": "T010"
-      },
-      {
-        "contributionId": "FC015",
-        "technologyId": "T012"
-      },
-      {
-        "contributionId": "FC016",
-        "technologyId": "T009"
-      },
-      {
-        "contributionId": "FC016",
-        "technologyId": "T010"
-      },
-      {
-        "contributionId": "FC016",
-        "technologyId": "T013"
-      },
-      {
-        "contributionId": "FC017",
-        "technologyId": "T009"
-      },
-      {
-        "contributionId": "FC017",
-        "technologyId": "T010"
-      },
-      {
-        "contributionId": "FC017",
-        "technologyId": "T012"
-      },
-      {
-        "contributionId": "FC018",
-        "technologyId": "T009"
-      },
-      {
-        "contributionId": "FC018",
-        "technologyId": "T010"
-      },
-      {
-        "contributionId": "FC018",
-        "technologyId": "T011"
-      },
-      {
-        "contributionId": "FC018",
-        "technologyId": "T004"
-      },
-      {
-        "contributionId": "FC019",
-        "technologyId": "T009"
-      },
-      {
-        "contributionId": "FC019",
-        "technologyId": "T010"
-      },
-      {
-        "contributionId": "FC019",
-        "technologyId": "T011"
-      },
-      {
-        "contributionId": "FC019",
-        "technologyId": "T004"
-      },
-      {
-        "contributionId": "FC019",
-        "technologyId": "T013"
+        "technologyId": "T007"
       }
     ],
     "contributionEvidence": [
@@ -1849,14 +1956,6 @@
       {
         "contributionId": "FC011",
         "evidenceId": "E010"
-      },
-      {
-        "contributionId": "FC012",
-        "evidenceId": "E012"
-      },
-      {
-        "contributionId": "FC012",
-        "evidenceId": "E013"
       },
       {
         "contributionId": "FC013",
@@ -1993,6 +2092,10 @@
       {
         "contributionId": "FC023",
         "evidenceId": "E032"
+      },
+      {
+        "contributionId": "FC012",
+        "evidenceId": "E033"
       }
     ],
     "metricEvidence": [
@@ -2304,24 +2407,26 @@
       "id": "D006",
       "projectId": "P002",
       "sectionAnchor": "validation",
-      "title": "Validation Comparison",
+      "title": "2026.11 원본 입력 재실행",
       "type": "VALIDATION_VIEW",
-      "sourceClassification": "USER_CONFIRMED_EXPERIENCE",
-      "disclosure": "직접 확인한 결과의 서술. 원본 비교 로그 재현 아님",
+      "sourceClassification": "FOLLOW_UP_EXPERIMENT",
+      "disclosure": "제공 Python 공유본과 도착 시각 검사 수정본의 후속 비교. 각 입력의 5개 시드 결과이며 Xpress 실행 아님.",
       "states": [
         {
-          "label": "Small Cases",
-          "numericCount": 2,
-          "statement": "Xpress·Python ALNS 목적함수 값 일치"
+          "label": "소규모 입력 1",
+          "numericCount": 5,
+          "numericUnit": "시드",
+          "statement": "미배정 승객 1→0 · 전원 배정\n초기해 107 → 탐색 후 107"
         },
         {
-          "label": "Large Cases",
-          "numericCount": 2,
-          "statement": "도착 시간창 위반 없음"
+          "label": "소규모 입력 2",
+          "numericCount": 5,
+          "numericUnit": "시드",
+          "statement": "미배정 승객 1→0 · 전원 배정\n초기해 107 → 탐색 후 107"
         }
       ],
       "description": "목적함수 수치와 최적성 보장을 임의 작성하지 않음",
-      "caption": "소규모: 목적함수 값 비교 / 대규모: 도착 시간창 충족 여부 검사"
+      "caption": "소규모 2입력 · 차량 2대 · Q=5 / U=30 · 5개 시드 · 5,000회"
     },
     {
       "id": "D007",
@@ -2933,9 +3038,9 @@
       {
         "id": "routing-results",
         "type": "work",
-        "title": "방문 순서 조정과 경로 비교",
+        "title": "시간창 검사와 같은 입력의 결과 비교",
         "chapter": "ROUTE OPTIMIZATION",
-        "eyebrow": "03 / 2-OPT & RESULTS",
+        "eyebrow": "03 / SEARCH & VALIDATION",
         "projectId": "P002",
         "contributionIds": [
           "FC011",
