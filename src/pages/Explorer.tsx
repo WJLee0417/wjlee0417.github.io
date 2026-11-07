@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { data, displayCopy, getCapabilityProjectEdges, getTechnologyProjectEdges, getTechnologyGroups, getContributionsByConnection, getContributionsByTechnologyProject, getMetricsByProject, getProjectsByCapability, getProjectsByTechnology, projectPath, sectionPath, sortTechnologies, type Contribution, type Technology } from '../data';
-import { CategoryTag, ContributionContext, EvidenceLinks, EvidenceTag, ProjectScope } from '../ui';
+import { CategoryTag, EvidenceLinks } from '../ui';
 
 type Mode = 'capability' | 'technology';
 const modeNames: Record<Mode, string> = { capability: 'Capability View', technology: 'Technology View' };
@@ -19,12 +19,12 @@ function Contributions({ items }: { items: Contribution[] }) {
       <details className="contribution-disclosure">
         <summary><span>{c.title}</span><span className="disclosure-plus" aria-hidden="true">+</span></summary>
         <div className="contribution-body">
-          <dl><dt>Problem</dt><dd>{c.problem}</dd><dt>Decision</dt><dd>{c.decision}</dd><dt>Action</dt><dd>{displayCopy(c.action)}</dd><dt>Outcome</dt><dd>{displayCopy(c.output)}</dd></dl>
-          <ContributionContext contribution={c}/>
+          <p className="contribution-result">{displayCopy(c.output)}</p>
+          <dl><dt>문제</dt><dd>{c.problem}</dd><dt>판단</dt><dd>{c.decision}</dd><dt>{project.id === 'P004' ? '설계' : '구현'}</dt><dd>{displayCopy(c.action)}</dd></dl>
+          <EvidenceLinks contributionId={c.id}/>
           <Link className="text-link" to={sectionPath(project.slug, c.sectionAnchor)}>{project.name} · 해당 섹션 보기 ↗</Link>
         </div>
       </details>
-      <EvidenceLinks contributionId={c.id}/>
     </div>;
   })}</div>;
 }
@@ -42,14 +42,11 @@ function ExplorerDetail({ mode, selected }: { mode: Mode; selected: string }) {
     return <>
       <p className="eyebrow">PROJECT / {project.id}</p><h3>{project.name}</h3>
       <p className="detail-lead">{project.summary}</p>
-      {project.id === 'P004' && project.provenanceNote && <p className="project-design-note">{project.provenanceNote.split('이며')[0]}</p>}
-      <div className="detail-keyline"><b>개인 역할</b><span>{project.role}</span></div>
+      <div className="detail-keyline"><b>맡은 역할</b><span>{project.role}</span></div>
       <h4>대표 수행 작업</h4><Contributions items={featured}/>
-      {metrics.length > 0 && <><h4>규모·설정·검증 범위</h4>{metrics.map(m => <div className="detail-metric" key={m.id}>
+      {metrics.length > 0 && <><h4>데이터와 작업 규모</h4>{metrics.map(m => <div className="detail-metric" key={m.id}>
         <CategoryTag category={m.category}/><strong>{m.numericValue.toLocaleString('ko-KR')} {m.unit}</strong><span>{m.label} · {displayCopy(m.context)}</span>
-        <details className="metric-context contextual-detail"><summary>자료 출처 <span aria-hidden="true">+</span></summary><div><EvidenceTag status={m.evidenceStatus}/></div></details>
       </div>)}</>}
-      <ProjectScope project={project}/>
       <Link className="button primary panel-link" to={projectPath(project.slug)}>프로젝트 사례 보기 ↗</Link>
     </>;
   }
@@ -90,7 +87,7 @@ function ExplorerDetail({ mode, selected }: { mode: Mode; selected: string }) {
 
 function Network({ mode, selected, choose, technologies }: { mode: 'capability' | 'technology'; selected: string; choose: (value: string) => void; technologies: Technology[] }) {
   const isCapability = mode === 'capability';
-  const nodes = isCapability ? activeCapabilities.map(c => ({ id: c.id, label: c.label, subtitle: c.id })) : technologies.map(t => ({ id: t.id, label: t.label, subtitle: t.category }));
+  const nodes = isCapability ? activeCapabilities.map(c => ({ id: c.id, label: c.label, subtitle: 'CAPABILITY' })) : technologies.map(t => ({ id: t.id, label: t.label, subtitle: t.category }));
   const edges = isCapability ? capEdges.map(e => ({ ...e, leftId: e.capabilityId })) : techEdges.map(e => ({ ...e, leftId: e.technologyId }));
   const visibleEdges = edges.filter(e => nodes.some(n => n.id === e.leftId));
   const nodeY = (index: number) => 56 + index * (540 / Math.max(nodes.length - 1, 1));
@@ -137,6 +134,6 @@ export default function Explorer() {
   const selectedTechId = mode === 'technology' && selected.startsWith('t:') ? selected.slice(2) : null;
   const relatedProjectIds = new Set(techEdges.filter(e => e.technologyId === selectedTechId).map(e => e.projectId));
   return <div className="explorer"><div className="explorer-toolbar"><div className="segmented" role="group" aria-label="탐색 모드">{(['capability', 'technology'] as const).map(m => <button key={m} className={mode === m ? 'active' : ''} aria-pressed={mode === m} onClick={() => changeMode(m)}>{modeNames[m]}</button>)}</div><button className="reset-button" onClick={reset}>전체 관계 보기 <span aria-hidden="true">↗</span></button></div>{mode === 'technology' && <div className="tech-controls"><label htmlFor="technology-search">기술 검색</label><input id="technology-search" value={search} onChange={e => setSearch(e.target.value)} placeholder="기술 이름 검색" type="search"/><span>{filteredCount}개 연결 기술</span>{selectedGroup === 'all' && !expanded && !search && filteredCount > 8 && <button onClick={() => setExpanded(true)}>더 보기 +</button>}<div className="tech-groups" role="group" aria-label="기술 그룹"><button className={selectedGroup === 'all' ? 'active' : ''} aria-pressed={selectedGroup === 'all'} onClick={() => changeGroup('all')}>전체</button>{technologyGroups.map(group => <button key={group.label} className={selectedGroup === group.label ? 'active' : ''} aria-pressed={selectedGroup === group.label} onClick={() => changeGroup(group.label)}>{group.label}</button>)}</div></div>}
-    <div className="explorer-body"><div className="explorer-main"><><div className="desktop-network"><Network mode={mode} selected={selected} choose={choose} technologies={visibleTechnologies}/></div><div className="mobile-network"><p className="mobile-explore-hint">항목을 선택한 뒤 연결된 프로젝트와 수행 작업을 확인하세요.</p><div className="mobile-choice-list">{(mode === 'capability' ? data.dimensions.capabilities.map(c => ({id:c.id,label:c.label,subtitle:c.id})) : filteredTechnologies.map(t => ({id:t.id,label:t.label,subtitle:t.category}))).map(n => <button key={n.id} className={selected === `${mode === 'capability' ? 'c' : 't'}:${n.id}` ? 'selected' : ''} onClick={() => choose(`${mode === 'capability' ? 'c' : 't'}:${n.id}`)}><small>{n.subtitle}</small>{n.label}</button>)}</div><div className="mobile-project-list"><h3>프로젝트</h3>{projects.map(p => <button key={p.id} className={selected === `p:${p.id}` ? 'selected' : relatedProjectIds.has(p.id) ? 'related' : ''} onClick={() => choose(`p:${p.id}`)}>{p.id} · {p.name}</button>)}</div><div className="mobile-edge-list"><h3>프로젝트 연결</h3>{(mode === 'capability' ? capEdges.map(e => ({...e,leftId:e.capabilityId})) : techEdges.map(e => ({...e,leftId:e.technologyId}))).filter(e => mode === 'capability' || filteredTechnologies.some(t => t.id === e.leftId)).map(e => { const label = mode === 'capability' ? data.dimensions.capabilities.find(c => c.id === e.leftId)?.label : allTechnologies.find(t => t.id === e.leftId)?.label; const project = projects.find(p => p.id === e.projectId)!; const value = `${mode === 'capability' ? 'e' : 'te'}:${e.leftId}::${e.projectId}`; return <button className={selected === value ? 'selected' : ''} key={e.id} onClick={() => choose(value)}>{label} ↔ {project.name}</button>; })}</div></div>{mode === 'capability' && <details className="all-capabilities"><summary>전체 역량 분류 보기 · 8개</summary><div>{data.dimensions.capabilities.map(c => <button key={c.id} onClick={() => choose(`c:${c.id}`)}>{c.id} · {c.label}{c.noConfirmedContribution && <span>연결된 프로젝트 없음</span>}</button>)}</div></details>}</></div><aside ref={detailRef} className="explorer-detail" aria-live="polite"><ExplorerDetail mode={mode} selected={selected}/></aside></div>
+    <div className="explorer-body"><div className="explorer-main"><><div className="desktop-network"><Network mode={mode} selected={selected} choose={choose} technologies={visibleTechnologies}/></div><div className="mobile-network"><p className="mobile-explore-hint">항목을 선택한 뒤 연결된 프로젝트와 수행 작업을 확인하세요.</p><div className="mobile-choice-list">{(mode === 'capability' ? activeCapabilities.map(c => ({id:c.id,label:c.label,subtitle:'CAPABILITY'})) : filteredTechnologies.map(t => ({id:t.id,label:t.label,subtitle:t.category}))).map(n => <button key={n.id} className={selected === `${mode === 'capability' ? 'c' : 't'}:${n.id}` ? 'selected' : ''} onClick={() => choose(`${mode === 'capability' ? 'c' : 't'}:${n.id}`)}><small>{n.subtitle}</small>{n.label}</button>)}</div><div className="mobile-project-list"><h3>프로젝트</h3>{projects.map(p => <button key={p.id} className={selected === `p:${p.id}` ? 'selected' : relatedProjectIds.has(p.id) ? 'related' : ''} onClick={() => choose(`p:${p.id}`)}>{p.id} · {p.name}</button>)}</div><div className="mobile-edge-list"><h3>프로젝트 연결</h3>{(mode === 'capability' ? capEdges.map(e => ({...e,leftId:e.capabilityId})) : techEdges.map(e => ({...e,leftId:e.technologyId}))).filter(e => mode === 'capability' || filteredTechnologies.some(t => t.id === e.leftId)).map(e => { const label = mode === 'capability' ? data.dimensions.capabilities.find(c => c.id === e.leftId)?.label : allTechnologies.find(t => t.id === e.leftId)?.label; const project = projects.find(p => p.id === e.projectId)!; const value = `${mode === 'capability' ? 'e' : 'te'}:${e.leftId}::${e.projectId}`; return <button className={selected === value ? 'selected' : ''} key={e.id} onClick={() => choose(value)}>{label} ↔ {project.name}</button>; })}</div></div></></div><aside ref={detailRef} className="explorer-detail" aria-live="polite"><ExplorerDetail mode={mode} selected={selected}/></aside></div>
   </div>;
 }

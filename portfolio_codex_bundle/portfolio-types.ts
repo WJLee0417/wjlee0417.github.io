@@ -63,7 +63,7 @@ export interface LogicalTable {
 export interface Diagram {
   id: string; projectId: string; sectionAnchor: string; title: string;
   type: string; sourceClassification: string; disclosure: string;
-  description: string;
+  description: string; caption: string;
   stages?: string[]; stateLabels?: string[];
   facts?: Record<string,string>;
   states?: Array<Record<string, string | number>>;
@@ -83,7 +83,7 @@ export interface PortfolioData {
   };
   profile: {
     nameKo:string; nameEn:string; role:string; eyebrow:string; headline:string;
-    shortKeywords:string[];
+    shortKeywords:string[]; intro:string;
     education:Array<{institution:string;major:string;degree:string}>;
     training:Array<{institution:string;track:string;display:string}>;
     certifications:string[];

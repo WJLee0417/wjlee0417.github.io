@@ -10,6 +10,7 @@ function unique(arr, label, key = x => x.id) {
   return new Set(keys);
 }
 const dim=d.dimensions, fact=d.facts, bridge=d.bridges;
+assert(typeof d.profile.intro==='string' && d.profile.intro.trim(),'profile work introduction missing');
 assert(d.meta.contentLock==='LOCKED','content lock missing');
 assert(dim.projects.length===4,'must have 4 projects');
 assert(dim.capabilities.length===8,'must have 8 capabilities');
@@ -106,6 +107,7 @@ for(const x of d.diagrams){
   assert(projects.has(x.projectId),`diagram unknown project ${x.id}`);
   assert(d.pages[x.projectId].sections.some(s=>s.id===x.sectionAnchor),`diagram bad anchor ${x.id}`);
   assert(typeof x.disclosure==='string' && x.disclosure.trim(),`diagram disclosure missing ${x.id}`);
+  assert(typeof x.caption==='string' && x.caption.trim(),`diagram caption missing ${x.id}`);
   if(x.relationships){
     const entities=new Set(x.entities??[]);
     const pairs=new Set();

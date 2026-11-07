@@ -5,7 +5,7 @@ import {
   getDesignFocusByProject, getDetailTechnologiesByProject, getFeaturedTechnologiesByProject,
   getTechnologiesByContribution, projectPath,
 } from '../data';
-import { ContributionContext, EvidenceLinks, MetricList, ProjectScope, TechnologyTags } from '../ui';
+import { EvidenceLinks, MetricList, TechnologyTags } from '../ui';
 import DiagramFrame from './Diagrams';
 import EvidenceList from './EvidenceList';
 
@@ -54,7 +54,6 @@ export default function ProjectDetail() {
         <h1>{project.name}</h1>
         <p className="project-en">{project.nameEn}</p>
         <p className="project-summary">{project.summary}</p>
-        {project.id === 'P004' && project.provenanceNote && <p className="project-design-note">{project.provenanceNote.split('이며')[0]}</p>}
         <div className="project-hero-tags">{getCapabilitiesByProject(data, project.id).map(c => <span key={c.id}>{c.label}</span>)}</div>
         <div className="project-stack">
           <small>{designFocus.length ? 'DESIGN FOCUS' : 'TECH STACK'}</small>
@@ -71,15 +70,15 @@ export default function ProjectDetail() {
     </div>
 
     <div className="project-summary-grid">
-      <div><span>01 / PROBLEM</span><p>{project.problemSummary}</p></div>
-      <div><span>02 / DECISION</span><p>{featured[0]?.decision}</p></div>
-      <div><span>03 / ACTION</span><p>{featured[0]?.action}</p></div>
-      <div><span>04 / OUTCOME</span><p>{displayCopy(project.outcomeSummary)}</p></div>
+      <div><span>01 / {project.id === 'P004' ? 'DESIGNED' : 'BUILT'}</span><p>{displayCopy(project.outcomeSummary)}</p></div>
+      <div><span>02 / PROBLEM</span><p>{project.problemSummary}</p></div>
+      <div><span>03 / DECISION</span><p>{featured[0]?.decision}</p></div>
+      <div><span>04 / APPROACH</span><p>{featured[0]?.action}</p></div>
     </div>
 
     <div className="project-content">
       <aside className="project-toc"><p>ON THIS PAGE</p>
-        {sections.map((s, i) => <Link to={`?section=${s.id}`} key={s.id}><span>{String(i + 1).padStart(2, '0')}</span>{s.id === 'evidence' ? '프로젝트 자료' : s.title}</Link>)}
+        {sections.map((s, i) => <Link to={`?section=${s.id}`} key={s.id}><span>{String(i + 1).padStart(2, '0')}</span>{s.title}</Link>)}
         <Link className="toc-back" to={{ pathname: '/', hash: '#projects' }}>← 프로젝트 목록</Link>
       </aside>
       <div className="project-article">
@@ -90,28 +89,24 @@ export default function ProjectDetail() {
           return <section className="article-section" id={s.id} key={s.id}>
             <div className="article-section-heading">
               <span>{String(i + 1).padStart(2, '0')} / {project.id}</span>
-              <h2>{s.id === 'evidence' ? '프로젝트 자료' : s.title}</h2>
+              <h2>{s.title}</h2>
               {!isEvidenceSection && <p>{displayCopy(s.body)}</p>}
             </div>
             {i === 0 && <>
-              <div className="overview-brief">
-                <div><small>ROLE</small><strong>{project.role}</strong></div>
-                <div><small>RESULT</small><strong>{displayCopy(project.outcomeSummary)}</strong></div>
-              </div>
               <MetricList projectId={project.id}/>
             </>}
             {currentDiagrams.map(d => <DiagramFrame diagram={d} sectionDescription={displayCopy(s.body)} key={d.id}/>)}
             {current.length > 0 && <div className="section-contributions">
-              <h3>개인 수행 작업 <span>{current.length}</span></h3>
+              <h3>수행 작업 <span>{current.length}</span></h3>
               {current.map(c => <article className="work-entry" key={c.id}>
-                <div className="work-heading"><h4>{c.title}</h4><EvidenceLinks contributionId={c.id}/></div>
+                <div className="work-heading"><h4>{c.title}</h4></div>
+                <p className="work-result">{displayCopy(c.output)}</p>
                 <div className="work-entry-flow">
                   <div><b>문제</b><p>{c.problem}</p></div>
                   <div><b>판단</b><p>{c.decision}</p></div>
-                  <div><b>수행</b><p>{displayCopy(c.action)}</p></div>
-                  <div><b>결과</b><p>{displayCopy(c.output)}</p></div>
+                  <div><b>{project.id === 'P004' ? '설계' : '구현'}</b><p>{displayCopy(c.action)}</p></div>
                 </div>
-                <ContributionContext contribution={c}/>
+                <EvidenceLinks contributionId={c.id}/>
                 {getTechnologiesByContribution(data, c.id).length > 0 && <details className="technical-detail">
                   <summary>사용 기술 보기 <span aria-hidden="true">+</span></summary>
                   <div>
@@ -120,7 +115,7 @@ export default function ProjectDetail() {
                 </details>}
               </article>)}
             </div>}
-            {isEvidenceSection && <><EvidenceList projectId={project.id}/><ProjectScope project={project} sourceNote={s.body}/></>}
+            {isEvidenceSection && <EvidenceList projectId={project.id}/>}
           </section>;
         })}
       </div>

@@ -11,7 +11,7 @@ export const sectionPath = (slug: string, section: string) => `${projectPath(slu
 
 export const categoryLabel: Record<string, string> = {
   SCALE: '규모', CONFIGURATION: '설정', VALIDATION_CONTEXT: '평가 사례', STRUCTURE: '구조',
-  IMPLEMENTATION: '구현 구조', DESIGN: '설계',
+  IMPLEMENTATION: '구현', DESIGN: '설계',
 };
 
 // Preserve the source wording, including sample sizes, units and limitations.

@@ -1,13 +1,6 @@
 import { useState } from 'react';
 import { data, type Diagram } from '../data';
 
-const sourceLabels: Record<string, string> = {
-  SOURCE_DERIVED_RECONSTRUCTION: '원본 자료 기반 재구성',
-  ILLUSTRATIVE_EXAMPLE: '설명용 예시',
-  USER_CONFIRMED_EXPERIENCE: '본인 확인 경험',
-  RECONSTRUCTED_DESIGN: '재구성 설계안',
-};
-
 const staticDiagramIds = new Set(['D003', 'D004', 'D005', 'D010']);
 
 function OptionButtons({ labels, active, onChange, label = '도식 상태 선택' }: {
@@ -29,11 +22,11 @@ function RelationshipGraphic({ diagram, active }: { diagram: Diagram; active: nu
       {diagram.entities?.map(name => <span role="listitem" className={entity === name ? 'active' : ''} key={name}>{name}</span>)}
     </div>
     <div className="erd-detail" aria-live="polite">
-      <small>{diagram.id === 'D011' ? '개념적 엔터티 관계 · 재구성 설계안' : '원본 DDL 기반 관계 개념도'}</small>
+      <small>{diagram.id === 'D011' ? '계약 중심 데이터 모델' : '테이블과 외래키'}</small>
       <strong>{entity ?? '관계 전체'}</strong>
       {relationships.length > 0 ? relationships.map((r, i) => <p key={`${r[0]}-${r[1]}-${i}`}>
         {r[0]} ↔ {r[1]} <code>{r[2]}</code>
-      </p>) : <p>현재 자료에 연결 관계가 명시되지 않았습니다</p>}
+      </p>) : null}
     </div>
   </div>;
 }
@@ -74,14 +67,13 @@ function ReportBranches({ diagram }: { diagram: Diagram }) {
       <div className="pipeline-current" role="listitem">
         <small>신규 생성</small>
         {createStates.map(state => <p key={String(state.label)}>{state.label} · {state.outcome}</p>)}
-        <p>신규 생성 관련 구성 요소</p>
-        <div className="pipeline-steps" role="list" aria-label="신규 생성 구성 요소">
+        <p>생성·저장 처리</p>
+        <div className="pipeline-steps" role="list" aria-label="생성·저장 처리">
           {stages.slice(4, 7).map(stage => <div role="listitem" key={stage}><strong>{stage}</strong></div>)}
         </div>
         <p>생성 결과 반환 · {stages[7]}</p>
       </div>
     </div>
-    <div className="pipeline-current"><p>신규 생성의 구성 요소를 함께 표시한 개념도이며, 서버 내부의 세부 실행 순서를 나타내지는 않습니다.</p></div>
   </div>;
 }
 
@@ -122,6 +114,6 @@ export default function DiagramFrame({ diagram, sectionDescription }: { diagram:
     <div className="diagram-head"><div><h4>{diagram.title}</h4><p>{sectionDescription}</p></div></div>
     {interactive && <OptionButtons labels={labels} active={active} label={relationshipView ? '관계 전체 또는 엔터티 선택' : '도식 상태 선택'} onChange={index => setSelection({ diagramId: diagram.id, index })}/>}
     <DiagramGraphic diagram={diagram} active={active} description={sectionDescription}/>
-    <figcaption><strong>{sourceLabels[diagram.sourceClassification] ?? '출처 분류 미확인'}</strong> · {diagram.disclosure}</figcaption>
+    <figcaption>{diagram.caption}</figcaption>
   </figure>;
 }

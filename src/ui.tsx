@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { data, categoryLabel, displayCopy, getEvidenceByContribution, type Contribution, type EvidenceVerificationStatus, type Project, type Technology } from './data';
+import { data, categoryLabel, displayCopy, getEvidenceByContribution, type Technology } from './data';
 
 const nav = [
   ['about', 'About'], ['projects', 'Projects'], ['explore', 'Explore'], ['contact', 'Contact'],
@@ -52,43 +52,12 @@ export function SectionHeading({ number, eyebrow, title, description }: { number
 
 export function CategoryTag({ category }: { category: string }) { return <span className="category-tag">{categoryLabel[category] ?? category}</span>; }
 
-export function EvidenceTag({ status }: { status: EvidenceVerificationStatus }) {
-  const labels: Record<EvidenceVerificationStatus, string> = {
-    SOURCE_SUPPORTED: '소스 자료로 기록',
-    USER_CONFIRMED: '본인 확인 경험',
-    REVIEW_REQUIRED: '추가 확인 필요',
-    RECONSTRUCTED_DESIGN: '재구성 설계',
-  };
-  return <span className={`evidence-tag ${status.toLowerCase()}`}>{labels[status]}</span>;
-}
-
-export function ProjectScope({ project, sourceNote }: { project: Project; sourceNote?: string }) {
-  if (!project.provenanceNote && !project.scopeNotes?.length && !sourceNote) return null;
-  return <details className="project-scope contextual-detail">
-    <summary>담당 범위·자료 출처 <span aria-hidden="true">+</span></summary>
-    <div>
-      {project.provenanceNote && <p className="provenance-note">{project.provenanceNote}</p>}
-      {project.scopeNotes && <ul>{project.scopeNotes.map(note => <li key={note}>{note}</li>)}</ul>}
-      {sourceNote && <p>{sourceNote}</p>}
-    </div>
-  </details>;
-}
-
-export function ContributionContext({ contribution }: { contribution: Contribution }) {
-  if (!contribution.verification && !contribution.publicNote) return null;
-  return <details className="claim-context contextual-detail">
-    <summary>검증·추가 설명 <span aria-hidden="true">+</span></summary>
-    <div>
-      <EvidenceTag status={contribution.origin === 'RECONSTRUCTED_DESIGN' ? 'RECONSTRUCTED_DESIGN' : contribution.evidenceStatus}/>
-      {contribution.verification && <p><strong>검증 범위</strong>{contribution.verification}</p>}
-      {contribution.publicNote && <p>{contribution.publicNote}</p>}
-    </div>
-  </details>;
-}
-
 export function evidenceLinkLabel(evidence: (typeof data.dimensions.evidence)[number]) {
-  if (evidence.verificationStatus === 'RECONSTRUCTED_DESIGN') return '재구성 설계';
-  return evidence.kind === 'SOURCE' ? '코드·문서' : evidence.kind === 'DESIGN' ? '설계 자료' : '관련 자료';
+  if (evidence.kind === 'DESIGN') return '설계';
+  const path = evidence.artifact?.path ?? '';
+  if (path.endsWith('.sql') || path.endsWith('.xml')) return 'SQL';
+  if (path.endsWith('.java') || path.endsWith('.py')) return '코드';
+  return '문서';
 }
 
 export function EvidenceLinks({ contributionId }: { contributionId: string }) {
@@ -110,6 +79,6 @@ export function MetricList({ projectId }: { projectId: string }) {
   if (!records.length) return null;
   return <div className="metric-list">{records.map(r => {
     const metric = data.dimensions.metrics.find(m => m.id === r.metricId)!;
-    return <div className="metric-item" key={r.id}><div><CategoryTag category={metric.category} /><strong>{r.numericValue.toLocaleString('ko-KR')}<small>{metric.unit}</small></strong></div><p>{metric.label}</p><span>{displayCopy(r.context)}</span><details className="metric-context contextual-detail"><summary>자료 출처 <span aria-hidden="true">+</span></summary><div><EvidenceTag status={r.evidenceStatus}/></div></details></div>;
+    return <div className="metric-item" key={r.id}><div><CategoryTag category={metric.category} /><strong>{r.numericValue.toLocaleString('ko-KR')}<small>{metric.unit}</small></strong></div><p>{metric.label}</p><span>{displayCopy(r.context)}</span></div>;
   })}</div>;
 }
