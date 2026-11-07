@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 const path = new URL('./portfolio-data.json', import.meta.url);
 const d = JSON.parse(fs.readFileSync(path, 'utf8'));
+const evidenceLock = JSON.parse(fs.readFileSync(new URL('./evidence-artifacts.lock.json', import.meta.url), 'utf8'));
 const errors = [];
 function assert(condition, message) { if (!condition) errors.push(message); }
 function unique(arr, label, key = x => x.id) {
@@ -60,10 +61,35 @@ for(const r of fact.metricRecords){
   assert(typeof r.numericValue==='number' && Number.isFinite(r.numericValue),`non-numeric metric ${r.id}`);
   assert(typeof r.context==='string' && r.context.trim(),`metric missing context ${r.id}`);
 }
+const repository=d.meta.evidenceRepository;
+assert(repository?.repositoryUrl==='https://github.com/WJLee0417/wjlee0417.github.io','invalid evidence repository');
+assert(repository?.branch==='codex/portfolio-evidence','invalid evidence branch');
+assert(/^[0-9a-f]{40}$/.test(repository?.revision??''),'evidence revision must be a full commit');
+assert(repository?.revision===evidenceLock.revision && repository?.branch===evidenceLock.branch,'evidence lock revision mismatch');
+const artifactMap=new Map(evidenceLock.artifacts.map(a=>[a.evidenceId,a]));
+assert(artifactMap.size===evidenceLock.artifacts.length,'duplicate evidence artifact ids');
 for(const e of dim.evidence){
   assert(projects.has(e.projectId),`bad evidence project: ${e.id}`);
-  assert(e.url===null && e.publicAssetPath===null,`unverified evidence link: ${e.id}`);
+  assert(e.publicAssetPath===null,`unregistered public asset: ${e.id}`);
+  const artifact=artifactMap.get(e.id);
+  if(!artifact){
+    assert(e.url===null && !e.artifact,`unregistered evidence link: ${e.id}`);
+    continue;
+  }
+  assert(artifact.projectId===e.projectId && artifact.kind===e.kind,`artifact scope mismatch: ${e.id}`);
+  assert(/^projects\/P\d{3}\/[A-Za-z0-9_./-]+$/.test(artifact.path) && !artifact.path.split('/').some(p=>p==='.'||p==='..'),`unsafe evidence path: ${e.id}`);
+  assert(/^[0-9a-f]{64}$/.test(artifact.sha256),`invalid artifact hash: ${e.id}`);
+  assert(e.url===`${repository.repositoryUrl}/blob/${repository.revision}/${artifact.path}`,`evidence link must match pinned artifact: ${e.id}`);
+  assert(e.artifact?.path===artifact.path && e.artifact?.sha256===artifact.sha256 && e.artifact?.origin===artifact.origin,`artifact metadata mismatch: ${e.id}`);
+  if(artifact.origin==='RECONSTRUCTED_DESIGN') assert(e.kind==='DESIGN' && e.verificationStatus==='RECONSTRUCTED_DESIGN',`design cannot be presented as historical source: ${e.id}`);
+  else {
+    assert(artifact.origin==='UPSTREAM_SOURCE' && e.kind==='SOURCE',`invalid source artifact type: ${e.id}`);
+    assert(['https://github.com/WJLee0417/SSAFIT_Playlist','https://github.com/WJLee0417/Franchise_Recommendation_DB'].includes(artifact.source?.repositoryUrl),`unregistered upstream source: ${e.id}`);
+    assert(/^[0-9a-f]{40}$/.test(artifact.source?.revision??'') && /^[0-9a-f]{64}$/.test(artifact.source?.sourceSha256??''),`invalid upstream provenance: ${e.id}`);
+    assert(JSON.stringify(e.artifact?.source)===JSON.stringify(artifact.source),`upstream metadata mismatch: ${e.id}`);
+  }
 }
+assert([...artifactMap.keys()].every(id=>evidence.has(id)),'artifact refers to missing evidence');
 for(const [name,rows,keys,refs] of [
  ['contributionTechnology',bridge.contributionTechnology,['contributionId','technologyId'],[contributions,technologies]],
  ['contributionEvidence',bridge.contributionEvidence,['contributionId','evidenceId'],[contributions,evidence]],

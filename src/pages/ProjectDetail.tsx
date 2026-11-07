@@ -2,10 +2,10 @@ import { useEffect } from 'react';
 import { Link, useParams, useSearchParams } from 'react-router-dom';
 import {
   data, displayCopy, getAlgorithmsByProject, getCapabilitiesByProject, getContributionsByProject,
-  getDesignFocusByProject, getDetailTechnologiesByProject, getEvidenceByContribution, getFeaturedTechnologiesByProject,
+  getDesignFocusByProject, getDetailTechnologiesByProject, getFeaturedTechnologiesByProject,
   getTechnologiesByContribution, projectPath,
 } from '../data';
-import { ContributionContext, MetricList, ProjectScope, TechnologyTags } from '../ui';
+import { ContributionContext, EvidenceLinks, MetricList, ProjectScope, TechnologyTags } from '../ui';
 import DiagramFrame from './Diagrams';
 import EvidenceList from './EvidenceList';
 
@@ -54,6 +54,7 @@ export default function ProjectDetail() {
         <h1>{project.name}</h1>
         <p className="project-en">{project.nameEn}</p>
         <p className="project-summary">{project.summary}</p>
+        {project.id === 'P004' && project.provenanceNote && <p className="project-design-note">{project.provenanceNote.split('이며')[0]}</p>}
         <div className="project-hero-tags">{getCapabilitiesByProject(data, project.id).map(c => <span key={c.id}>{c.label}</span>)}</div>
         <div className="project-stack">
           <small>{designFocus.length ? 'DESIGN FOCUS' : 'TECH STACK'}</small>
@@ -69,8 +70,6 @@ export default function ProjectDetail() {
       </div>
     </div>
 
-    <ProjectScope project={project}/>
-
     <div className="project-summary-grid">
       <div><span>01 / PROBLEM</span><p>{project.problemSummary}</p></div>
       <div><span>02 / DECISION</span><p>{featured[0]?.decision}</p></div>
@@ -80,18 +79,19 @@ export default function ProjectDetail() {
 
     <div className="project-content">
       <aside className="project-toc"><p>ON THIS PAGE</p>
-        {sections.map((s, i) => <Link to={`?section=${s.id}`} key={s.id}><span>{String(i + 1).padStart(2, '0')}</span>{s.title}</Link>)}
+        {sections.map((s, i) => <Link to={`?section=${s.id}`} key={s.id}><span>{String(i + 1).padStart(2, '0')}</span>{s.id === 'evidence' ? '프로젝트 자료' : s.title}</Link>)}
         <Link className="toc-back" to={{ pathname: '/', hash: '#projects' }}>← 프로젝트 목록</Link>
       </aside>
       <div className="project-article">
         {sections.map((s, i) => {
           const current = contributions.filter(c => c.sectionAnchor === s.id);
           const currentDiagrams = diagrams.filter(d => d.sectionAnchor === s.id);
+          const isEvidenceSection = s.id === 'evidence' || s.id === 'api-evidence';
           return <section className="article-section" id={s.id} key={s.id}>
             <div className="article-section-heading">
               <span>{String(i + 1).padStart(2, '0')} / {project.id}</span>
-              <h2>{s.title}</h2>
-              <p>{displayCopy(s.body)}</p>
+              <h2>{s.id === 'evidence' ? '프로젝트 자료' : s.title}</h2>
+              {!isEvidenceSection && <p>{displayCopy(s.body)}</p>}
             </div>
             {i === 0 && <>
               <div className="overview-brief">
@@ -104,7 +104,7 @@ export default function ProjectDetail() {
             {current.length > 0 && <div className="section-contributions">
               <h3>개인 수행 작업 <span>{current.length}</span></h3>
               {current.map(c => <article className="work-entry" key={c.id}>
-                <h4>{c.title}</h4>
+                <div className="work-heading"><h4>{c.title}</h4><EvidenceLinks contributionId={c.id}/></div>
                 <div className="work-entry-flow">
                   <div><b>문제</b><p>{c.problem}</p></div>
                   <div><b>판단</b><p>{c.decision}</p></div>
@@ -112,16 +112,15 @@ export default function ProjectDetail() {
                   <div><b>결과</b><p>{displayCopy(c.output)}</p></div>
                 </div>
                 <ContributionContext contribution={c}/>
-                {(getTechnologiesByContribution(data, c.id).length > 0 || getEvidenceByContribution(data, c.id).length > 0) && <details className="technical-detail">
-                  <summary>{getTechnologiesByContribution(data, c.id).length > 0 ? '사용 기술·근거 자료 보기' : '근거 자료 보기'} <span aria-hidden="true">+</span></summary>
+                {getTechnologiesByContribution(data, c.id).length > 0 && <details className="technical-detail">
+                  <summary>사용 기술 보기 <span aria-hidden="true">+</span></summary>
                   <div>
                     {getTechnologiesByContribution(data, c.id).length > 0 && <p><strong>사용 기술</strong> {getTechnologiesByContribution(data, c.id).map(t => t.label).join(' · ')}</p>}
-                    <ul className="contribution-sources">{getEvidenceByContribution(data, c.id).map(e => <li key={e.id}><Link to={`?section=evidence-${e.id}`}>{e.label} ↗</Link></li>)}</ul>
                   </div>
                 </details>}
               </article>)}
             </div>}
-            {(s.id === 'evidence' || s.id === 'api-evidence') && <EvidenceList projectId={project.id}/>}
+            {isEvidenceSection && <><EvidenceList projectId={project.id}/><ProjectScope project={project} sourceNote={s.body}/></>}
           </section>;
         })}
       </div>

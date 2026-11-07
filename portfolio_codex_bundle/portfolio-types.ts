@@ -35,6 +35,14 @@ export interface Evidence {
   verificationStatus: EvidenceVerificationStatus;
   projectId: string; description: string;
   url: string | null; publicAssetPath: string | null;
+  artifact?: {
+    path: string; sha256: string; createdOn: string;
+    origin: 'RECONSTRUCTED_DESIGN' | 'UPSTREAM_SOURCE';
+    source?: {
+      repositoryUrl: string; revision: string; path: string;
+      sourceSha256: string; extraction?: string;
+    };
+  };
 }
 export interface Contribution {
   id: string; projectId: string; capabilityId: string; processId: string;
@@ -68,6 +76,10 @@ export interface PortfolioData {
     portfolioTitle: string; purpose: string;
     contentLock: 'LOCKED'; notProductionData: boolean;
     designReferences: Array<{name:string;url:string;adopt:string}>;
+    evidenceRepository?: {
+      url: string; repositoryUrl: string; branch: string; revision: string;
+      manifestPath: string;
+    };
   };
   profile: {
     nameKo:string; nameEn:string; role:string; eyebrow:string; headline:string;

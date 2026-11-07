@@ -1,0 +1,550 @@
+{
+  "version": 1,
+  "repositoryUrl": "https://github.com/WJLee0417/wjlee0417.github.io",
+  "branch": "codex/portfolio-evidence",
+  "sourceCommit": "45fc70cf2b6f3cba5a4f4874f7889ea960d71d4a",
+  "artifacts": [
+    {
+      "evidenceId": "E003",
+      "projectId": "P001",
+      "label": "7개 관계형 테이블의 개념·논리 ERD",
+      "kind": "DESIGN",
+      "origin": "RECONSTRUCTED_DESIGN",
+      "path": "projects/P001/database-model.md",
+      "sha256": "5df8d5280785f0b9bf61caf96b59408c536dac72de36b9300643bdf313f8ee0e",
+      "createdOn": "2026-11-07",
+      "sourceCommit": "45fc70cf2b6f3cba5a4f4874f7889ea960d71d4a"
+    },
+    {
+      "evidenceId": "E010",
+      "projectId": "P002",
+      "label": "ALNS 탐색 절차 재구성 도식",
+      "kind": "DESIGN",
+      "origin": "RECONSTRUCTED_DESIGN",
+      "path": "projects/P002/algorithm-flow.md",
+      "sha256": "181f4fc78974ebf9beac117950fd018ef879b2a3c5ea8ee326b86f36058736a8",
+      "createdOn": "2026-11-07",
+      "sourceCommit": "45fc70cf2b6f3cba5a4f4874f7889ea960d71d4a"
+    },
+    {
+      "evidenceId": "E023",
+      "projectId": "P004",
+      "label": "신청→인수→이용→반납→검수 업무 흐름 재구성",
+      "kind": "DESIGN",
+      "origin": "RECONSTRUCTED_DESIGN",
+      "path": "projects/P004/rental-lifecycle.md",
+      "sha256": "db7fa548ab5e18443ef487fe707f8b437af6795efb7ce0205406f475111bcc97",
+      "createdOn": "2026-11-07",
+      "sourceCommit": "45fc70cf2b6f3cba5a4f4874f7889ea960d71d4a"
+    },
+    {
+      "evidenceId": "E024",
+      "projectId": "P004",
+      "label": "상품·계약·상태 기록 관계 개념도",
+      "kind": "DESIGN",
+      "origin": "RECONSTRUCTED_DESIGN",
+      "path": "projects/P004/contract-model.md",
+      "sha256": "de1910993737462c5301e3d7cabe5e0988364a24f16d88469866cda8c6201f22",
+      "createdOn": "2026-11-07",
+      "sourceCommit": "45fc70cf2b6f3cba5a4f4874f7889ea960d71d4a"
+    },
+    {
+      "evidenceId": "E025",
+      "projectId": "P004",
+      "label": "계약별 상태·사진·손상 이력 재구성",
+      "kind": "DESIGN",
+      "origin": "RECONSTRUCTED_DESIGN",
+      "path": "projects/P004/condition-history.md",
+      "sha256": "d62b00561cceb6b6d907514ce98a0190b9a6c3948bea179c7075a472f3a28b7e",
+      "createdOn": "2026-11-07",
+      "sourceCommit": "45fc70cf2b6f3cba5a4f4874f7889ea960d71d4a"
+    },
+    {
+      "evidenceId": "E014",
+      "projectId": "P003",
+      "label": "AiRunningReportAggregationService.java",
+      "kind": "SOURCE",
+      "origin": "UPSTREAM_SOURCE",
+      "path": "projects/P003/source/ssafit/src/main/java/com/ssafy/ssafit/airunningreport/service/AiRunningReportAggregationService.java",
+      "sha256": "44bae5c7488ad18f2526a0fe6421183564d2d397f2ca38de8b043a6a93d133e5",
+      "source": {
+        "repositoryUrl": "https://github.com/WJLee0417/SSAFIT_Playlist",
+        "revision": "0e3a07c1d0eae320a6f66a571c5237bf2c114e80",
+        "path": "ssafit/src/main/java/com/ssafy/ssafit/airunningreport/service/AiRunningReportAggregationService.java",
+        "sourceSha256": "44bae5c7488ad18f2526a0fe6421183564d2d397f2ca38de8b043a6a93d133e5"
+      },
+      "createdOn": "2026-11-07"
+    },
+    {
+      "evidenceId": "E015",
+      "projectId": "P003",
+      "label": "AiRunningReportAggregationDtos.java",
+      "kind": "SOURCE",
+      "origin": "UPSTREAM_SOURCE",
+      "path": "projects/P003/source/ssafit/src/main/java/com/ssafy/ssafit/airunningreport/dto/AiRunningReportAggregationDtos.java",
+      "sha256": "30cfbf8da9ad8eb186c374a57bdecbb58fb556ea1173b6fe099d814e802ce39b",
+      "source": {
+        "repositoryUrl": "https://github.com/WJLee0417/SSAFIT_Playlist",
+        "revision": "0e3a07c1d0eae320a6f66a571c5237bf2c114e80",
+        "path": "ssafit/src/main/java/com/ssafy/ssafit/airunningreport/dto/AiRunningReportAggregationDtos.java",
+        "sourceSha256": "30cfbf8da9ad8eb186c374a57bdecbb58fb556ea1173b6fe099d814e802ce39b"
+      },
+      "createdOn": "2026-11-07"
+    },
+    {
+      "evidenceId": "E016",
+      "projectId": "P003",
+      "label": "AiRunningReportGenerationService.java",
+      "kind": "SOURCE",
+      "origin": "UPSTREAM_SOURCE",
+      "path": "projects/P003/source/ssafit/src/main/java/com/ssafy/ssafit/airunningreport/service/AiRunningReportGenerationService.java",
+      "sha256": "54c725d950164a7b991504a824d34cd2898d60b87d89c01beba72e86e600fbc3",
+      "source": {
+        "repositoryUrl": "https://github.com/WJLee0417/SSAFIT_Playlist",
+        "revision": "0e3a07c1d0eae320a6f66a571c5237bf2c114e80",
+        "path": "ssafit/src/main/java/com/ssafy/ssafit/airunningreport/service/AiRunningReportGenerationService.java",
+        "sourceSha256": "54c725d950164a7b991504a824d34cd2898d60b87d89c01beba72e86e600fbc3"
+      },
+      "createdOn": "2026-11-07"
+    },
+    {
+      "evidenceId": "E017",
+      "projectId": "P003",
+      "label": "외부 LLM API Provider 구현 파일",
+      "kind": "SOURCE",
+      "origin": "UPSTREAM_SOURCE",
+      "path": "projects/P003/source/ssafit/src/main/java/com/ssafy/ssafit/airunningreport/provider/OpenAiRunningReportProvider.java",
+      "sha256": "c1e1318994f8985276c4c7fdccd73cb752e300edef26c035259e59c94ccf004d",
+      "source": {
+        "repositoryUrl": "https://github.com/WJLee0417/SSAFIT_Playlist",
+        "revision": "0e3a07c1d0eae320a6f66a571c5237bf2c114e80",
+        "path": "ssafit/src/main/java/com/ssafy/ssafit/airunningreport/provider/OpenAiRunningReportProvider.java",
+        "sourceSha256": "c1e1318994f8985276c4c7fdccd73cb752e300edef26c035259e59c94ccf004d"
+      },
+      "createdOn": "2026-11-07"
+    },
+    {
+      "evidenceId": "E018",
+      "projectId": "P003",
+      "label": "AiRunningReportStorageService.java",
+      "kind": "SOURCE",
+      "origin": "UPSTREAM_SOURCE",
+      "path": "projects/P003/source/ssafit/src/main/java/com/ssafy/ssafit/airunningreport/service/AiRunningReportStorageService.java",
+      "sha256": "91b5ccbc0bd48dc93e74ef4a3cb4facc66994f42bac01ae1a39d0e4ccdb8523a",
+      "source": {
+        "repositoryUrl": "https://github.com/WJLee0417/SSAFIT_Playlist",
+        "revision": "0e3a07c1d0eae320a6f66a571c5237bf2c114e80",
+        "path": "ssafit/src/main/java/com/ssafy/ssafit/airunningreport/service/AiRunningReportStorageService.java",
+        "sourceSha256": "91b5ccbc0bd48dc93e74ef4a3cb4facc66994f42bac01ae1a39d0e4ccdb8523a"
+      },
+      "createdOn": "2026-11-07"
+    },
+    {
+      "evidenceId": "E019",
+      "projectId": "P003",
+      "label": "AiRunningReportMapper.xml",
+      "kind": "SOURCE",
+      "origin": "UPSTREAM_SOURCE",
+      "path": "projects/P003/source/ssafit/src/main/resources/mappers/airunningreport/AiRunningReportMapper.xml",
+      "sha256": "0b032251048d3a13473cdbb43303d2eede9a9e0a9c3662e9efce6f91dfc6354f",
+      "source": {
+        "repositoryUrl": "https://github.com/WJLee0417/SSAFIT_Playlist",
+        "revision": "0e3a07c1d0eae320a6f66a571c5237bf2c114e80",
+        "path": "ssafit/src/main/resources/mappers/airunningreport/AiRunningReportMapper.xml",
+        "sourceSha256": "0b032251048d3a13473cdbb43303d2eede9a9e0a9c3662e9efce6f91dfc6354f"
+      },
+      "createdOn": "2026-11-07"
+    },
+    {
+      "evidenceId": "E020",
+      "projectId": "P003",
+      "label": "AiRunningReportApiController.java",
+      "kind": "SOURCE",
+      "origin": "UPSTREAM_SOURCE",
+      "path": "projects/P003/source/ssafit/src/main/java/com/ssafy/ssafit/airunningreport/controller/api/AiRunningReportApiController.java",
+      "sha256": "b327f33a5252dc45cab531415f42a39c70955540050969e009dd923cc1d5a850",
+      "source": {
+        "repositoryUrl": "https://github.com/WJLee0417/SSAFIT_Playlist",
+        "revision": "0e3a07c1d0eae320a6f66a571c5237bf2c114e80",
+        "path": "ssafit/src/main/java/com/ssafy/ssafit/airunningreport/controller/api/AiRunningReportApiController.java",
+        "sourceSha256": "b327f33a5252dc45cab531415f42a39c70955540050969e009dd923cc1d5a850"
+      },
+      "createdOn": "2026-11-07"
+    },
+    {
+      "evidenceId": "E021",
+      "projectId": "P003",
+      "label": "AI 리포트 테스트 코드",
+      "kind": "SOURCE",
+      "origin": "UPSTREAM_SOURCE",
+      "path": "projects/P003/source/ssafit/src/test/java/com/ssafy/ssafit/airunningreport/service/AiRunningReportGenerationServiceTest.java",
+      "sha256": "9de19aaf0f607b4e7ca9dcaf10e99c714cd8516e3ac67ec340453ae42f5aa96c",
+      "source": {
+        "repositoryUrl": "https://github.com/WJLee0417/SSAFIT_Playlist",
+        "revision": "0e3a07c1d0eae320a6f66a571c5237bf2c114e80",
+        "path": "ssafit/src/test/java/com/ssafy/ssafit/airunningreport/service/AiRunningReportGenerationServiceTest.java",
+        "sourceSha256": "9de19aaf0f607b4e7ca9dcaf10e99c714cd8516e3ac67ec340453ae42f5aa96c"
+      },
+      "createdOn": "2026-11-07"
+    },
+    {
+      "evidenceId": "E022",
+      "projectId": "P003",
+      "label": "docs/ai-running-report.md",
+      "kind": "SOURCE",
+      "origin": "UPSTREAM_SOURCE",
+      "path": "projects/P003/source/docs/ai-running-report.md",
+      "sha256": "f662e0ff20ce157c6531aaafb048f4886b3e01f5481d93d9c16812dd9161ca42",
+      "source": {
+        "repositoryUrl": "https://github.com/WJLee0417/SSAFIT_Playlist",
+        "revision": "0e3a07c1d0eae320a6f66a571c5237bf2c114e80",
+        "path": "docs/ai-running-report.md",
+        "sourceSha256": "f662e0ff20ce157c6531aaafb048f4886b3e01f5481d93d9c16812dd9161ca42"
+      },
+      "createdOn": "2026-11-07"
+    },
+    {
+      "evidenceId": "E004",
+      "projectId": "P001",
+      "label": "MySQL DDL 발췌",
+      "kind": "SOURCE",
+      "origin": "UPSTREAM_SOURCE",
+      "path": "projects/P001/source/sql/schema.sql",
+      "sha256": "d9f8c4e6a7aada4483bb4bbb0d818a9c3a2eac11344cc1817d1b5fb5c7aee918",
+      "source": {
+        "repositoryUrl": "https://github.com/WJLee0417/Franchise_Recommendation_DB",
+        "revision": "944b28f6715ace4289ae85d7498910f021046998",
+        "path": "sql/schema.sql",
+        "sourceSha256": "d9f8c4e6a7aada4483bb4bbb0d818a9c3a2eac11344cc1817d1b5fb5c7aee918"
+      },
+      "createdOn": "2026-11-07"
+    },
+    {
+      "evidenceId": "E005",
+      "projectId": "P001",
+      "label": "SQL JOIN 발췌",
+      "kind": "SOURCE",
+      "origin": "UPSTREAM_SOURCE",
+      "path": "projects/P001/source/sql/sample_queries.sql",
+      "sha256": "49256ed0c532c45949bff4f2b2f434aa4cca8af66ae7234b43b14096386666b5",
+      "source": {
+        "repositoryUrl": "https://github.com/WJLee0417/Franchise_Recommendation_DB",
+        "revision": "944b28f6715ace4289ae85d7498910f021046998",
+        "path": "sql/sample_queries.sql",
+        "sourceSha256": "49256ed0c532c45949bff4f2b2f434aa4cca8af66ae7234b43b14096386666b5"
+      },
+      "createdOn": "2026-11-07"
+    },
+    {
+      "evidenceId": "E006",
+      "projectId": "P001",
+      "label": "Python–MySQL 연동 설명",
+      "kind": "SOURCE",
+      "origin": "UPSTREAM_SOURCE",
+      "path": "projects/P001/source/python-mysql-excerpt.py",
+      "sha256": "60c69195e49bdd2c118c2c1df3a12792d4132d07b1bf4a6fac5dc593ceed27a9",
+      "source": {
+        "repositoryUrl": "https://github.com/WJLee0417/Franchise_Recommendation_DB",
+        "revision": "944b28f6715ace4289ae85d7498910f021046998",
+        "path": "notebooks/franchise_recommendation.ipynb",
+        "sourceSha256": "8022bc2cf60678259384df0844b14897a5b0f109eeae7dafc08ba9ecf6dd44bb",
+        "extraction": "Code cells 1 and 3 (zero-based), unchanged cell source; notebook outputs omitted."
+      },
+      "createdOn": "2026-11-07"
+    }
+  ],
+  "importedFiles": [
+    {
+      "path": "projects/P003/source/docs/ai-running-report.md",
+      "sha256": "f662e0ff20ce157c6531aaafb048f4886b3e01f5481d93d9c16812dd9161ca42",
+      "source": {
+        "repositoryUrl": "https://github.com/WJLee0417/SSAFIT_Playlist",
+        "revision": "0e3a07c1d0eae320a6f66a571c5237bf2c114e80",
+        "path": "docs/ai-running-report.md",
+        "sourceSha256": "f662e0ff20ce157c6531aaafb048f4886b3e01f5481d93d9c16812dd9161ca42"
+      }
+    },
+    {
+      "path": "projects/P003/source/ssafit/src/main/java/com/ssafy/ssafit/airunningreport/config/AiRunningReportProperties.java",
+      "sha256": "fd4428ac5fdbe367464d9b14aaa8406c1afa46d7cdb9c2453a53922e80f60572",
+      "source": {
+        "repositoryUrl": "https://github.com/WJLee0417/SSAFIT_Playlist",
+        "revision": "0e3a07c1d0eae320a6f66a571c5237bf2c114e80",
+        "path": "ssafit/src/main/java/com/ssafy/ssafit/airunningreport/config/AiRunningReportProperties.java",
+        "sourceSha256": "fd4428ac5fdbe367464d9b14aaa8406c1afa46d7cdb9c2453a53922e80f60572"
+      }
+    },
+    {
+      "path": "projects/P003/source/ssafit/src/main/java/com/ssafy/ssafit/airunningreport/controller/api/AiRunningReportApiController.java",
+      "sha256": "b327f33a5252dc45cab531415f42a39c70955540050969e009dd923cc1d5a850",
+      "source": {
+        "repositoryUrl": "https://github.com/WJLee0417/SSAFIT_Playlist",
+        "revision": "0e3a07c1d0eae320a6f66a571c5237bf2c114e80",
+        "path": "ssafit/src/main/java/com/ssafy/ssafit/airunningreport/controller/api/AiRunningReportApiController.java",
+        "sourceSha256": "b327f33a5252dc45cab531415f42a39c70955540050969e009dd923cc1d5a850"
+      }
+    },
+    {
+      "path": "projects/P003/source/ssafit/src/main/java/com/ssafy/ssafit/airunningreport/domain/AiRunningReport.java",
+      "sha256": "7fb00076cdaca3a8e3a7d234ae37037f3624e4e72e1c7a92f07f14cd2cd4eb53",
+      "source": {
+        "repositoryUrl": "https://github.com/WJLee0417/SSAFIT_Playlist",
+        "revision": "0e3a07c1d0eae320a6f66a571c5237bf2c114e80",
+        "path": "ssafit/src/main/java/com/ssafy/ssafit/airunningreport/domain/AiRunningReport.java",
+        "sourceSha256": "7fb00076cdaca3a8e3a7d234ae37037f3624e4e72e1c7a92f07f14cd2cd4eb53"
+      }
+    },
+    {
+      "path": "projects/P003/source/ssafit/src/main/java/com/ssafy/ssafit/airunningreport/domain/AiRunningReportSource.java",
+      "sha256": "835f6cd84fa15be3b04c0f1b7cbb7e26dff6cc4fd2e451739e7ce1dd09c35b3e",
+      "source": {
+        "repositoryUrl": "https://github.com/WJLee0417/SSAFIT_Playlist",
+        "revision": "0e3a07c1d0eae320a6f66a571c5237bf2c114e80",
+        "path": "ssafit/src/main/java/com/ssafy/ssafit/airunningreport/domain/AiRunningReportSource.java",
+        "sourceSha256": "835f6cd84fa15be3b04c0f1b7cbb7e26dff6cc4fd2e451739e7ce1dd09c35b3e"
+      }
+    },
+    {
+      "path": "projects/P003/source/ssafit/src/main/java/com/ssafy/ssafit/airunningreport/domain/AiRunningReportStatus.java",
+      "sha256": "7883ff00e637215d32d7ca400bfce98d30c36b17fc0641c202dbea4857e79418",
+      "source": {
+        "repositoryUrl": "https://github.com/WJLee0417/SSAFIT_Playlist",
+        "revision": "0e3a07c1d0eae320a6f66a571c5237bf2c114e80",
+        "path": "ssafit/src/main/java/com/ssafy/ssafit/airunningreport/domain/AiRunningReportStatus.java",
+        "sourceSha256": "7883ff00e637215d32d7ca400bfce98d30c36b17fc0641c202dbea4857e79418"
+      }
+    },
+    {
+      "path": "projects/P003/source/ssafit/src/main/java/com/ssafy/ssafit/airunningreport/domain/AiRunningReportType.java",
+      "sha256": "8746b9d44ea0f33ab25f7e1c126e1660bece1582e69965e43804606512fe3f1c",
+      "source": {
+        "repositoryUrl": "https://github.com/WJLee0417/SSAFIT_Playlist",
+        "revision": "0e3a07c1d0eae320a6f66a571c5237bf2c114e80",
+        "path": "ssafit/src/main/java/com/ssafy/ssafit/airunningreport/domain/AiRunningReportType.java",
+        "sourceSha256": "8746b9d44ea0f33ab25f7e1c126e1660bece1582e69965e43804606512fe3f1c"
+      }
+    },
+    {
+      "path": "projects/P003/source/ssafit/src/main/java/com/ssafy/ssafit/airunningreport/dto/AiRunningReportAggregationDtos.java",
+      "sha256": "30cfbf8da9ad8eb186c374a57bdecbb58fb556ea1173b6fe099d814e802ce39b",
+      "source": {
+        "repositoryUrl": "https://github.com/WJLee0417/SSAFIT_Playlist",
+        "revision": "0e3a07c1d0eae320a6f66a571c5237bf2c114e80",
+        "path": "ssafit/src/main/java/com/ssafy/ssafit/airunningreport/dto/AiRunningReportAggregationDtos.java",
+        "sourceSha256": "30cfbf8da9ad8eb186c374a57bdecbb58fb556ea1173b6fe099d814e802ce39b"
+      }
+    },
+    {
+      "path": "projects/P003/source/ssafit/src/main/java/com/ssafy/ssafit/airunningreport/dto/AiRunningReportApiDtos.java",
+      "sha256": "96981b1275c442ab6eafe9eb04854a5ceb5d033011c2b0061b000b73ca5cb5c5",
+      "source": {
+        "repositoryUrl": "https://github.com/WJLee0417/SSAFIT_Playlist",
+        "revision": "0e3a07c1d0eae320a6f66a571c5237bf2c114e80",
+        "path": "ssafit/src/main/java/com/ssafy/ssafit/airunningreport/dto/AiRunningReportApiDtos.java",
+        "sourceSha256": "96981b1275c442ab6eafe9eb04854a5ceb5d033011c2b0061b000b73ca5cb5c5"
+      }
+    },
+    {
+      "path": "projects/P003/source/ssafit/src/main/java/com/ssafy/ssafit/airunningreport/dto/AiRunningReportContentDtos.java",
+      "sha256": "780563784489b65d5112bf52fcf52eb2f6d2dafd3dde54ae2d4100aa130780ab",
+      "source": {
+        "repositoryUrl": "https://github.com/WJLee0417/SSAFIT_Playlist",
+        "revision": "0e3a07c1d0eae320a6f66a571c5237bf2c114e80",
+        "path": "ssafit/src/main/java/com/ssafy/ssafit/airunningreport/dto/AiRunningReportContentDtos.java",
+        "sourceSha256": "780563784489b65d5112bf52fcf52eb2f6d2dafd3dde54ae2d4100aa130780ab"
+      }
+    },
+    {
+      "path": "projects/P003/source/ssafit/src/main/java/com/ssafy/ssafit/airunningreport/mapper/AiRunningReportMapper.java",
+      "sha256": "8fbd7a3b9dcdf95e9ed3c2d9cea879dc38e13b0de3d58573bfe0d35a1d5ece4a",
+      "source": {
+        "repositoryUrl": "https://github.com/WJLee0417/SSAFIT_Playlist",
+        "revision": "0e3a07c1d0eae320a6f66a571c5237bf2c114e80",
+        "path": "ssafit/src/main/java/com/ssafy/ssafit/airunningreport/mapper/AiRunningReportMapper.java",
+        "sourceSha256": "8fbd7a3b9dcdf95e9ed3c2d9cea879dc38e13b0de3d58573bfe0d35a1d5ece4a"
+      }
+    },
+    {
+      "path": "projects/P003/source/ssafit/src/main/java/com/ssafy/ssafit/airunningreport/provider/AiRunningReportLlmProvider.java",
+      "sha256": "9fb1af19478a72326ed648866402cef8beb48bef0d50876809309a7b83397664",
+      "source": {
+        "repositoryUrl": "https://github.com/WJLee0417/SSAFIT_Playlist",
+        "revision": "0e3a07c1d0eae320a6f66a571c5237bf2c114e80",
+        "path": "ssafit/src/main/java/com/ssafy/ssafit/airunningreport/provider/AiRunningReportLlmProvider.java",
+        "sourceSha256": "9fb1af19478a72326ed648866402cef8beb48bef0d50876809309a7b83397664"
+      }
+    },
+    {
+      "path": "projects/P003/source/ssafit/src/main/java/com/ssafy/ssafit/airunningreport/provider/AiRunningReportProviderException.java",
+      "sha256": "17639f194702b08b026812de126ba03c435f0fbca5a98477dcd8f353acc0c9ec",
+      "source": {
+        "repositoryUrl": "https://github.com/WJLee0417/SSAFIT_Playlist",
+        "revision": "0e3a07c1d0eae320a6f66a571c5237bf2c114e80",
+        "path": "ssafit/src/main/java/com/ssafy/ssafit/airunningreport/provider/AiRunningReportProviderException.java",
+        "sourceSha256": "17639f194702b08b026812de126ba03c435f0fbca5a98477dcd8f353acc0c9ec"
+      }
+    },
+    {
+      "path": "projects/P003/source/ssafit/src/main/java/com/ssafy/ssafit/airunningreport/provider/AiRunningReportProviderFailureReason.java",
+      "sha256": "1d13e72e9d8397ad87d3a5bddf64507613c9c40e96c4f3c55163176c7c6a7291",
+      "source": {
+        "repositoryUrl": "https://github.com/WJLee0417/SSAFIT_Playlist",
+        "revision": "0e3a07c1d0eae320a6f66a571c5237bf2c114e80",
+        "path": "ssafit/src/main/java/com/ssafy/ssafit/airunningreport/provider/AiRunningReportProviderFailureReason.java",
+        "sourceSha256": "1d13e72e9d8397ad87d3a5bddf64507613c9c40e96c4f3c55163176c7c6a7291"
+      }
+    },
+    {
+      "path": "projects/P003/source/ssafit/src/main/java/com/ssafy/ssafit/airunningreport/provider/AiRunningReportProviderResponse.java",
+      "sha256": "e240c0ac95ba14e6d67465f4b716abfd48a3f761ea4d0dd5a3c417fe56506471",
+      "source": {
+        "repositoryUrl": "https://github.com/WJLee0417/SSAFIT_Playlist",
+        "revision": "0e3a07c1d0eae320a6f66a571c5237bf2c114e80",
+        "path": "ssafit/src/main/java/com/ssafy/ssafit/airunningreport/provider/AiRunningReportProviderResponse.java",
+        "sourceSha256": "e240c0ac95ba14e6d67465f4b716abfd48a3f761ea4d0dd5a3c417fe56506471"
+      }
+    },
+    {
+      "path": "projects/P003/source/ssafit/src/main/java/com/ssafy/ssafit/airunningreport/provider/OpenAiRunningReportProvider.java",
+      "sha256": "c1e1318994f8985276c4c7fdccd73cb752e300edef26c035259e59c94ccf004d",
+      "source": {
+        "repositoryUrl": "https://github.com/WJLee0417/SSAFIT_Playlist",
+        "revision": "0e3a07c1d0eae320a6f66a571c5237bf2c114e80",
+        "path": "ssafit/src/main/java/com/ssafy/ssafit/airunningreport/provider/OpenAiRunningReportProvider.java",
+        "sourceSha256": "c1e1318994f8985276c4c7fdccd73cb752e300edef26c035259e59c94ccf004d"
+      }
+    },
+    {
+      "path": "projects/P003/source/ssafit/src/main/java/com/ssafy/ssafit/airunningreport/service/AiRunningReportAggregationService.java",
+      "sha256": "44bae5c7488ad18f2526a0fe6421183564d2d397f2ca38de8b043a6a93d133e5",
+      "source": {
+        "repositoryUrl": "https://github.com/WJLee0417/SSAFIT_Playlist",
+        "revision": "0e3a07c1d0eae320a6f66a571c5237bf2c114e80",
+        "path": "ssafit/src/main/java/com/ssafy/ssafit/airunningreport/service/AiRunningReportAggregationService.java",
+        "sourceSha256": "44bae5c7488ad18f2526a0fe6421183564d2d397f2ca38de8b043a6a93d133e5"
+      }
+    },
+    {
+      "path": "projects/P003/source/ssafit/src/main/java/com/ssafy/ssafit/airunningreport/service/AiRunningReportGenerationService.java",
+      "sha256": "54c725d950164a7b991504a824d34cd2898d60b87d89c01beba72e86e600fbc3",
+      "source": {
+        "repositoryUrl": "https://github.com/WJLee0417/SSAFIT_Playlist",
+        "revision": "0e3a07c1d0eae320a6f66a571c5237bf2c114e80",
+        "path": "ssafit/src/main/java/com/ssafy/ssafit/airunningreport/service/AiRunningReportGenerationService.java",
+        "sourceSha256": "54c725d950164a7b991504a824d34cd2898d60b87d89c01beba72e86e600fbc3"
+      }
+    },
+    {
+      "path": "projects/P003/source/ssafit/src/main/java/com/ssafy/ssafit/airunningreport/service/AiRunningReportResponseAssembler.java",
+      "sha256": "a599cd6e08201eef544d71cfab485c658bfef69a5a7629588d45e42d6e994663",
+      "source": {
+        "repositoryUrl": "https://github.com/WJLee0417/SSAFIT_Playlist",
+        "revision": "0e3a07c1d0eae320a6f66a571c5237bf2c114e80",
+        "path": "ssafit/src/main/java/com/ssafy/ssafit/airunningreport/service/AiRunningReportResponseAssembler.java",
+        "sourceSha256": "a599cd6e08201eef544d71cfab485c658bfef69a5a7629588d45e42d6e994663"
+      }
+    },
+    {
+      "path": "projects/P003/source/ssafit/src/main/java/com/ssafy/ssafit/airunningreport/service/AiRunningReportStorageService.java",
+      "sha256": "91b5ccbc0bd48dc93e74ef4a3cb4facc66994f42bac01ae1a39d0e4ccdb8523a",
+      "source": {
+        "repositoryUrl": "https://github.com/WJLee0417/SSAFIT_Playlist",
+        "revision": "0e3a07c1d0eae320a6f66a571c5237bf2c114e80",
+        "path": "ssafit/src/main/java/com/ssafy/ssafit/airunningreport/service/AiRunningReportStorageService.java",
+        "sourceSha256": "91b5ccbc0bd48dc93e74ef4a3cb4facc66994f42bac01ae1a39d0e4ccdb8523a"
+      }
+    },
+    {
+      "path": "projects/P003/source/ssafit/src/main/resources/mappers/airunningreport/AiRunningReportMapper.xml",
+      "sha256": "0b032251048d3a13473cdbb43303d2eede9a9e0a9c3662e9efce6f91dfc6354f",
+      "source": {
+        "repositoryUrl": "https://github.com/WJLee0417/SSAFIT_Playlist",
+        "revision": "0e3a07c1d0eae320a6f66a571c5237bf2c114e80",
+        "path": "ssafit/src/main/resources/mappers/airunningreport/AiRunningReportMapper.xml",
+        "sourceSha256": "0b032251048d3a13473cdbb43303d2eede9a9e0a9c3662e9efce6f91dfc6354f"
+      }
+    },
+    {
+      "path": "projects/P003/source/ssafit/src/main/resources/sql/migrations/20260624_add_ai_running_reports.sql",
+      "sha256": "84cb83084543823292579f2eea9b52f79f490e8f61583ab55b7639b68fe06e3a",
+      "source": {
+        "repositoryUrl": "https://github.com/WJLee0417/SSAFIT_Playlist",
+        "revision": "0e3a07c1d0eae320a6f66a571c5237bf2c114e80",
+        "path": "ssafit/src/main/resources/sql/migrations/20260624_add_ai_running_reports.sql",
+        "sourceSha256": "84cb83084543823292579f2eea9b52f79f490e8f61583ab55b7639b68fe06e3a"
+      }
+    },
+    {
+      "path": "projects/P003/source/ssafit/src/test/java/com/ssafy/ssafit/airunningreport/controller/api/AiRunningReportApiControllerTest.java",
+      "sha256": "6d8af3a2ee634bc7d1db2378297d094d41fe54df254c4bbc1a5b7dfbaac53028",
+      "source": {
+        "repositoryUrl": "https://github.com/WJLee0417/SSAFIT_Playlist",
+        "revision": "0e3a07c1d0eae320a6f66a571c5237bf2c114e80",
+        "path": "ssafit/src/test/java/com/ssafy/ssafit/airunningreport/controller/api/AiRunningReportApiControllerTest.java",
+        "sourceSha256": "6d8af3a2ee634bc7d1db2378297d094d41fe54df254c4bbc1a5b7dfbaac53028"
+      }
+    },
+    {
+      "path": "projects/P003/source/ssafit/src/test/java/com/ssafy/ssafit/airunningreport/service/AiRunningReportAggregationServiceTest.java",
+      "sha256": "0d0b88e2e388f6951ecf3c2fed321eddbd6ee88ab94a0a00eddd06607731712a",
+      "source": {
+        "repositoryUrl": "https://github.com/WJLee0417/SSAFIT_Playlist",
+        "revision": "0e3a07c1d0eae320a6f66a571c5237bf2c114e80",
+        "path": "ssafit/src/test/java/com/ssafy/ssafit/airunningreport/service/AiRunningReportAggregationServiceTest.java",
+        "sourceSha256": "0d0b88e2e388f6951ecf3c2fed321eddbd6ee88ab94a0a00eddd06607731712a"
+      }
+    },
+    {
+      "path": "projects/P003/source/ssafit/src/test/java/com/ssafy/ssafit/airunningreport/service/AiRunningReportGenerationServiceTest.java",
+      "sha256": "9de19aaf0f607b4e7ca9dcaf10e99c714cd8516e3ac67ec340453ae42f5aa96c",
+      "source": {
+        "repositoryUrl": "https://github.com/WJLee0417/SSAFIT_Playlist",
+        "revision": "0e3a07c1d0eae320a6f66a571c5237bf2c114e80",
+        "path": "ssafit/src/test/java/com/ssafy/ssafit/airunningreport/service/AiRunningReportGenerationServiceTest.java",
+        "sourceSha256": "9de19aaf0f607b4e7ca9dcaf10e99c714cd8516e3ac67ec340453ae42f5aa96c"
+      }
+    },
+    {
+      "path": "projects/P003/source/ssafit/src/test/java/com/ssafy/ssafit/airunningreport/service/AiRunningReportStorageServiceTest.java",
+      "sha256": "8537e0a84ae34eee7bbb6f385900617de330bd638464d106cb9b8473f896d53a",
+      "source": {
+        "repositoryUrl": "https://github.com/WJLee0417/SSAFIT_Playlist",
+        "revision": "0e3a07c1d0eae320a6f66a571c5237bf2c114e80",
+        "path": "ssafit/src/test/java/com/ssafy/ssafit/airunningreport/service/AiRunningReportStorageServiceTest.java",
+        "sourceSha256": "8537e0a84ae34eee7bbb6f385900617de330bd638464d106cb9b8473f896d53a"
+      }
+    },
+    {
+      "path": "projects/P001/source/sql/schema.sql",
+      "sha256": "d9f8c4e6a7aada4483bb4bbb0d818a9c3a2eac11344cc1817d1b5fb5c7aee918",
+      "source": {
+        "repositoryUrl": "https://github.com/WJLee0417/Franchise_Recommendation_DB",
+        "revision": "944b28f6715ace4289ae85d7498910f021046998",
+        "path": "sql/schema.sql",
+        "sourceSha256": "d9f8c4e6a7aada4483bb4bbb0d818a9c3a2eac11344cc1817d1b5fb5c7aee918"
+      }
+    },
+    {
+      "path": "projects/P001/source/sql/sample_queries.sql",
+      "sha256": "49256ed0c532c45949bff4f2b2f434aa4cca8af66ae7234b43b14096386666b5",
+      "source": {
+        "repositoryUrl": "https://github.com/WJLee0417/Franchise_Recommendation_DB",
+        "revision": "944b28f6715ace4289ae85d7498910f021046998",
+        "path": "sql/sample_queries.sql",
+        "sourceSha256": "49256ed0c532c45949bff4f2b2f434aa4cca8af66ae7234b43b14096386666b5"
+      }
+    },
+    {
+      "path": "projects/P001/source/python-mysql-excerpt.py",
+      "sha256": "60c69195e49bdd2c118c2c1df3a12792d4132d07b1bf4a6fac5dc593ceed27a9",
+      "source": {
+        "repositoryUrl": "https://github.com/WJLee0417/Franchise_Recommendation_DB",
+        "revision": "944b28f6715ace4289ae85d7498910f021046998",
+        "path": "notebooks/franchise_recommendation.ipynb",
+        "sourceSha256": "8022bc2cf60678259384df0844b14897a5b0f109eeae7dafc08ba9ecf6dd44bb",
+        "extraction": "Code cells 1 and 3 (zero-based), unchanged cell source; notebook outputs omitted."
+      }
+    }
+  ],
+  "revision": "782a00371d2e5859ecc0e22504cb7c2632a9047a"
+}
