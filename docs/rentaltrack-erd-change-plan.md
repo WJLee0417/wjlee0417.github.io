@@ -12,7 +12,8 @@
 - 새 ERD: 사용자 제공 `C:/Users/SSAFY/Downloads/렌탈트랙 (1).damx`. 엔터티 13개·컬럼 108개·관계 객체 14개를 추출하고 기존 코드와 비교함.
 - 사용자 결정: 새 ERD 중심 재구성, 지점·수요 예측 활성 기능 제외. 확정 기록 보존·다음 차수 작성·검수 기준 고정 방식으로 구현.
 - 구현 브랜치: `codex/rentaltrack-erd-v2`. 실제 MySQL 통합 테스트 21개·화면 빌드·고객/관리자 브라우저 흐름 검증 통과. 아래 기존 구현 연결표는 변경 전 구조를 기록한 것.
-- GitHub: [Draft PR #2](https://github.com/WJLee0417/RentalTrack/pull/2), 커밋 `831c6619416d8e9cfe77f020a7f39803e61e18a2`. 대상은 `refactor/rentaltrack-web-skeleton`이며 병합하지 않음.
+- GitHub: [PR #2](https://github.com/WJLee0417/RentalTrack/pull/2)는 사용자 요청으로 `refactor/rentaltrack-web-skeleton`에 병합. 병합 커밋 `c1608d0ab4c7a9ef59cd100452d049cfd7f7ff0d`.
+- 후속 작업: [기존 이력 매핑·이전](rentaltrack-legacy-mapping.md). 관리자 대응표·사전 점검·전체 이전과 MySQL 통합 테스트 40개·브라우저 흐름 검증 완료. 실제 자료는 사용자 답변 ‘자료 없음’에 따라 적용 대기.
 
 ## 기존 관계와 구현 연결
 
