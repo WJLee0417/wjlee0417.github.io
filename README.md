@@ -24,6 +24,7 @@ npm run dev
 - 연락처는 `profile.contact`에서 관리합니다. 원본 파일 URL이 `null`이면 링크를 표시하지 않습니다.
 - 담당 범위와 자료 한계는 프로젝트의 `scopeNotes`·`provenanceNote`, 수행 작업의 `verification`·`publicNote`, 도식의 `disclosure`에서 관리합니다. 증빙 유형과 원본 연결 여부를 구분해 표시합니다.
 - 리뷰 반영 사항과 사용자가 제공할 자료는 [추가 자료 목록](docs/portfolio-evidence-needed.md)에 우선순위별로 정리했습니다.
+- 연결된 코드·SQL로 구체화한 구현 내용과 파일별 근거는 [콘텐츠 보강 기록](docs/portfolio-source-review.md)에서 확인할 수 있습니다.
 - 코드·SQL·설계는 [증빙 전용 브랜치](https://github.com/WJLee0417/wjlee0417.github.io/tree/codex/portfolio-evidence)에 보관하고 커밋 고정 링크로 연결합니다. [자료 추가·갱신 방법](docs/evidence-workflow.md)을 참고하세요.
 
 ## 프로젝트 전용 AI 스킬
