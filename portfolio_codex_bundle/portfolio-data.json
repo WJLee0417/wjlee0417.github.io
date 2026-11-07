@@ -114,10 +114,10 @@
         "teamSize": 4,
         "contributionPercent": 25,
         "role": "운행 제약·수리모형 설계, ALNS·2-opt 구현",
-        "summary": "도보거리·차량 용량·시간창 제약 정의\nXpress Mosel 수리모형 작성\nPython ALNS·2-opt 경로 탐색 구현",
+        "summary": "도보거리·차량 용량·시간창을 반영한 Xpress 모형\nPython 승객 제거·재삽입 탐색\n이동 비용·운행 제약 평가",
         "problemSummary": "탑승 지점·차량 배정·방문 순서의 상호 의존\n차량 용량·도착 시간창의 동시 충족 필요",
         "outcomeSummary": "Xpress 수리모형·Python 탐색 로직 구현\n소규모 2문제: 목적함수 값 일치\n대규모 2문제: 도착 시간창 충족",
-        "cardLabel": "Xpress 모델링 · ALNS · 2-opt",
+        "cardLabel": "Xpress 모형 · 제거·재삽입 · 경로 조정",
         "cardLabelKind": "IMPLEMENTATION",
         "featuredContributionIds": [
           "FC010",
@@ -127,7 +127,21 @@
         "sortOrder": 2,
         "scopeNotes": [
           "검증 범위는 소규모 2문제와 대규모 2문제입니다. 대규모 문제에서는 시간창 준수 여부를 확인했으며 최적성을 입증한 결과는 아닙니다.",
-          "당시 Python 원본 코드와 재현 가능한 실행 로그는 현재 미확보 상태입니다. 검증 결과는 본인이 직접 확인한 경험에 근거합니다."
+          "ZIP의 2025-06-09 코드 공유 텍스트에서 Python 코드를 추출. 개인 작성 범위·C++ 포트 시점은 후속 확인 대상."
+        ],
+        "implementationNotes": [
+          {
+            "title": "Python · 배정과 재삽입",
+            "body": "random·worst 제거와 greedy·regret 삽입 조합\n탑승 후보지 선택과 승하차 위치 조합 탐색\n승하차 순서·차량 용량·목적지 시간창 검사"
+          },
+          {
+            "title": "Python · 해 수용과 재탐색",
+            "body": "차량 이동 비용·승객 도보 비용 계산\n온도에 따른 비개선 해 확률 수용\n개선 정체 시 온도 재가열"
+          },
+          {
+            "title": "C++ · 경로 내부 2-opt",
+            "body": "구간 반전 후보의 선후관계·기본 비용 검사\n지역 탐색 후 용량·시간창 위반량 재계산"
+          }
         ]
       },
       {
@@ -162,30 +176,62 @@
       {
         "id": "P004",
         "slug": "rentaltrack",
-        "name": "RentalTrack · 계약별 대여 이력 설계",
-        "nameEn": "RentalTrack Condition History Design",
+        "name": "RentalTrack · 대여·상태 기록·반납 검수",
+        "nameEn": "RentalTrack Rental & Condition History",
         "organization": "삼성청년SW·AI아카데미(SSAFY)",
         "periodStart": "2026-07",
         "periodEnd": "2026-08",
-        "kind": "대여 서비스 개념 설계",
+        "kind": "팀 프로젝트 · ERD 개편·웹 구현",
         "teamSize": null,
         "contributionPercent": 17,
-        "role": "대여 업무 흐름·계약별 이력 모델·협업 문서 설계",
-        "summary": "반복 대여를 위한 상품·계약 분리\n계약별 인수·반납 상태와 사진·손상 관계 설계\n검수 절차·요구사항·API 명세 정리",
-        "problemSummary": "상품의 최신 상태만으로 과거 대여 이력 구분 곤란\n계약별 인수·반납 상태와 손상 기록 연결 필요",
-        "outcomeSummary": "대여 업무 흐름도·계약 중심 개념 모델 설계\n인수·반납 상태 이력 구조 설계\n팀 합의 사항을 요구사항·API 명세에 반영",
-        "cardLabel": "상품·계약 분리 · 상태 이력 모델",
-        "cardLabelKind": "DESIGN",
+        "role": "대여 업무·계약별 이력 모델 설계, 후속 ERD 개편·기록 정책 구체화",
+        "summary": "상품·계약 분리와 단계별 대여 API\n확정 상태 기록 보존·차수 관리·검수 기준 고정\n기존 이력 매핑·이전과 반응형 웹 구현",
+        "problemSummary": "반복 대여 시 계약별 상태 기록 혼재\n상태 정정 이후에도 검수 기준 보존 필요",
+        "outcomeSummary": "계약별 인수·반납 기록과 손상 판정 연결\n확정 기록의 새 차수 생성·검수 기준 고정\n원본→대상 ID 매핑과 사전 점검 후 이력 이전",
+        "cardLabel": "기록 차수 · 검수 기준 고정 · 이력 이전",
+        "cardLabelKind": "IMPLEMENTATION",
         "featuredContributionIds": [
-          "FC021",
           "FC022",
-          "FC025"
+          "FC023",
+          "FC020"
         ],
         "sortOrder": 4,
-        "provenanceNote": "과거 팀 프로젝트 경험을 바탕으로 재구성한 개념 설계이며, 실제 구현 범위는 추가 확인이 필요합니다.",
+        "provenanceNote": "2026-07~08의 팀 경험과 2026-11의 사용자 제공 ERD 기반 후속 구현을 구분. 후속 구현은 이 대화의 설계 결정·구현 작업에 해당하며 과거 팀 프로젝트의 구현 실적으로 소급하지 않음.",
         "scopeNotes": [
-          "계약 A/B/C와 손상 변화는 설계 취지를 설명하기 위한 가상 사례입니다.",
-          "현재 도식은 공개용으로 재구성한 개념 모델입니다. 손상 자동 판정이나 법적 책임 확정 기능을 제시하지 않습니다."
+          "공개 데모는 샘플 조회 전용이며, 실제 대여·회원가입·자료 저장은 API 서버 실행 환경에서 제공.",
+          "기존 이력 이전은 fixture로 검증. 실제 운영 DB·상품 소유 사업자 자료는 미제공.",
+          "협업 문서 작업은 기존 팀 경험에 해당하며 후속 ERD 개편·웹 구현과 구분."
+        ],
+        "followUpPeriod": "2026-11 · ERD 개편·웹 구현",
+        "implementationStack": [
+          "Java 21",
+          "Spring Boot",
+          "MySQL",
+          "React · TypeScript"
+        ],
+        "links": [
+          {
+            "label": "웹 데모 · 샘플 조회",
+            "url": "https://wjlee0417.github.io/RentalTrack/"
+          },
+          {
+            "label": "구현 코드",
+            "url": "https://github.com/WJLee0417/RentalTrack/tree/3c1adca8bfd18fd5737617123c8644b3fc73d6ee"
+          }
+        ],
+        "implementationNotes": [
+          {
+            "title": "계약별 업무 흐름",
+            "body": "신청 → 인수 기록 확정 → 이용 → 반납 → 검수\n상품 잠금과 진행 계약 조회로 중복 신청 차단"
+          },
+          {
+            "title": "기존 이력 이전",
+            "body": "사업자·상품·회원·상태와 원본 ID 매핑\n원본·매핑·사진 해시로 사전 점검 후 변경 감지\n복사·대응표·실행 기록을 한 트랜잭션으로 처리"
+          },
+          {
+            "title": "화면과 검증",
+            "body": "일반회원·검수담당자·관리자 역할별 작업\n계약별 인수·반납 비교와 다른 차수 열람\nMySQL 통합 테스트·브라우저 흐름 검증"
+          }
         ]
       }
     ],
@@ -879,7 +925,7 @@
       },
       {
         "id": "E023",
-        "label": "대여 업무 흐름도",
+        "label": "초기 대여 업무 흐름",
         "kind": "DESIGN",
         "verificationStatus": "RECONSTRUCTED_DESIGN",
         "projectId": "P004",
@@ -895,7 +941,7 @@
       },
       {
         "id": "E024",
-        "label": "상품·계약 데이터 모델",
+        "label": "초기 상품·계약 모델",
         "kind": "DESIGN",
         "verificationStatus": "RECONSTRUCTED_DESIGN",
         "projectId": "P004",
@@ -911,7 +957,7 @@
       },
       {
         "id": "E025",
-        "label": "계약별 상태 이력 설계",
+        "label": "초기 상태 이력 설계",
         "kind": "DESIGN",
         "verificationStatus": "RECONSTRUCTED_DESIGN",
         "projectId": "P004",
@@ -944,6 +990,86 @@
         "description": "새로운 공개용 설명 자료, 원본 완료 명세서라고 단정하지 않음",
         "url": null,
         "publicAssetPath": null
+      },
+      {
+        "id": "E028",
+        "projectId": "P004",
+        "label": "대여·기록·검수 서비스",
+        "kind": "SOURCE",
+        "verificationStatus": "SOURCE_SUPPORTED",
+        "description": "대여·기록·검수 서비스 · 2026-11 후속 구현",
+        "url": "https://github.com/WJLee0417/RentalTrack/blob/3c1adca8bfd18fd5737617123c8644b3fc73d6ee/backend/src/main/java/com/rentaltrack/core/WorkflowService.java",
+        "publicAssetPath": null,
+        "source": {
+          "repositoryUrl": "https://github.com/WJLee0417/RentalTrack",
+          "revision": "3c1adca8bfd18fd5737617123c8644b3fc73d6ee",
+          "path": "backend/src/main/java/com/rentaltrack/core/WorkflowService.java",
+          "sourceSha256": "c179f024d6ae4a4a9cbbca3836d3474a80c49b1bfeb167f1c1b0a59ea853dfda"
+        }
+      },
+      {
+        "id": "E029",
+        "projectId": "P004",
+        "label": "ERD 개편 스키마",
+        "kind": "SOURCE",
+        "verificationStatus": "SOURCE_SUPPORTED",
+        "description": "ERD 개편 스키마 · 2026-11 후속 구현",
+        "url": "https://github.com/WJLee0417/RentalTrack/blob/3c1adca8bfd18fd5737617123c8644b3fc73d6ee/backend/src/main/resources/db/migration/V11__rebuild_rental_inspection_model.sql",
+        "publicAssetPath": null,
+        "source": {
+          "repositoryUrl": "https://github.com/WJLee0417/RentalTrack",
+          "revision": "3c1adca8bfd18fd5737617123c8644b3fc73d6ee",
+          "path": "backend/src/main/resources/db/migration/V11__rebuild_rental_inspection_model.sql",
+          "sourceSha256": "8861887d1b004201c280ae6f716c340a06b2d5c27259f8b83b45d49c781259f9"
+        }
+      },
+      {
+        "id": "E030",
+        "projectId": "P004",
+        "label": "기존 이력 매핑·이전",
+        "kind": "SOURCE",
+        "verificationStatus": "SOURCE_SUPPORTED",
+        "description": "기존 이력 매핑·이전 · 2026-11 후속 구현",
+        "url": "https://github.com/WJLee0417/RentalTrack/blob/3c1adca8bfd18fd5737617123c8644b3fc73d6ee/backend/src/main/java/com/rentaltrack/legacy/LegacyImportService.java",
+        "publicAssetPath": null,
+        "source": {
+          "repositoryUrl": "https://github.com/WJLee0417/RentalTrack",
+          "revision": "3c1adca8bfd18fd5737617123c8644b3fc73d6ee",
+          "path": "backend/src/main/java/com/rentaltrack/legacy/LegacyImportService.java",
+          "sourceSha256": "3d8233f465fe7950669aab4c883abc5a496ad71fc5dc8d2dcbd1251953b0df11"
+        }
+      },
+      {
+        "id": "E031",
+        "projectId": "P004",
+        "label": "역할별 웹·계약 비교 화면",
+        "kind": "SOURCE",
+        "verificationStatus": "SOURCE_SUPPORTED",
+        "description": "역할별 웹·계약 비교 화면 · 2026-11 후속 구현",
+        "url": "https://github.com/WJLee0417/RentalTrack/blob/3c1adca8bfd18fd5737617123c8644b3fc73d6ee/frontend/web/src/App.tsx",
+        "publicAssetPath": null,
+        "source": {
+          "repositoryUrl": "https://github.com/WJLee0417/RentalTrack",
+          "revision": "3c1adca8bfd18fd5737617123c8644b3fc73d6ee",
+          "path": "frontend/web/src/App.tsx",
+          "sourceSha256": "11fbc494de498634eb94f7e71e094cb5dae4daf918f178241792c1e8c0f434eb"
+        }
+      },
+      {
+        "id": "E032",
+        "projectId": "P004",
+        "label": "MySQL 통합 테스트",
+        "kind": "SOURCE",
+        "verificationStatus": "SOURCE_SUPPORTED",
+        "description": "MySQL 통합 테스트 · 2026-11 후속 구현",
+        "url": "https://github.com/WJLee0417/RentalTrack/blob/3c1adca8bfd18fd5737617123c8644b3fc73d6ee/backend/src/test/java/com/rentaltrack/core/WorkflowIntegrationTest.java",
+        "publicAssetPath": null,
+        "source": {
+          "repositoryUrl": "https://github.com/WJLee0417/RentalTrack",
+          "revision": "3c1adca8bfd18fd5737617123c8644b3fc73d6ee",
+          "path": "backend/src/test/java/com/rentaltrack/core/WorkflowIntegrationTest.java",
+          "sourceSha256": "eed44abc8581ff8b8b17f3da70013e8e0a40ffd2d0165e33850602881050fe67"
+        }
       }
     ]
   },
@@ -1107,7 +1233,7 @@
         "projectId": "P002",
         "capabilityId": "C005",
         "processId": "PR005",
-        "title": "Python ALNS 제거·삽입 탐색 구현",
+        "title": "Python 승객 제거·재삽입 탐색 구현",
         "problem": "승객·경유지 증가에 따른 배정·방문 순서 조합 증가",
         "decision": "해의 일부를 제거한 뒤 제약을 검사하며 재삽입하는 ALNS 적용",
         "action": "Python 승객 제거·재삽입 연산 구현\n후보 경로 반복 탐색 흐름 구현",
@@ -1115,10 +1241,9 @@
         "verification": null,
         "sectionAnchor": "alns",
         "ownership": "DIRECT",
-        "evidenceStatus": "USER_CONFIRMED",
+        "evidenceStatus": "SOURCE_SUPPORTED",
         "origin": "HISTORICAL_PROJECT",
-        "note": "당시 Python 원본 코드 미보유. UI에서 설명용 재구성 도식만 제공.",
-        "publicNote": "당시 Python 원본 코드는 현재 미확보 상태이며, 탐색 도식은 알고리즘 설명을 위해 재구성했습니다."
+        "note": "2025_DRT_ALNS.zip의 6월 9일 공유 텍스트에서 Python 코드 복구. random/worst 제거, greedy/regret 삽입, SA 수용 구조 확인. 작성 범위는 기존 본인 확인 범위를 유지."
       },
       {
         "id": "FC011",
@@ -1127,16 +1252,15 @@
         "processId": "PR005",
         "title": "2-opt 경로 개선 로직 구현",
         "problem": "승객 재배정 후 경로 내부 방문 순서의 추가 조정 필요",
-        "decision": "제약조건을 검사하며 방문 순서를 바꾸는 2-opt 적용",
-        "action": "Python으로 2-opt 후보 경로 생성\n후보별 비용·제약조건 검사",
-        "output": "방문 순서 변경과 비용·제약 검사를 결합한 지역 탐색 구현",
+        "decision": "구간 반전으로 방문 순서 조정\n비용 개선과 경로의 운행 조건을 나누어 평가",
+        "action": "2-opt 후보 구간 생성·승하차 선후관계 검사\n경로 조정 후 비용·용량·시간창 위반량 재계산",
+        "output": "구간 반전 기반 경로 내부 지역 탐색\n승하차 순서 검사와 전체 경로 위반량 평가",
         "verification": null,
         "sectionAnchor": "alns",
         "ownership": "DIRECT",
         "evidenceStatus": "USER_CONFIRMED",
         "origin": "HISTORICAL_PROJECT",
-        "note": "원본 구현 코드가 남아 있지 않음. 개선율을 임의 생성하지 않음.",
-        "publicNote": "당시 원본 구현 코드가 남아 있지 않아 실제 구현과 개선율을 재검증할 수 있는 자료는 현재 미확보 상태입니다."
+        "note": "제공 C++ two_opt는 선후관계·기본 비용을 검사하며 지역 탐색 후 위반량을 재계산. Python 공유본에는 two_opt 함수가 없으며 C++ 포트의 개인 작성 범위는 확인 대상."
       },
       {
         "id": "FC012",
@@ -1283,69 +1407,68 @@
         "projectId": "P004",
         "capabilityId": "C002",
         "processId": "PR001",
-        "title": "신청부터 검수까지 업무 흐름 정의",
-        "problem": "기록 시점·관리 주체 미정 시 대여 전후 비교 곤란",
-        "decision": "신청→인수→이용→반납→검수의 업무 단계 구분",
-        "action": "단계별 상태·사진·검수 데이터 정의",
-        "output": "대여 5단계와 단계별 기록 대상을 업무 흐름도로 설계",
+        "title": "계약 상태에 따른 대여 API",
+        "problem": "같은 상품의 동시 신청·업무 단계 누락 가능성",
+        "decision": "상품 행 잠금과 진행 계약 확인\n최신 인수 기록 확정 후 이용 시작",
+        "action": "신청·취소·이용 시작·반납 API 구성\n반납 시 상품을 점검 상태로 전환",
+        "output": "상품 중복 신청 차단\n대여 계약과 상품 상태를 업무 단계에 맞춰 전환",
         "verification": null,
         "sectionAnchor": "business-process",
         "ownership": "DIRECT",
-        "evidenceStatus": "USER_CONFIRMED",
-        "origin": "RECONSTRUCTED_DESIGN",
-        "note": null
+        "evidenceStatus": "SOURCE_SUPPORTED",
+        "origin": "FOLLOW_UP_IMPLEMENTATION",
+        "note": "2026-11 사용자 제공 ERD와 이 대화의 결정에 따라 후속 구현. 원래 팀 프로젝트의 개인 구현 실적으로 소급하지 않음."
       },
       {
         "id": "FC021",
         "projectId": "P004",
         "capabilityId": "C002",
         "processId": "PR004",
-        "title": "상품과 대여계약 중심 엔터티 관계 설계",
-        "problem": "반복 대여 시 상품 정보만으로 개별 계약 이력 구분 곤란",
-        "decision": "상품과 개별 대여계약 분리",
-        "action": "상품·계약·상태·사진·손상·검수 엔터티 관계 설계",
-        "output": "상품·계약을 분리한 개념 모델 설계\n상태·사진·손상·검수 기록을 계약 중심으로 연결",
+        "title": "상품·계약·기록의 관계형 모델",
+        "problem": "상품의 현재 상태만으로 계약별 인수·반납 이력 구분 곤란",
+        "decision": "반복 대여되는 상품과 개별 계약 분리\n상태 기록·사진·손상을 계약에 연결",
+        "action": "제공 ERD를 Flyway 스키마와 JPA 엔터티에 반영\n계약·상태·사진·손상·검수의 FK·고유 제약 구성",
+        "output": "상품과 계약의 일대다 구조\n계약별 상태·사진·손상·검수 관계 구현",
         "verification": null,
         "sectionAnchor": "data-model",
         "ownership": "DIRECT",
-        "evidenceStatus": "USER_CONFIRMED",
-        "origin": "RECONSTRUCTED_DESIGN",
-        "note": null
+        "evidenceStatus": "SOURCE_SUPPORTED",
+        "origin": "FOLLOW_UP_IMPLEMENTATION",
+        "note": "2026-11 사용자 제공 ERD와 이 대화의 결정에 따라 후속 구현. 원래 팀 프로젝트의 개인 구현 실적으로 소급하지 않음."
       },
       {
         "id": "FC022",
         "projectId": "P004",
         "capabilityId": "C002",
         "processId": "PR004",
-        "title": "계약별 전·후 상태·사진 이력 설계",
-        "problem": "사진·손상을 상품에만 연결할 경우 대여 기간별 기록 혼재",
-        "decision": "상태 기록을 계약별 인수·반납 시점으로 구분",
-        "action": "상태·사진·손상 위치를 계약에 연결하는 관계 설계",
-        "output": "반복 대여 이력을 계약 단위로 분리\n인수·반납 상태·사진·손상 위치의 비교 구조 설계",
+        "title": "확정 기록 보존과 다음 차수 생성",
+        "problem": "상태 기록 수정 시 과거 사진·손상 관찰의 덮어쓰기 가능성",
+        "decision": "확정 기록의 직접 수정 차단\n수정은 새 차수에서 작성",
+        "action": "사진·손상 관찰·증거 연결을 새 ID로 복사\n계약·기록 단계별 다음 차수 생성\n기존 확정 기록과 사진 저장 키 보존",
+        "output": "확정 이력을 유지하는 차수 관리\n인수·반납 기록 수정과 과거 기록 열람 분리",
         "verification": null,
         "sectionAnchor": "condition-history",
         "ownership": "DIRECT",
-        "evidenceStatus": "USER_CONFIRMED",
-        "origin": "RECONSTRUCTED_DESIGN",
-        "note": null
+        "evidenceStatus": "SOURCE_SUPPORTED",
+        "origin": "FOLLOW_UP_IMPLEMENTATION",
+        "note": "2026-11 사용자 제공 ERD와 이 대화의 결정에 따라 후속 구현. 원래 팀 프로젝트의 개인 구현 실적으로 소급하지 않음."
       },
       {
         "id": "FC023",
         "projectId": "P004",
         "capabilityId": "C002",
         "processId": "PR004",
-        "title": "반납 검수와 상태 비교 절차 설계",
-        "problem": "인수 시 상태 부재 시 반납 후 신규 손상 구분 곤란",
-        "decision": "동일 계약의 인수 기록·반납 기록을 비교 대상으로 지정",
-        "action": "기록 시점과 검수 데이터를 연결하는 업무·데이터 흐름 설계",
-        "output": "동일 계약의 인수·반납 상태를 검수 기록에 연결하는 비교 절차 설계",
+        "title": "검수 기준 고정과 손상별 판정",
+        "problem": "비교 기록 변경 시 검수 판단의 기준 변동\n미판정 손상이 있는 검수의 완료 가능성",
+        "decision": "동일 계약의 확정 인수·반납 기록을 검수에 고정\n기존·신규·보류 판정을 손상별로 분리",
+        "action": "기록의 계약·단계·확정 여부 검사\n기존 손상 판정에 인수 손상 참조 요구\n미판정·보류가 남으면 완료 차단",
+        "output": "선택한 인수·반납 기록 기준의 검수\n판정 결과에 따른 상품의 가용·수리 상태 전환",
         "verification": null,
         "sectionAnchor": "condition-history",
         "ownership": "DIRECT",
-        "evidenceStatus": "USER_CONFIRMED",
-        "origin": "RECONSTRUCTED_DESIGN",
-        "note": "손상 자동 판정이나 법적 책임 확정 기능 아님.",
-        "publicNote": "인수·반납 기록 비교를 위한 설계이며, 손상 자동 판정이나 법적 책임 확정까지 다루지는 않습니다."
+        "evidenceStatus": "SOURCE_SUPPORTED",
+        "origin": "FOLLOW_UP_IMPLEMENTATION",
+        "note": "2026-11 사용자 제공 ERD와 이 대화의 결정에 따라 후속 구현. 원래 팀 프로젝트의 개인 구현 실적으로 소급하지 않음."
       },
       {
         "id": "FC024",
@@ -1816,26 +1939,6 @@
         "evidenceId": "E020"
       },
       {
-        "contributionId": "FC020",
-        "evidenceId": "E023"
-      },
-      {
-        "contributionId": "FC021",
-        "evidenceId": "E024"
-      },
-      {
-        "contributionId": "FC022",
-        "evidenceId": "E024"
-      },
-      {
-        "contributionId": "FC022",
-        "evidenceId": "E025"
-      },
-      {
-        "contributionId": "FC023",
-        "evidenceId": "E025"
-      },
-      {
         "contributionId": "FC024",
         "evidenceId": "E026"
       },
@@ -1846,6 +1949,50 @@
       {
         "contributionId": "FC025",
         "evidenceId": "E027"
+      },
+      {
+        "contributionId": "FC020",
+        "evidenceId": "E028"
+      },
+      {
+        "contributionId": "FC020",
+        "evidenceId": "E032"
+      },
+      {
+        "contributionId": "FC020",
+        "evidenceId": "E023"
+      },
+      {
+        "contributionId": "FC021",
+        "evidenceId": "E029"
+      },
+      {
+        "contributionId": "FC021",
+        "evidenceId": "E030"
+      },
+      {
+        "contributionId": "FC021",
+        "evidenceId": "E024"
+      },
+      {
+        "contributionId": "FC022",
+        "evidenceId": "E028"
+      },
+      {
+        "contributionId": "FC022",
+        "evidenceId": "E031"
+      },
+      {
+        "contributionId": "FC022",
+        "evidenceId": "E025"
+      },
+      {
+        "contributionId": "FC023",
+        "evidenceId": "E028"
+      },
+      {
+        "contributionId": "FC023",
+        "evidenceId": "E032"
       }
     ],
     "metricEvidence": [
@@ -1997,8 +2144,8 @@
       "sections": [
         {
           "id": "overview",
-          "title": "설계 개요",
-          "body": "반복 대여 상품의 계약별 인수·반납 상태 비교 구조 설계"
+          "title": "작업 개요",
+          "body": "계약별 상태 이력·검수와 2026-11 후속 ERD 개편·웹 구현"
         },
         {
           "id": "business-process",
@@ -2013,7 +2160,7 @@
         {
           "id": "condition-history",
           "title": "계약별 상태 이력",
-          "body": "동일 계약의 인수·반납 상태·사진·손상 위치 비교"
+          "body": "확정 차수 보존·다음 차수 복사·검수 기준 기록 고정"
         },
         {
           "id": "design-decisions",
@@ -2139,19 +2286,19 @@
       "id": "D005",
       "projectId": "P002",
       "sectionAnchor": "alns",
-      "title": "ALNS Stage Explorer",
+      "title": "Passenger Search",
       "type": "STEPPER",
-      "sourceClassification": "ILLUSTRATIVE_EXAMPLE",
-      "disclosure": "알고리즘 작동 원리의 재구성 예시. 당시 Python 원본 코드를 뜻하지 않음",
+      "sourceClassification": "SOURCE_STRUCTURE",
+      "disclosure": "제공 Python 공유본의 탐색 구조를 요약. C++의 2-opt 구현과 구분.",
       "stages": [
-        "Initial Solution",
-        "Passenger Removal",
-        "Passenger Reinsertion",
-        "Feasibility Check",
-        "2-opt"
+        "초기 승객 배정",
+        "random / worst 제거",
+        "greedy / regret 재삽입",
+        "비용·운행 제약 검사",
+        "확률 수용·온도 재가열"
       ],
-      "description": "단계를 선택하면 조건·변경 내용을 글과 도식으로 함께 표시",
-      "caption": "승객 제거·재삽입 탐색과 2-opt 방문 순서 조정의 결합"
+      "description": "Python alns의 제거·삽입·해 수용 흐름",
+      "caption": "승객 배정 변경과 제약 검사를 반복하는 Python 탐색 흐름"
     },
     {
       "id": "D006",
@@ -2273,8 +2420,8 @@
       "sectionAnchor": "business-process",
       "title": "Rental Lifecycle",
       "type": "STEPPER",
-      "sourceClassification": "RECONSTRUCTED_DESIGN",
-      "disclosure": "대화 기반 재구성 설계안. 구현 완료 상태도를 뜻하지 않음",
+      "sourceClassification": "FOLLOW_UP_IMPLEMENTATION",
+      "disclosure": "2026-11 후속 구현의 업무 흐름 요약",
       "stages": [
         "신청",
         "인수",
@@ -2282,8 +2429,8 @@
         "반납",
         "검수"
       ],
-      "description": "각 단계의 기록 대상만 보여줌",
-      "caption": "대여 단계별 상태·사진·검수 기록을 정의한 업무 흐름"
+      "description": "최신 인수 기록 확정과 반납 후 검수 조건",
+      "caption": "인수 기록 확정 후 이용 시작, 반납 후 기록 비교·손상 판정"
     },
     {
       "id": "D011",
@@ -2291,73 +2438,78 @@
       "sectionAnchor": "data-model",
       "title": "Contract ERD Explorer",
       "type": "CONCEPTUAL_ERD",
-      "sourceClassification": "RECONSTRUCTED_DESIGN",
-      "disclosure": "개념적 엔터티 관계. 원본 DDL/물리 테이블명 아님",
+      "sourceClassification": "SOURCE_STRUCTURE",
+      "disclosure": "제공 ERD 기반 V11 스키마의 주요 관계 요약",
       "entities": [
-        "RentalProduct",
-        "RentalContract",
-        "ConditionRecord",
-        "ConditionImage",
-        "DamageRecord",
-        "ReturnInspection"
+        "RENTAL_ITEM",
+        "RENTAL_CONTRACT",
+        "CONDITION_RECORD",
+        "CONDITION_PHOTO",
+        "DAMAGE_OBSERVATION",
+        "RETURN_INSPECTION"
       ],
       "description": "상품↔계약 1:N, 계약↔상태기록, 상태기록↔사진·손상, 계약↔검수",
       "relationships": [
         [
-          "RentalProduct",
-          "RentalContract",
-          "1:N"
+          "RENTAL_ITEM",
+          "RENTAL_CONTRACT",
+          "상품별 계약"
         ],
         [
-          "RentalContract",
-          "ConditionRecord",
-          "계약별 상태 기록"
+          "RENTAL_CONTRACT",
+          "CONDITION_RECORD",
+          "인수·반납 / 차수"
         ],
         [
-          "ConditionRecord",
-          "ConditionImage",
-          "상태 기록의 사진"
+          "CONDITION_RECORD",
+          "CONDITION_PHOTO",
+          "차수별 사진"
         ],
         [
-          "ConditionRecord",
-          "DamageRecord",
-          "상태 기록의 손상"
+          "CONDITION_RECORD",
+          "DAMAGE_OBSERVATION",
+          "손상 관찰"
         ],
         [
-          "RentalContract",
-          "ReturnInspection",
+          "RENTAL_CONTRACT",
+          "RETURN_INSPECTION",
           "계약별 검수"
+        ],
+        [
+          "RETURN_INSPECTION",
+          "CONDITION_RECORD",
+          "인수·반납 기준 고정"
         ]
       ],
-      "caption": "상품·계약 분리 및 상태·사진·손상·검수의 계약별 연결 설계"
+      "caption": "상품·계약 분리와 기록 차수·검수 기준의 관계"
     },
     {
       "id": "D012",
       "projectId": "P004",
       "sectionAnchor": "condition-history",
-      "title": "Contract History Explorer",
+      "title": "기록 차수와 검수 기준",
       "type": "CONDITION_STEPPER",
-      "sourceClassification": "ILLUSTRATIVE_EXAMPLE",
-      "disclosure": "설계 취지를 설명하기 위한 가상 계약 A/B/C. 고객·대여·손상 사실 아님",
+      "sourceClassification": "SOURCE_STRUCTURE",
+      "disclosure": "확정 기록·새 차수·고정된 검수 기준의 처리 원리",
       "states": [
         {
-          "label": "계약 A",
-          "before": "손상 없음",
-          "after": "왼쪽 모서리 흠집"
+          "label": "기록 확정",
+          "before": "사진·손상 관찰 작성",
+          "after": "해당 차수의 직접 수정 차단"
         },
         {
-          "label": "계약 B",
-          "before": "왼쪽 모서리 흠집",
-          "after": "기존 흠집 유지"
+          "label": "다음 차수",
+          "before": "기존 확정 기록 보존",
+          "after": "새 ID로 사진·관찰·증거 연결 복사"
         },
         {
-          "label": "계약 C",
-          "before": "기존 흠집",
-          "after": "추가 손상 기록"
+          "label": "검수 기준",
+          "before": "같은 계약의 확정 인수·반납 기록 선택",
+          "after": "비교 기준 고정·미판정 완료 차단"
         }
       ],
       "description": "계약을 전환할 때 해당 인수/반납 이력을 함께 바꿈; 법적 책임 판정 금지",
-      "caption": "계약 A/B/C를 가정한 인수·반납 상태 비교 예시"
+      "caption": "이전 차수 보존과 검수 기준 고정을 분리한 상태 기록 흐름"
     }
   ],
   "logicalSchema": [
@@ -2795,8 +2947,8 @@
         "id": "rental",
         "type": "overview",
         "title": "반복 대여를 계약별 이력으로",
-        "chapter": "RENTALTRACK DESIGN",
-        "eyebrow": "04 / CONCEPT DESIGN",
+        "chapter": "RENTALTRACK",
+        "eyebrow": "04 / RENTAL WORKFLOW",
         "projectId": "P004",
         "contributionIds": [],
         "diagramId": "D011"
@@ -2804,8 +2956,8 @@
       {
         "id": "rental-model",
         "type": "work",
-        "title": "업무 단계와 데이터 관계 설계",
-        "chapter": "RENTALTRACK DESIGN",
+        "title": "업무 상태와 계약별 데이터",
+        "chapter": "RENTALTRACK",
         "eyebrow": "04 / PROCESS & MODEL",
         "projectId": "P004",
         "contributionIds": [
@@ -2817,8 +2969,8 @@
       {
         "id": "rental-history",
         "type": "work",
-        "title": "인수부터 반납까지, 같은 계약 안에",
-        "chapter": "RENTALTRACK DESIGN",
+        "title": "차수는 보존하고, 검수 기준은 고정",
+        "chapter": "RENTALTRACK",
         "eyebrow": "04 / CONDITION HISTORY",
         "projectId": "P004",
         "contributionIds": [
@@ -2830,8 +2982,8 @@
       {
         "id": "rental-collaboration",
         "type": "work",
-        "title": "범위는 좁히고, 문서는 함께 갱신",
-        "chapter": "RENTALTRACK DESIGN",
+        "title": "팀의 업무 범위와 문서 정리",
+        "chapter": "RENTALTRACK",
         "eyebrow": "04 / COLLABORATION",
         "projectId": "P004",
         "contributionIds": [

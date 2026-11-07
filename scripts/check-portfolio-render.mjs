@@ -40,8 +40,13 @@ try {
   assert.equal(resolveSlide('/','?slide=unknown'),0);
   const app=renderToString(createElement(MemoryRouter,{initialEntries:['/?slide=running-storage']},createElement(PortfolioDeck)));
   assert.ok(app.includes('data-slide-index="6"'));
-  assert.ok(all.includes('계약 A/B/C를 가정한'));
-  assert.ok(all.includes('대여 서비스 개념 설계'));
+  assert.ok(all.includes('이전 차수 보존과 검수 기준 고정'));
+  assert.ok(all.includes('2026-11 · ERD 개편·웹 구현'));
+  assert.ok(all.includes('https://wjlee0417.github.io/RentalTrack/'));
+  assert.ok(all.includes('팀 프로젝트 · ERD 개편·웹 구현'));
+  assert.ok(!all.includes('CONCEPT DESIGN'));
+  assert.ok(!all.includes('당시 Python 원본 코드는 현재 미확보'));
+  assert.ok(!all.includes('Python으로 2-opt 후보 경로 생성'));
   const home=renderToString(createElement(MemoryRouter,null,createElement(WebHome)));
   for(const project of data.dimensions.projects){
     assert.ok(home.includes(`/projects/${project.slug}`));

@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react';
 import { Link, Outlet, useLocation, useNavigate, useParams } from 'react-router-dom';
-import { data, getFeaturedTechnologiesByProject, getDesignFocusByProject, type Project } from '../data';
+import { data, getFeaturedTechnologiesByProject, type Project } from '../data';
 import { deckSlides, slideNumber } from '../deck-model';
-import { Bullets, DeckDiagram, WorkCard } from './Deck';
+import { Bullets, DeckDiagram, WorkCard, ProjectLinks } from './Deck';
 
 const overviews = deckSlides.filter(slide => slide.type === 'overview');
 export const webProjects = overviews.map(slide => data.dimensions.projects.find(project => project.id === slide.projectId)!);
 
 function Stack({ project }: { project: Project }) {
-  const labels = project.id === 'P004' ? getDesignFocusByProject(project.id) : getFeaturedTechnologiesByProject(data,project.id).map(tech => tech.label);
+  const labels = project.implementationStack ?? getFeaturedTechnologiesByProject(data,project.id).map(tech => tech.label);
   return <div className="web-stack">{labels.map(label => <span key={label}>{label}</span>)}</div>;
 }
 
@@ -84,7 +84,7 @@ export function WebProject() {
   },[slug,location.search]);
   if(!project) return <WebNotFound/>;
   const goTo=(id:string)=>{setSelected(id);document.getElementById(id)?.scrollIntoView({behavior:'smooth'});};
-  return <main className="web-project-page"><div className="web-wrap"><nav className="web-breadcrumb" aria-label="현재 위치"><Link to={{pathname:'/',hash:'#projects'}}>Projects</Link><span>/</span><span>{slideNumber(index)} · {project.name}</span></nav><header className="web-project-hero"><div><p className="web-eyebrow">{overview?.eyebrow}</p><h1>{project.name}</h1><p className="web-project-english">{project.nameEn}</p><Bullets text={project.summary}/><Stack project={project}/><dl className="web-project-facts"><div><dt>ROLE</dt><dd>{project.role}</dd></div><div><dt>PERIOD</dt><dd>{project.periodStart} — {project.periodEnd}</dd></div><div><dt>CONTEXT</dt><dd>{project.kind}</dd></div></dl></div>{diagram && <DeckDiagram diagram={diagram}/>}</header><ProjectMetrics project={project}/><div className="web-detail-layout"><aside className="web-project-nav"><p>ON THIS PROJECT</p>{groups.map((group,index)=><button type="button" key={group.id} className={selected===group.id?'is-active':''} onClick={()=>goTo(group.id)}><span>{slideNumber(index)}</span>{group.title}</button>)}<Link to={`/deck?slide=${overview?.id}`}>이 프로젝트를 슬라이드로 ↗</Link></aside><div className="web-project-work">{groups.map((group,index)=>{
+  return <main className="web-project-page"><div className="web-wrap"><nav className="web-breadcrumb" aria-label="현재 위치"><Link to={{pathname:'/',hash:'#projects'}}>Projects</Link><span>/</span><span>{slideNumber(index)} · {project.name}</span></nav><header className="web-project-hero"><div><p className="web-eyebrow">{overview?.eyebrow}</p><h1>{project.name}</h1><p className="web-project-english">{project.nameEn}</p><Bullets text={project.summary}/><Stack project={project}/><dl className="web-project-facts"><div><dt>ROLE</dt><dd>{project.role}</dd></div><div><dt>PERIOD</dt><dd>{project.periodStart} — {project.periodEnd}</dd></div><div><dt>CONTEXT</dt><dd>{project.kind}</dd></div>{project.followUpPeriod && <div><dt>FOLLOW-UP</dt><dd>{project.followUpPeriod}</dd></div>}</dl><ProjectLinks project={project}/></div>{diagram && <DeckDiagram diagram={diagram}/>}</header><ProjectMetrics project={project}/>{project.implementationNotes?.length ? <section className="web-implementation"><p className="web-eyebrow">PROJECT IMPLEMENTATION</p><h2>프로젝트 구현 구조</h2><div>{project.implementationNotes.map(note=><article key={note.title}><h3>{note.title}</h3><Bullets text={note.body}/></article>)}</div></section> : null}<div className="web-detail-layout"><aside className="web-project-nav"><p>ON THIS PROJECT</p>{groups.map((group,index)=><button type="button" key={group.id} className={selected===group.id?'is-active':''} onClick={()=>goTo(group.id)}><span>{slideNumber(index)}</span>{group.title}</button>)}<Link to={`/deck?slide=${overview?.id}`}>이 프로젝트를 슬라이드로 ↗</Link></aside><div className="web-project-work">{groups.map((group,index)=>{
     const work=group.contributionIds.map(id=>data.facts.contributions.find(work=>work.id===id)!);
     const visual=data.diagrams.find(diagram=>diagram.id===group.diagramId);
     return <section className="web-work-section" id={group.id} key={group.id}><div className="web-work-heading"><p className="web-eyebrow">{slideNumber(index)} / {group.eyebrow.split(' / ')[1]}</p><h2>{group.title}</h2></div><div className="web-work-grid">{work.map(item=><WorkCard work={item} key={item.id}/>)}</div>{visual && <DeckDiagram diagram={visual}/>}</section>;

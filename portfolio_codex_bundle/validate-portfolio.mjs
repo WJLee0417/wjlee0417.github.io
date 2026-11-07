@@ -63,6 +63,10 @@ for(const [projectId,expected] of Object.entries({P001:['T001','T002','T005','T0
   assert(actual.join(',')===expected.join(','),`featured technology selection changed ${projectId}`);
 }
 for (const p of dim.projects){
+  for(const item of p.implementationNotes??[]) assert(item.title?.trim() && item.body?.trim(),`empty implementation note ${p.id}`);
+  for(const link of p.links??[]){
+    assert(link.label?.trim() && /^https:\/\/(github\.com\/WJLee0417\/|wjlee0417\.github\.io\/)/.test(link.url),`invalid project link ${p.id}`);
+  }
   assert(Object.hasOwn(d.pages,p.id),`page missing: ${p.id}`);
   const pages=new Set(d.pages[p.id]?.sections.map(s=>s.id));
   for(const id of p.featuredContributionIds) assert(cmap.get(id)?.projectId===p.id,`featured contribution invalid ${p.id}/${id}`);
@@ -93,7 +97,14 @@ for(const e of dim.evidence){
   assert(e.publicAssetPath===null,`unregistered public asset: ${e.id}`);
   const artifact=artifactMap.get(e.id);
   if(!artifact){
-    assert(e.url===null && !e.artifact,`unregistered evidence link: ${e.id}`);
+    if(e.source){
+      const source=e.source;
+      assert(e.kind==='SOURCE' && e.verificationStatus==='SOURCE_SUPPORTED',`invalid direct source type ${e.id}`);
+      assert(source.repositoryUrl==='https://github.com/WJLee0417/RentalTrack',`unregistered direct source repository ${e.id}`);
+      assert(/^[0-9a-f]{40}$/.test(source.revision) && /^[0-9a-f]{64}$/.test(source.sourceSha256),`invalid direct source provenance ${e.id}`);
+      assert(/^[A-Za-z0-9_./-]+$/.test(source.path) && !source.path.split('/').includes('..'),`unsafe direct source path ${e.id}`);
+      assert(e.url===`${source.repositoryUrl}/blob/${source.revision}/${source.path}` && !e.artifact,`direct source link mismatch ${e.id}`);
+    }else assert(e.url===null && !e.artifact,`unregistered evidence link: ${e.id}`);
     continue;
   }
   assert(artifact.projectId===e.projectId && artifact.kind===e.kind,`artifact scope mismatch: ${e.id}`);
@@ -149,7 +160,8 @@ const badP001=/코사인|유사도 계산|Folium|지도 시각화|추천 점수 
 for(const c of fact.contributions.filter(c=>c.projectId==='P001')){
   const s=JSON.stringify(c);assert(!badP001.test(s),`P001 team-only work entered personal contribution: ${c.id}`);
 }
-assert(!JSON.stringify(d).includes('C++'),'avoid non-personal implementation language in personal portfolio data');
+const personalCopy=[JSON.stringify(d.profile),...dim.projects.flatMap(p=>[p.role,p.summary,p.outcomeSummary]),...fact.contributions.flatMap(c=>[c.title,c.problem,c.decision,c.action,c.output])];
+assert(!personalCopy.some(text=>text.includes('C++')),'C++ port must not be claimed as personal implementation without ownership confirmation');
 const secretPattern=/(?:sk-[a-zA-Z0-9]{16,}|password\s*[:=]|jdbc:mysql:\/\/[^" ]+:[0-9]+)/i;
 assert(!secretPattern.test(JSON.stringify(d)),'possible private credential/contact in browser data');
 if(errors.length){ console.error(`Validation failed (${errors.length}):\n- ${errors.join('\n- ')}`);process.exitCode=1; }

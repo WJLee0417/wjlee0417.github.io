@@ -4,7 +4,7 @@
  */
 export type Ownership = 'DIRECT' | 'JOINT' | 'TEAM';
 export type EvidenceStatus = 'SOURCE_SUPPORTED' | 'USER_CONFIRMED' | 'REVIEW_REQUIRED';
-export type WorkOrigin = 'HISTORICAL_PROJECT' | 'HISTORICAL_TEAM_EXPERIENCE' | 'RECONSTRUCTED_DESIGN';
+export type WorkOrigin = 'HISTORICAL_PROJECT' | 'HISTORICAL_TEAM_EXPERIENCE' | 'RECONSTRUCTED_DESIGN' | 'FOLLOW_UP_IMPLEMENTATION';
 export type MetricCategory = 'SCALE' | 'VALIDATION_CONTEXT' | 'CONFIGURATION' | 'STRUCTURE';
 export type EvidenceKind = 'SOURCE' | 'DESIGN' | 'EXPERIENCE';
 export type EvidenceVerificationStatus = EvidenceStatus | 'RECONSTRUCTED_DESIGN';
@@ -17,6 +17,10 @@ export interface Project {
   cardLabel: string; cardLabelKind: MetricCategory | 'IMPLEMENTATION' | 'DESIGN';
   featuredContributionIds: string[]; sortOrder: number; provenanceNote?: string;
   scopeNotes?: string[];
+  followUpPeriod?: string;
+  implementationStack?: string[];
+  implementationNotes?: Array<{ title: string; body: string }>;
+  links?: Array<{ label: string; url: string }>;
 }
 export interface Capability { id: string; label: string; description: string; noConfirmedContribution?: boolean }
 export interface Process { id: string; label: string; description: string }
@@ -35,6 +39,7 @@ export interface Evidence {
   verificationStatus: EvidenceVerificationStatus;
   projectId: string; description: string;
   url: string | null; publicAssetPath: string | null;
+  source?: { repositoryUrl: string; revision: string; path: string; sourceSha256: string };
   artifact?: {
     path: string; sha256: string; createdOn: string;
     origin: 'RECONSTRUCTED_DESIGN' | 'UPSTREAM_SOURCE';

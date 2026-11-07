@@ -7,6 +7,11 @@ export function Bullets({ text, className = '' }: { text: string; className?: st
   return <ul className={`deck-bullets ${className}`}>{text.split('\n').filter(Boolean).map((line, index) => <li key={index}>{line}</li>)}</ul>;
 }
 
+export function ProjectLinks({ project }: { project: Project }) {
+  if(!project.links?.length) return null;
+  return <div className="project-links">{project.links.map(link=><a href={link.url} key={link.url} target="_blank" rel="noreferrer">{link.label} <span aria-hidden="true">↗</span></a>)}</div>;
+}
+
 function WorkLinks({ work }: { work: Contribution }) {
   const evidence = getEvidenceByContribution(data, work.id).filter(item => item.url);
   if (!evidence.length) return null;
@@ -20,7 +25,7 @@ export function WorkCard({ work }: { work: Contribution }) {
     <div className="deck-work-details">
       <div className="deck-problem"><b>문제</b><Bullets text={work.problem}/></div>
       <div><b>판단</b><Bullets text={work.decision}/></div>
-      <div><b>{work.projectId === 'P004' ? '설계' : '구현'}</b><Bullets text={work.action}/></div>
+      <div><b>{work.origin === 'HISTORICAL_TEAM_EXPERIENCE' ? '협업' : work.origin === 'RECONSTRUCTED_DESIGN' ? '설계' : '구현'}</b><Bullets text={work.action}/></div>
     </div>
     <WorkLinks work={work}/>
   </article>;
@@ -76,13 +81,14 @@ function Overview({ project, slide }: { project: Project; slide: DeckSlide }) {
     <div className="overview-copy">
       <p className="deck-project-name">{project.name}</p>
       <Bullets text={project.summary} className="overview-summary"/>
-      <dl className="deck-project-meta"><div><dt>ROLE</dt><dd>{project.role}</dd></div><div><dt>PERIOD</dt><dd>{project.periodStart} — {project.periodEnd}</dd></div><div><dt>CONTEXT</dt><dd>{project.kind}</dd></div></dl>
-      <div className="deck-stack">{project.id === 'P004' ? <span>업무 흐름 · 개념 모델 · 요구사항 · API 명세</span> : getFeaturedTechnologiesByProject(data, project.id).map(tech => <span key={tech.id}>{tech.label}</span>)}</div>
+      <dl className="deck-project-meta"><div><dt>ROLE</dt><dd>{project.role}</dd></div><div><dt>PERIOD</dt><dd>{project.periodStart} — {project.periodEnd}</dd></div><div><dt>CONTEXT</dt><dd>{project.kind}</dd></div>{project.followUpPeriod && <div><dt>FOLLOW-UP</dt><dd>{project.followUpPeriod}</dd></div>}</dl>
+      <div className="deck-stack">{project.implementationStack ? project.implementationStack.map(label=><span key={label}>{label}</span>) : getFeaturedTechnologiesByProject(data, project.id).map(tech => <span key={tech.id}>{tech.label}</span>)}</div>
       {metrics.length > 0 && <div className="deck-metrics">{metrics.map(record => {
         const definition = data.dimensions.metrics.find(item => item.id === record.metricId)!;
         return <div key={record.id}><small>{definition.category === 'CONFIGURATION' ? '설정' : definition.category === 'STRUCTURE' ? '구조' : definition.category === 'VALIDATION_CONTEXT' ? '비교 문제' : '데이터 규모'}</small><strong>{record.numericValue.toLocaleString('ko-KR')}<span>{definition.unit}</span></strong><p>{definition.label}</p></div>;
       })}</div>}
-      {project.id === 'P004' && <div className="design-principle"><small>DESIGN PRINCIPLE</small><Bullets text={project.outcomeSummary}/></div>}
+      {project.id === 'P004' && <div className="design-principle"><small>WORKFLOW</small><Bullets text={project.outcomeSummary}/></div>}
+      <ProjectLinks project={project}/>
     </div>
     {diagram && <DeckDiagram diagram={diagram}/>}
   </div>;
@@ -124,7 +130,7 @@ export function SlideContent({ slide, index, go = () => {} }: { slide: DeckSlide
   return <section className={`portfolio-slide slide-${slide.type}`} data-slide-id={slide.id} aria-label={`${slideNumber(index)}. ${slide.title}`}>
     <div className="slide-rail"><span>{slide.chapter}</span></div>
     {slide.type === 'cover' ? <Cover go={go}/> : slide.type === 'closing' ? <Closing go={go}/> : <div className="slide-paper">
-      <header className="slide-heading"><div><p>{slide.eyebrow}</p><h2>{slide.title}</h2></div><span>{project ? project.id === 'P004' ? 'CONCEPT DESIGN' : project.periodStart.slice(0,4) : data.profile.role}</span></header>
+      <header className="slide-heading"><div><p>{slide.eyebrow}</p><h2>{slide.title}</h2></div><span>{project ? project.followUpPeriod && !work.some(item=>item.origin==='HISTORICAL_TEAM_EXPERIENCE') ? `${project.followUpPeriod.slice(0,7).replace('-','.')} / UPDATE` : project.periodStart.slice(0,4) : data.profile.role}</span></header>
       <div className={`slide-body ${slide.type === 'work' ? `work-layout ${work.length === 1 ? 'single-work' : ''} ${diagram && work.length > 1 ? 'with-diagram-strip' : ''}` : ''}`}>
         {slide.type === 'contents' && <Contents go={go}/>}
         {slide.type === 'overview' && project && <Overview project={project} slide={slide}/>}
