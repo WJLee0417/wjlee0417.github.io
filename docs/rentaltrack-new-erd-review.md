@@ -281,4 +281,3 @@ flowchart LR
 | use_yn | CHAR(1) | 53274 |
 | created_at | DATETIME(3) | 53892 |
 | updated_at | DATETIME(3) | 54526 |
-
