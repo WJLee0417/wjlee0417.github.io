@@ -71,6 +71,14 @@ export interface Diagram {
 }
 export interface ProjectPage { sections: Array<{ id: string; title: string; body: string }>; sectionNavigation: string }
 export interface PortfolioData {
+  presentation: {
+    theme: string; title: string; coverTitle: string; closingTitle: string;
+    slides: Array<{
+      id: string; type: 'cover' | 'contents' | 'overview' | 'work' | 'closing';
+      title: string; chapter: string; eyebrow: string; projectId: string | null;
+      contributionIds: string[]; diagramId: string | null;
+    }>;
+  };
   meta: {
     version: string; lastUpdated: string; locale: string;
     portfolioTitle: string; purpose: string;

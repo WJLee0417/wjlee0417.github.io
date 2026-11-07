@@ -7,7 +7,8 @@
     "dev": "vite --host 127.0.0.1",
     "typecheck": "tsc --noEmit",
     "check:render": "node scripts/check-portfolio-render.mjs",
-    "build": "tsc --noEmit && vite build",
+    "build": "tsc --noEmit && vite build && node scripts/export-deck.mjs",
+    "export:deck": "node scripts/export-deck.mjs",
     "validate:data": "node portfolio_codex_bundle/validate-portfolio.mjs"
   },
   "dependencies": {

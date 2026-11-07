@@ -25,6 +25,25 @@ const metrics=unique(dim.metrics,'metric definitions'), evidence=unique(dim.evid
 const contributions=unique(fact.contributions,'contributions'), mrecords=unique(fact.metricRecords,'metric records');
 unique(d.logicalSchema,'schema tables', x=>x.name);unique(d.diagrams,'diagrams');
 const cmap=new Map(fact.contributions.map(c=>[c.id,c]));
+const presentation=d.presentation;
+assert(presentation?.theme==='warm-ivory-cobalt','slide theme must be warm-ivory-cobalt');
+assert(Array.isArray(presentation?.slides) && presentation.slides.length>2,'slide deck missing');
+if(Array.isArray(presentation?.slides)){
+  unique(presentation.slides,'slides');
+  const workIds=[];
+  for(const slide of presentation.slides){
+    assert(/^[a-z][a-z-]*$/.test(slide.id),`unsafe slide id ${slide.id}`);
+    assert(typeof slide.title==='string' && slide.title.trim(),`slide title missing ${slide.id}`);
+    assert(['cover','contents','overview','work','closing'].includes(slide.type),`invalid slide type ${slide.id}`);
+    assert(slide.projectId===null || projects.has(slide.projectId),`unknown slide project ${slide.id}`);
+    assert(slide.diagramId===null || d.diagrams.some(item=>item.id===slide.diagramId && item.projectId===slide.projectId),`invalid slide diagram ${slide.id}`);
+    for(const id of slide.contributionIds){
+      assert(cmap.has(id) && cmap.get(id).projectId===slide.projectId,`invalid slide contribution ${slide.id}/${id}`);
+      workIds.push(id);
+    }
+  }
+  assert(new Set(workIds).size===workIds.length && fact.contributions.every(item=>workIds.includes(item.id)),'each contribution must appear once in deck');
+}
 const technologyGroups=['Java / Backend','Python / Data','SQL / Database','Optimization','Interface / Tools'];
 for(const t of dim.technologies){
   assert(technologyGroups.includes(t.group),`invalid technology group ${t.id}`);

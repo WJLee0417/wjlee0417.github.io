@@ -2605,5 +2605,251 @@
       "P003": "외부 LLM API로 표기. 테스트 코드의 존재는 확인되지만 본인 작성 여부 단정 금지. API 호출 감소율·응답의 의미적 정확도 주장 금지.",
       "P004": "과거 경험에 기초한 재구성 설계라는 사실 유지. 구현 완료·손상 자동 판정·법적 책임 결론 주장 금지. GitHub 링크 없음."
     }
+  },
+  "presentation": {
+    "theme": "warm-ivory-cobalt",
+    "title": "LEE WONJUN / PORTFOLIO",
+    "coverTitle": "데이터 연결부터\n서비스 구현까지",
+    "closingTitle": "다음 프로젝트를\n함께 만들겠습니다.",
+    "slides": [
+      {
+        "id": "cover",
+        "type": "cover",
+        "title": "이원준 포트폴리오",
+        "chapter": "PORTFOLIO",
+        "eyebrow": "DATA ENGINEERING",
+        "projectId": null,
+        "contributionIds": [],
+        "diagramId": null
+      },
+      {
+        "id": "contents",
+        "type": "contents",
+        "title": "프로젝트와 기술",
+        "chapter": "CONTENTS",
+        "eyebrow": "PROFILE & SELECTED WORK",
+        "projectId": null,
+        "contributionIds": [],
+        "diagramId": null
+      },
+      {
+        "id": "running",
+        "type": "overview",
+        "title": "러닝 기록을 리포트로",
+        "chapter": "AI RUNNING REPORT",
+        "eyebrow": "01 / BACKEND & AI",
+        "projectId": "P003",
+        "contributionIds": [],
+        "diagramId": "D007"
+      },
+      {
+        "id": "running-aggregation",
+        "type": "work",
+        "title": "통계는 서버에서, 누락은 상태로",
+        "chapter": "AI RUNNING REPORT",
+        "eyebrow": "01 / AGGREGATION",
+        "projectId": "P003",
+        "contributionIds": [
+          "FC013",
+          "FC014"
+        ],
+        "diagramId": null
+      },
+      {
+        "id": "running-provider",
+        "type": "work",
+        "title": "집계 JSON에서 LLM 응답까지",
+        "chapter": "AI RUNNING REPORT",
+        "eyebrow": "01 / PROVIDER",
+        "projectId": "P003",
+        "contributionIds": [
+          "FC015",
+          "FC016"
+        ],
+        "diagramId": null
+      },
+      {
+        "id": "running-fallback",
+        "type": "work",
+        "title": "응답 보완과 실패 처리 분리",
+        "chapter": "AI RUNNING REPORT",
+        "eyebrow": "01 / RESPONSE HANDLING",
+        "projectId": "P003",
+        "contributionIds": [
+          "FC017"
+        ],
+        "diagramId": "D008"
+      },
+      {
+        "id": "running-storage",
+        "type": "work",
+        "title": "같은 입력은 재사용, 결과는 API로",
+        "chapter": "AI RUNNING REPORT",
+        "eyebrow": "01 / SNAPSHOT & API",
+        "projectId": "P003",
+        "contributionIds": [
+          "FC018",
+          "FC019"
+        ],
+        "diagramId": null
+      },
+      {
+        "id": "commercial",
+        "type": "overview",
+        "title": "다른 기관의 데이터를 하나로",
+        "chapter": "COMMERCIAL DISTRICT DB",
+        "eyebrow": "02 / DATA INTEGRATION",
+        "projectId": "P001",
+        "contributionIds": [],
+        "diagramId": "D002"
+      },
+      {
+        "id": "commercial-mapping",
+        "type": "work",
+        "title": "데이터 정제와 공통 업종코드",
+        "chapter": "COMMERCIAL DISTRICT DB",
+        "eyebrow": "02 / CLASSIFICATION",
+        "projectId": "P001",
+        "contributionIds": [
+          "FC001",
+          "FC002"
+        ],
+        "diagramId": "D001"
+      },
+      {
+        "id": "commercial-model",
+        "type": "work",
+        "title": "데이터 단위에 맞춘 키 설계",
+        "chapter": "COMMERCIAL DISTRICT DB",
+        "eyebrow": "02 / RELATIONAL MODEL",
+        "projectId": "P001",
+        "contributionIds": [
+          "FC003",
+          "FC004"
+        ],
+        "diagramId": null
+      },
+      {
+        "id": "commercial-query",
+        "type": "work",
+        "title": "브랜드에서 상권 매출까지 연결",
+        "chapter": "COMMERCIAL DISTRICT DB",
+        "eyebrow": "02 / SQL & PYTHON",
+        "projectId": "P001",
+        "contributionIds": [
+          "FC005",
+          "FC006"
+        ],
+        "diagramId": "D003"
+      },
+      {
+        "id": "routing",
+        "type": "overview",
+        "title": "운행 제약을 만족하는 경로 탐색",
+        "chapter": "ROUTE OPTIMIZATION",
+        "eyebrow": "03 / OPTIMIZATION",
+        "projectId": "P002",
+        "contributionIds": [],
+        "diagramId": "D005"
+      },
+      {
+        "id": "routing-constraints",
+        "type": "work",
+        "title": "승객 수요를 운행 조건으로",
+        "chapter": "ROUTE OPTIMIZATION",
+        "eyebrow": "03 / DATA & CONSTRAINTS",
+        "projectId": "P002",
+        "contributionIds": [
+          "FC007",
+          "FC008"
+        ],
+        "diagramId": null
+      },
+      {
+        "id": "routing-search",
+        "type": "work",
+        "title": "기준 모형과 ALNS 탐색 구현",
+        "chapter": "ROUTE OPTIMIZATION",
+        "eyebrow": "03 / MODEL & SEARCH",
+        "projectId": "P002",
+        "contributionIds": [
+          "FC009",
+          "FC010"
+        ],
+        "diagramId": null
+      },
+      {
+        "id": "routing-results",
+        "type": "work",
+        "title": "방문 순서 조정과 경로 비교",
+        "chapter": "ROUTE OPTIMIZATION",
+        "eyebrow": "03 / 2-OPT & RESULTS",
+        "projectId": "P002",
+        "contributionIds": [
+          "FC011",
+          "FC012"
+        ],
+        "diagramId": "D006"
+      },
+      {
+        "id": "rental",
+        "type": "overview",
+        "title": "반복 대여를 계약별 이력으로",
+        "chapter": "RENTALTRACK DESIGN",
+        "eyebrow": "04 / CONCEPT DESIGN",
+        "projectId": "P004",
+        "contributionIds": [],
+        "diagramId": "D011"
+      },
+      {
+        "id": "rental-model",
+        "type": "work",
+        "title": "업무 단계와 데이터 관계 설계",
+        "chapter": "RENTALTRACK DESIGN",
+        "eyebrow": "04 / PROCESS & MODEL",
+        "projectId": "P004",
+        "contributionIds": [
+          "FC020",
+          "FC021"
+        ],
+        "diagramId": "D010"
+      },
+      {
+        "id": "rental-history",
+        "type": "work",
+        "title": "인수부터 반납까지, 같은 계약 안에",
+        "chapter": "RENTALTRACK DESIGN",
+        "eyebrow": "04 / CONDITION HISTORY",
+        "projectId": "P004",
+        "contributionIds": [
+          "FC022",
+          "FC023"
+        ],
+        "diagramId": "D012"
+      },
+      {
+        "id": "rental-collaboration",
+        "type": "work",
+        "title": "범위는 좁히고, 문서는 함께 갱신",
+        "chapter": "RENTALTRACK DESIGN",
+        "eyebrow": "04 / COLLABORATION",
+        "projectId": "P004",
+        "contributionIds": [
+          "FC024",
+          "FC025"
+        ],
+        "diagramId": null
+      },
+      {
+        "id": "closing",
+        "type": "closing",
+        "title": "다음 프로젝트를 함께",
+        "chapter": "CONTACT",
+        "eyebrow": "LET’S BUILD TOGETHER",
+        "projectId": null,
+        "contributionIds": [],
+        "diagramId": null
+      }
+    ]
   }
 }
