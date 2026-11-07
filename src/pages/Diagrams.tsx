@@ -56,7 +56,7 @@ function ReportBranches({ diagram }: { diagram: Diagram }) {
     <div className="pipeline-current">
       <small>기존 완료 리포트 조회</small>
       <strong>{stages[3]}</strong>
-      <p>입력 Snapshot 해시가 같은 완료 리포트를 조회합니다.</p>
+      <p>동일 입력 Snapshot 해시의 완료 리포트 조회</p>
     </div>
     <div className="report-branches" role="list" aria-label="완료 리포트 재사용과 신규 생성 분기">
       <div className="pipeline-current" role="listitem">

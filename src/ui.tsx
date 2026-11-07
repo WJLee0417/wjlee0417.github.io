@@ -52,6 +52,11 @@ export function SectionHeading({ number, eyebrow, title, description }: { number
 
 export function CategoryTag({ category }: { category: string }) { return <span className="category-tag">{categoryLabel[category] ?? category}</span>; }
 
+export function BulletCopy({ text, className = '' }: { text: string; className?: string }) {
+  const items = text.split('\n').map(item => item.trim()).filter(Boolean);
+  return <ul className={`${className} copy-list`.trim()}>{items.map((item, index) => <li key={index}>{item}</li>)}</ul>;
+}
+
 export function evidenceLinkLabel(evidence: (typeof data.dimensions.evidence)[number]) {
   if (evidence.kind === 'DESIGN') return '설계';
   const path = evidence.artifact?.path ?? '';

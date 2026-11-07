@@ -131,3 +131,17 @@
 .evidence-list .evidence-row>.artifact-kind{grid-column:1;align-self:start;padding-top:3px}
 @media(min-width:1024px){.work-entry-flow{grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}}
 @media(max-width:767px){.work-result{padding:13px 15px;font-size:14px}.evidence-list .evidence-row{padding:14px;grid-template-columns:32px minmax(0,1fr);gap:9px}}
+
+.copy-list{margin:0;padding-left:1.15em;list-style:disc;line-height:1.75;word-break:keep-all;overflow-wrap:anywhere}
+.copy-list>li+li{margin-top:6px}
+.copy-list>li::marker{color:var(--accent)}
+.hero-intro.copy-list{margin-top:30px}
+.card-summary.copy-list{margin-top:14px}
+.project-summary.copy-list{margin-top:27px}
+.detail-lead.copy-list{margin-top:15px}
+.project-summary-grid .copy-list{margin-top:15px;font-size:13px;line-height:1.7;color:var(--text)}
+.work-result.copy-list{margin-top:16px;padding:14px 18px 14px 36px}
+.work-entry-flow .copy-list{margin-top:7px;font-size:13px;line-height:1.75}
+.contribution-result.copy-list{margin-bottom:18px}
+.contribution-body dd>.copy-list{font-size:inherit}
+@media(max-width:767px){.hero-intro.copy-list{margin-top:24px}.project-summary-grid .copy-list{font-size:12px}.work-result.copy-list{padding:13px 15px 13px 32px}}

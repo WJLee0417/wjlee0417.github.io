@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { data, displayCopy, getCapabilityProjectEdges, getTechnologyProjectEdges, getTechnologyGroups, getContributionsByConnection, getContributionsByTechnologyProject, getMetricsByProject, getProjectsByCapability, getProjectsByTechnology, projectPath, sectionPath, sortTechnologies, type Contribution, type Technology } from '../data';
-import { CategoryTag, EvidenceLinks } from '../ui';
+import { BulletCopy, CategoryTag, EvidenceLinks } from '../ui';
 
 type Mode = 'capability' | 'technology';
 const modeNames: Record<Mode, string> = { capability: 'Capability View', technology: 'Technology View' };
@@ -19,8 +19,8 @@ function Contributions({ items }: { items: Contribution[] }) {
       <details className="contribution-disclosure">
         <summary><span>{c.title}</span><span className="disclosure-plus" aria-hidden="true">+</span></summary>
         <div className="contribution-body">
-          <p className="contribution-result">{displayCopy(c.output)}</p>
-          <dl><dt>문제</dt><dd>{c.problem}</dd><dt>판단</dt><dd>{c.decision}</dd><dt>{project.id === 'P004' ? '설계' : '구현'}</dt><dd>{displayCopy(c.action)}</dd></dl>
+          <BulletCopy className="contribution-result" text={c.output}/>
+          <dl><dt>문제</dt><dd><BulletCopy text={c.problem}/></dd><dt>판단</dt><dd><BulletCopy text={c.decision}/></dd><dt>{project.id === 'P004' ? '설계' : '구현'}</dt><dd><BulletCopy text={c.action}/></dd></dl>
           <EvidenceLinks contributionId={c.id}/>
           <Link className="text-link" to={sectionPath(project.slug, c.sectionAnchor)}>{project.name} · 해당 섹션 보기 ↗</Link>
         </div>
@@ -41,7 +41,7 @@ function ExplorerDetail({ mode, selected }: { mode: Mode; selected: string }) {
     const metrics = getMetricsByProject(data, project.id);
     return <>
       <p className="eyebrow">PROJECT / {project.id}</p><h3>{project.name}</h3>
-      <p className="detail-lead">{project.summary}</p>
+      <BulletCopy className="detail-lead" text={project.summary}/>
       <div className="detail-keyline"><b>맡은 역할</b><span>{project.role}</span></div>
       <h4>대표 수행 작업</h4><Contributions items={featured}/>
       {metrics.length > 0 && <><h4>데이터와 작업 규모</h4>{metrics.map(m => <div className="detail-metric" key={m.id}>

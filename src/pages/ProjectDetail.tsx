@@ -5,7 +5,7 @@ import {
   getDesignFocusByProject, getDetailTechnologiesByProject, getFeaturedTechnologiesByProject,
   getTechnologiesByContribution, projectPath,
 } from '../data';
-import { EvidenceLinks, MetricList, TechnologyTags } from '../ui';
+import { BulletCopy, EvidenceLinks, MetricList, TechnologyTags } from '../ui';
 import DiagramFrame from './Diagrams';
 import EvidenceList from './EvidenceList';
 
@@ -53,7 +53,7 @@ export default function ProjectDetail() {
         <p className="eyebrow">CASE STUDY / {project.id}</p>
         <h1>{project.name}</h1>
         <p className="project-en">{project.nameEn}</p>
-        <p className="project-summary">{project.summary}</p>
+        <BulletCopy className="project-summary" text={project.summary}/>
         <div className="project-hero-tags">{getCapabilitiesByProject(data, project.id).map(c => <span key={c.id}>{c.label}</span>)}</div>
         <div className="project-stack">
           <small>{designFocus.length ? 'DESIGN FOCUS' : 'TECH STACK'}</small>
@@ -70,10 +70,10 @@ export default function ProjectDetail() {
     </div>
 
     <div className="project-summary-grid">
-      <div><span>01 / {project.id === 'P004' ? 'DESIGNED' : 'BUILT'}</span><p>{displayCopy(project.outcomeSummary)}</p></div>
-      <div><span>02 / PROBLEM</span><p>{project.problemSummary}</p></div>
-      <div><span>03 / DECISION</span><p>{featured[0]?.decision}</p></div>
-      <div><span>04 / APPROACH</span><p>{featured[0]?.action}</p></div>
+      <div><span>01 / {project.id === 'P004' ? 'DESIGNED' : 'BUILT'}</span><BulletCopy text={project.outcomeSummary}/></div>
+      <div><span>02 / PROBLEM</span><BulletCopy text={project.problemSummary}/></div>
+      <div><span>03 / DECISION</span><BulletCopy text={featured[0]?.decision ?? ''}/></div>
+      <div><span>04 / APPROACH</span><BulletCopy text={featured[0]?.action ?? ''}/></div>
     </div>
 
     <div className="project-content">
@@ -100,11 +100,11 @@ export default function ProjectDetail() {
               <h3>수행 작업 <span>{current.length}</span></h3>
               {current.map(c => <article className="work-entry" key={c.id}>
                 <div className="work-heading"><h4>{c.title}</h4></div>
-                <p className="work-result">{displayCopy(c.output)}</p>
+                <BulletCopy className="work-result" text={c.output}/>
                 <div className="work-entry-flow">
-                  <div><b>문제</b><p>{c.problem}</p></div>
-                  <div><b>판단</b><p>{c.decision}</p></div>
-                  <div><b>{project.id === 'P004' ? '설계' : '구현'}</b><p>{displayCopy(c.action)}</p></div>
+                  <div><b>문제</b><BulletCopy text={c.problem}/></div>
+                  <div><b>판단</b><BulletCopy text={c.decision}/></div>
+                  <div><b>{project.id === 'P004' ? '설계' : '구현'}</b><BulletCopy text={c.action}/></div>
                 </div>
                 <EvidenceLinks contributionId={c.id}/>
                 {getTechnologiesByContribution(data, c.id).length > 0 && <details className="technical-detail">

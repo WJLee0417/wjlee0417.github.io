@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { data, getAlgorithmsByProject, getCapabilitiesByProject, getDesignFocusByProject, getFeaturedTechnologiesByProject, getProjectsByTechnology, getTechnologyGroups, projectPath, sortTechnologies } from '../data';
-import { SectionHeading, CategoryTag, TechnologyTags } from '../ui';
+import { BulletCopy, SectionHeading, CategoryTag, TechnologyTags } from '../ui';
 
 function ProjectMark({ index }: { index: number }) {
   return <svg className="project-mark" viewBox="0 0 160 90" fill="none" aria-hidden="true">
@@ -37,11 +37,11 @@ export default function Home({ explorer }: { explorer: ReactNode }) {
   const contact = data.profile.contact;
   const hasContact = Boolean(contact.phone || contact.email || contact.resumeUrl || contact.githubUrl || contact.otherUrls.length);
   return <main>
-    <section className="hero wrap" id="home"><div className="hero-copy"><p className="eyebrow">{data.profile.eyebrow}</p><p className="hero-name">{data.profile.nameKo} <span>/ {data.profile.role}</span></p><h1>{data.profile.headline}</h1><p className="hero-intro">{data.profile.intro}</p><div className="hero-actions"><Link className="button primary" to={{ pathname: "/", hash: "#projects" }}>만든 작업 살펴보기 <span aria-hidden="true">↗</span></Link><Link className="button secondary" to={{ pathname: "/", hash: "#explore" }}>적용한 기술 보기 <span aria-hidden="true">→</span></Link></div></div></section>
+    <section className="hero wrap" id="home"><div className="hero-copy"><p className="eyebrow">{data.profile.eyebrow}</p><p className="hero-name">{data.profile.nameKo} <span>/ {data.profile.role}</span></p><h1>{data.profile.headline}</h1><BulletCopy className="hero-intro" text={data.profile.intro}/><div className="hero-actions"><Link className="button primary" to={{ pathname: "/", hash: "#projects" }}>만든 작업 살펴보기 <span aria-hidden="true">↗</span></Link><Link className="button secondary" to={{ pathname: "/", hash: "#explore" }}>적용한 기술 보기 <span aria-hidden="true">→</span></Link></div></div></section>
 
     <About/>
 
-    <section className="section wrap" id="projects"><SectionHeading number="02" eyebrow="SELECTED WORK" title="설계하고 구현한 작업" description="데이터 통합, 차량 경로 탐색, AI 리포트와 계약 이력 설계." /><div className="project-grid">{projects.map((p, index) => <Link className="project-card" to={projectPath(p.slug)} key={p.id}><div className="card-top"><span>{String(index + 1).padStart(2, '0')} / 04</span><span>{p.periodStart} — {p.periodEnd}</span></div><ProjectMark index={index} /><p className="card-en">{p.nameEn}</p><h3>{p.name}</h3><p className="card-summary">{p.summary}</p><div className="card-capabilities">{getCapabilitiesByProject(data, p.id).slice(0, 2).map(c => <span key={c.id}>{c.label}</span>)}</div><ProjectStack projectId={p.id}/><div className="card-bottom"><span><><CategoryTag category={p.cardLabelKind} /> {p.cardLabel}</></span><strong>작업 살펴보기 <span aria-hidden="true">↗</span></strong></div></Link>)}</div></section>
+    <section className="section wrap" id="projects"><SectionHeading number="02" eyebrow="SELECTED WORK" title="설계하고 구현한 작업" description="데이터 통합, 차량 경로 탐색, AI 리포트와 계약 이력 설계." /><div className="project-grid">{projects.map((p, index) => <Link className="project-card" to={projectPath(p.slug)} key={p.id}><div className="card-top"><span>{String(index + 1).padStart(2, '0')} / 04</span><span>{p.periodStart} — {p.periodEnd}</span></div><ProjectMark index={index} /><p className="card-en">{p.nameEn}</p><h3>{p.name}</h3><BulletCopy className="card-summary" text={p.summary}/><div className="card-capabilities">{getCapabilitiesByProject(data, p.id).slice(0, 2).map(c => <span key={c.id}>{c.label}</span>)}</div><ProjectStack projectId={p.id}/><div className="card-bottom"><span><><CategoryTag category={p.cardLabelKind} /> {p.cardLabel}</></span><strong>작업 살펴보기 <span aria-hidden="true">↗</span></strong></div></Link>)}</div></section>
 
     <section className="section explore-section" id="explore"><div className="wrap"><SectionHeading number="03" eyebrow="EXPLORE THE MODEL" title="프로젝트에 적용한 역량과 기술" description="역량이나 기술을 선택해 관련 프로젝트와 작업을 살펴보세요." />{explorer}</div></section>
 

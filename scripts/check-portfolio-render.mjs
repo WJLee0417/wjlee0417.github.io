@@ -18,6 +18,13 @@ function checkEditorial(html, label) {
   assert.ok(!auditCopy.test(html), `${label}: review metadata leaked into public copy`);
   assert.ok(!html.includes('evidence-tag'), `${label}: verification badge rendered`);
 }
+function checkBullets(html, copy, label) {
+  const escape = text => text.replace(/[&<>"']/g, character => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#x27;' })[character]);
+  for (const item of copy.split('\n')) {
+    assert.ok(item.trim(), `${label}: empty bullet`);
+    assert.ok(html.includes(`<li>${escape(item)}</li>`), `${label}: missing bullet ${item}`);
+  }
+}
 
 try {
   const { default: ProjectDetail } = await server.ssrLoadModule('/src/pages/ProjectDetail.tsx');
@@ -29,13 +36,16 @@ try {
     checkEditorial(html, project.id);
     assert.ok(html.includes(project.kind));
     const expected = data.facts.contributions.filter(c => c.projectId === project.id);
-    assert.equal((html.match(/class="work-result"/g) ?? []).length, expected.length, `${project.id}: missing work outcomes`);
+    assert.equal((html.match(/class="work-result copy-list"/g) ?? []).length, expected.length, `${project.id}: missing work outcomes`);
+    checkBullets(html, project.summary, `${project.id}/summary`);
+    checkBullets(html, project.outcomeSummary, `${project.id}/outcome`);
     for (const c of expected) {
       // Results lead their own work entries; implementation details follow them.
       const title = html.indexOf(c.title);
-      const outcome = html.indexOf('class="work-result"', title);
+      const outcome = html.indexOf('class="work-result copy-list"', title);
       const details = html.indexOf('class="work-entry-flow"', title);
       assert.ok(title >= 0 && outcome > title && details > outcome, `${c.id}: work order`);
+      for (const field of ['problem', 'decision', 'action', 'output']) checkBullets(html, c[field], `${c.id}/${field}`);
     }
     for (const e of data.dimensions.evidence.filter(e => e.projectId === project.id && e.url)) {
       assert.ok(html.includes(e.url), `${project.id}: missing artifact ${e.id}`);
@@ -48,12 +58,18 @@ try {
   }
   const home = render(Home, '/', { explorer: h('div') });
   checkEditorial(home, 'home');
-  assert.ok(home.includes(data.profile.intro));
+  checkBullets(home, data.profile.intro, 'home/intro');
+  for (const project of data.dimensions.projects) checkBullets(home, project.summary, `home/${project.id}`);
   assert.ok(home.includes('설계하고 구현한 작업'));
   for (const project of data.dimensions.projects) {
     const panel = render(Explorer, `/?select=p:${project.id}`);
     checkEditorial(panel, `explorer/${project.id}`);
     assert.ok(panel.includes('contribution-result'));
+    checkBullets(panel, project.summary, `explorer/${project.id}/summary`);
+    for (const id of project.featuredContributionIds) {
+      const work = data.facts.contributions.find(c => c.id === id);
+      for (const field of ['problem', 'decision', 'action', 'output']) checkBullets(panel, work[field], `explorer/${id}/${field}`);
+    }
   }
   for (const mode of ['capability', 'technology']) {
     checkEditorial(render(Explorer, `/?mode=${mode}`), `explorer/${mode}`);
