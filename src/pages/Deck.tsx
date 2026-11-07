@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { data, getEvidenceByContribution, getFeaturedTechnologiesByProject, type Contribution, type Diagram, type Project } from '../data';
 import { deckSlides, resolveSlide, slideNumber, type DeckSlide } from '../deck-model';
 
-function Bullets({ text, className = '' }: { text: string; className?: string }) {
+export function Bullets({ text, className = '' }: { text: string; className?: string }) {
   return <ul className={`deck-bullets ${className}`}>{text.split('\n').filter(Boolean).map((line, index) => <li key={index}>{line}</li>)}</ul>;
 }
 
@@ -13,8 +13,8 @@ function WorkLinks({ work }: { work: Contribution }) {
   return <div className="deck-code-links">{evidence.map(item => <a key={item.id} href={item.url!} target="_blank" rel="noreferrer">{item.label}<span aria-hidden="true"> ↗</span></a>)}</div>;
 }
 
-function WorkCard({ work }: { work: Contribution }) {
-  return <article className="deck-work" data-contribution={work.id}>
+export function WorkCard({ work }: { work: Contribution }) {
+  return <article className="deck-work" id={`work-${work.id}`} data-contribution={work.id}>
     <h3>{work.title}</h3>
     <Bullets text={work.output} className="deck-result"/>
     <div className="deck-work-details">
@@ -26,7 +26,7 @@ function WorkCard({ work }: { work: Contribution }) {
   </article>;
 }
 
-function DeckDiagram({ diagram }: { diagram: Diagram }) {
+export function DeckDiagram({ diagram }: { diagram: Diagram }) {
   const [selected, setSelected] = useState(0);
   const states = diagram.states ?? [];
   const state = states[selected];
@@ -139,13 +139,13 @@ function Thumbnail({ slide, index }: { slide: DeckSlide; index: number }) {
   return <div className={`deck-thumbnail thumb-${slide.type}`} aria-hidden="true"><div className="thumb-rail"/><div><small>{slide.eyebrow}</small><strong>{slide.type === 'cover' ? data.presentation.coverTitle : slide.title}</strong><div className="thumb-blocks"><i/><i/><i/></div><span>{slideNumber(index)}</span></div></div>;
 }
 
-export function DeckDocument({ active, scale = 1, go = () => {}, onPrint = () => window.print(), onFullscreen, mobileMenu = false, onMenu }: {
+export function DeckDocument({ active, scale = 1, go = () => {}, onPrint = () => window.print(), onFullscreen, mobileMenu = false, onMenu, basePath = '/deck' }: {
   active: number; scale?: number; go?: (index: number) => void; onPrint?: () => void;
-  onFullscreen?: () => void; mobileMenu?: boolean; onMenu?: () => void;
+  onFullscreen?: () => void; mobileMenu?: boolean; onMenu?: () => void; basePath?: string;
 }) {
   return <div className={`deck-app ${mobileMenu ? 'menu-open' : ''}`}>
-    <aside className="deck-sidebar" aria-label="슬라이드 미리보기"><a className="deck-brand" href="#/?slide=cover">LEE WONJUN<span>PORTFOLIO / 2026</span></a><div className="deck-sidebar-heading"><span>SLIDES</span><span>{deckSlides.length} PAGES</span></div><nav>{deckSlides.map((slide,index) => <button type="button" key={slide.id} data-go-slide={index} data-active={index === active} aria-current={index === active ? 'step' : undefined} aria-label={`${slideNumber(index)} ${slide.title}`} onClick={() => go(index)}><span className="thumb-number">{slideNumber(index)}</span><Thumbnail slide={slide} index={index}/><span className="thumb-title">{slide.title}</span></button>)}</nav><a className="sidebar-download" href="./portfolio.html" download>HTML 덱 다운로드 <span>↓</span></a></aside>
-    <main className="deck-main"><header className="deck-toolbar"><div><button type="button" className="deck-menu-button" aria-expanded={mobileMenu} data-deck-action="menu" onClick={onMenu}>목차 ☰</button><span className="toolbar-title">{data.presentation.title}</span></div><div><button type="button" data-go-slide={1} onClick={() => go(1)}>프로젝트 목차</button><a href="./portfolio.html" download>HTML 저장 ↓</a><button type="button" data-deck-action="print" onClick={onPrint}>인쇄 / PDF</button><button type="button" data-deck-action="fullscreen" onClick={onFullscreen} aria-label="전체 화면">⛶</button></div></header>
+    <aside className="deck-sidebar" aria-label="슬라이드 미리보기"><a className="deck-brand" href={`#${basePath}?slide=cover`}>LEE WONJUN<span>PORTFOLIO / 2026</span></a><div className="deck-sidebar-heading"><span>SLIDES</span><span>{deckSlides.length} PAGES</span></div><nav>{deckSlides.map((slide,index) => <button type="button" key={slide.id} data-go-slide={index} data-active={index === active} aria-current={index === active ? 'step' : undefined} aria-label={`${slideNumber(index)} ${slide.title}`} onClick={() => go(index)}><span className="thumb-number">{slideNumber(index)}</span><Thumbnail slide={slide} index={index}/><span className="thumb-title">{slide.title}</span></button>)}</nav><a className="sidebar-download" href="./portfolio.html" download>HTML 덱 다운로드 <span>↓</span></a></aside>
+    <main className="deck-main"><header className="deck-toolbar"><div><a className="deck-website-link" href={basePath==='/'?'https://wjlee0417.github.io/':'#/'}>웹페이지 ↗</a><button type="button" className="deck-menu-button" aria-expanded={mobileMenu} data-deck-action="menu" onClick={onMenu}>목차 ☰</button><span className="toolbar-title">{data.presentation.title}</span></div><div><button type="button" data-go-slide={1} onClick={() => go(1)}>프로젝트 목차</button><a href="./portfolio.html" download>HTML 저장 ↓</a><button type="button" data-deck-action="print" onClick={onPrint}>인쇄 / PDF</button><button type="button" data-deck-action="fullscreen" onClick={onFullscreen} aria-label="전체 화면">⛶</button></div></header>
       <div className="deck-viewport"><div className="deck-stage-space" style={{'--slide-scale':scale,width:1440*scale,height:810*scale} as CSSProperties}><div className="deck-stage">{deckSlides.map((slide,index) => <div className="slide-slot" data-slide-index={index} hidden={index !== active} key={slide.id}><SlideContent slide={slide} index={index} go={go}/></div>)}</div></div></div>
       <footer className="deck-controls"><span className="deck-keyboard-hint">← → 이동 <i/> 휠로 넘기기</span><div className="deck-page-controls"><button type="button" data-deck-action="prev" aria-label="이전 슬라이드" disabled={active === 0} onClick={() => go(active-1)}>←</button><span className="deck-page-number" aria-live="polite"><strong>{slideNumber(active)}</strong><span>/ {deckSlides.length}</span></span><button type="button" data-deck-action="next" aria-label="다음 슬라이드" disabled={active === deckSlides.length-1} onClick={() => go(active+1)}>→</button></div><span className="deck-chapter-name">{deckSlides[active].chapter}</span></footer>
     </main>
@@ -164,7 +164,7 @@ export default function PortfolioDeck() {
   const touch = useRef<{x:number;y:number}|null>(null);
   const go = (index: number) => {
     if (index < 0 || index >= deckSlides.length) return;
-    navigate(`/?slide=${deckSlides[index].id}`);
+    navigate(`/deck?slide=${deckSlides[index].id}`);
     setMobileMenu(false);
   };
   useEffect(() => {

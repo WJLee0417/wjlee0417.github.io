@@ -3,7 +3,7 @@ import { readFileSync, existsSync } from 'node:fs';
 import { createServer } from 'vite';
 import { createElement } from 'react';
 import { renderToStaticMarkup, renderToString } from 'react-dom/server';
-import { MemoryRouter } from 'react-router-dom';
+import { MemoryRouter, Routes, Route } from 'react-router-dom';
 
 const data = JSON.parse(readFileSync('portfolio_codex_bundle/portfolio-data.json','utf8'));
 const server = await createServer({server:{middlewareMode:true},appType:'custom'});
@@ -13,6 +13,7 @@ const escape = value => value.replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt
 try {
   const {SlideContent,DeckDocument,default:PortfolioDeck}=await server.ssrLoadModule('/src/pages/Deck.tsx');
   const {resolveSlide}=await server.ssrLoadModule('/src/deck-model.ts');
+  const {WebHome,WebProject}=await server.ssrLoadModule('/src/pages/WebPortfolio.tsx');
   const all = renderToStaticMarkup(createElement(DeckDocument,{active:0}));
   assert.equal((all.match(/class="portfolio-slide /g)??[]).length,data.presentation.slides.length);
   assert.equal((all.match(/data-contribution="FC/g)??[]).length,25);
@@ -41,11 +42,22 @@ try {
   assert.ok(app.includes('data-slide-index="6"'));
   assert.ok(all.includes('계약 A/B/C를 가정한'));
   assert.ok(all.includes('대여 서비스 개념 설계'));
+  const home=renderToString(createElement(MemoryRouter,null,createElement(WebHome)));
+  for(const project of data.dimensions.projects){
+    assert.ok(home.includes(`/projects/${project.slug}`));
+    const page=renderToString(createElement(MemoryRouter,{initialEntries:[`/projects/${project.slug}`]},createElement(Routes,null,createElement(Route,{path:'/projects/:slug',element:createElement(WebProject)}))));
+    const work=data.facts.contributions.filter(c=>c.projectId===project.id);
+    assert.equal((page.match(/data-contribution="FC/g)??[]).length,work.length);
+    for(const c of work)for(const field of ['problem','decision','action','output'])for(const item of c[field].split('\n'))assert.ok(page.includes(`<li>${escape(item)}</li>`),`web/${c.id}: missing bullet`);
+    for(const metric of data.facts.metricRecords.filter(r=>r.projectId===project.id))assert.ok(page.includes(escape(metric.context)),`web/${metric.id}: missing metric context`);
+    assert.ok(page.includes(project.kind));
+    assert.ok(!/검증·추가 설명|담당 범위·자료 출처|소스 자료로 기록|미확보|추가 확인 필요/.test(page));
+  }
   if(existsSync('dist/portfolio.html')){
     const offline=readFileSync('dist/portfolio.html','utf8');
     assert.equal((offline.match(/class="portfolio-slide /g)??[]).length,20);
     assert.ok(!/<script[^>]+src=|<link[^>]+(?:stylesheet|href=)/i.test(offline),'offline deck must be self-contained');
     assert.ok(offline.includes('hashchange') && offline.includes('data-state-content'));
   }
-  console.log('PASS: 20 slides, 25 contributions, every source link, bullet and metric; project deep links; standalone export');
+  console.log('PASS: responsive home + 4 project pages; 20 slides; 25 contributions; source links, bullets, metrics and standalone export');
 } finally {console.error=originalError;await server.close();}

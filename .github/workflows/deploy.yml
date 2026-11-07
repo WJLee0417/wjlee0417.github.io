@@ -31,7 +31,7 @@ jobs:
         run: npm run validate:data
       - name: Build site
         run: npm run build
-      - name: Check slide content and standalone export
+      - name: Check web pages, slides and standalone export
         run: npm run check:render
       - name: Configure Pages
         uses: actions/configure-pages@v5

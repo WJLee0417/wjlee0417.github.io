@@ -12,7 +12,7 @@ try {
   const script = readFileSync('scripts/deck-runtime.js', 'utf8');
   const escape = value => value.replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]);
   const html = `<!DOCTYPE html>
-<html lang="ko" data-owner="${escape(data.profile.nameEn)}"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#F4F1EA"><title>${escape(data.presentation.title)}</title><style>${css}</style></head><body>${renderToStaticMarkup(createElement(DeckDocument, { active: 0 }))}<script>${script.replace(/<\/script/gi, '<\\/script')}</script></body></html>`;
+<html lang="ko" data-owner="${escape(data.profile.nameEn)}"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#F4F1EA"><title>${escape(data.presentation.title)}</title><style>${css}</style></head><body>${renderToStaticMarkup(createElement(DeckDocument, { active: 0, basePath: '/' }))}<script>${script.replace(/<\/script/gi, '<\\/script')}</script></body></html>`;
   const target = resolve(process.argv[2] ?? 'dist/portfolio.html');
   mkdirSync(resolve(target, '..'), { recursive: true });
   writeFileSync(target, html);

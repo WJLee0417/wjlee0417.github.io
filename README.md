@@ -2,7 +2,7 @@
 
 [포트폴리오 바로 보기](https://wjlee0417.github.io/)
 
-`portfolio_codex_bundle`의 콘텐츠 데이터를 읽는 React 슬라이드 포트폴리오입니다. `warm-ivory-cobalt` 레퍼런스의 아이보리 페이퍼·코발트 레일·사각 패널을 적용하고, 개조식 표현을 유지합니다. 표지·목차·4개 프로젝트·마무리의 20장에 기존 수행 작업 25개를 배치했습니다.
+`portfolio_codex_bundle`의 콘텐츠 데이터를 읽는 React 반응형 포트폴리오입니다. `warm-ivory-cobalt`의 아이보리 페이퍼·코발트 강조색·사각 패널을 유지하며, 홈과 4개 프로젝트 상세 페이지에서 기존 개조식 작업을 스크롤해 읽을 수 있습니다. 20장 슬라이드 덱도 별도로 제공합니다.
 
 ## 실행
 
@@ -15,7 +15,14 @@ npm run build
 npm run dev
 ```
 
-개발 서버 주소는 `http://127.0.0.1:5173/`입니다. 슬라이드 주소는 `/#/?slide=running-aggregation` 형식이며, 기존 `/#/projects/commercial-district` 및 섹션 주소도 해당 슬라이드로 연결합니다.
+개발 서버 주소는 `http://127.0.0.1:5173/`입니다.
+
+- 홈: `/#/` — 프로젝트 목록·배경/기술·연락처
+- 상세: `/#/projects/commercial-district` — 개요·데이터 규모·수행 작업·코드 링크
+- 섹션: `/#/projects/ai-running-report?section=failure-handling`
+- 슬라이드: `/#/deck?slide=running-aggregation`
+
+이전 덱의 `/#/?slide=running-aggregation` 주소도 관련 웹 프로젝트 섹션으로 연결합니다. [반응형 웹 구성](docs/portfolio-web.md)을 참고하세요.
 
 ## 덱 사용과 공유
 
@@ -34,6 +41,7 @@ npm run dev
 - 데이터 타입/관계 계산: 같은 폴더의 `portfolio-types.ts`, `portfolio-selectors.ts`
 - 슬라이드 순서·제목·프로젝트/작업/도식 연결: JSON의 `presentation.slides`
 - 덱 화면: `src/pages/Deck.tsx`, `src/deck.css`; HTML 출력: `scripts/export-deck.mjs`
+- 웹 화면: `src/pages/WebPortfolio.tsx`, `src/web.css`; 도식·작업 카드는 덱과 공유
 - 출처, 개인 기여, 지표, 기술 연결, 링크 등은 원본 JSON에 의존합니다. UI 코드에 새 실적을 추가하지 않습니다.
 - 연락처는 `profile.contact`에서 관리합니다. 원본 파일 URL이 `null`이면 링크를 표시하지 않습니다.
 - 공개 화면은 작성한 코드·모델·설계를 먼저 소개하고, 수행 작업은 결과→문제→판단→구현 순서의 개조식 목록으로 보여줍니다. 자료 상태와 기여 범위의 검토 기록은 JSON 메타데이터와 `docs/`에서 관리합니다.

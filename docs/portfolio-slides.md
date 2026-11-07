@@ -2,6 +2,8 @@
 
 적용일: 2026-11-07.
 
+현재 기본 화면은 [반응형 웹](portfolio-web.md)이며, 이 문서의 덱은 `/#/deck`과 `portfolio.html`에서 계속 제공합니다.
+
 사용자가 선택한 `.agents/skills/portfolio-build/references/warm-ivory-cobalt.html`을 기준으로 크림색 `#F4F1EA`, 코발트 `#1F3BE0`, 검정 제목, 세로 레일, 사각 패널, 얇은 구분선을 적용했습니다. 기존 스크롤형 첫 화면을 슬라이드 덱으로 바꾸고 개조식 문구는 그대로 사용했습니다.
 
 ## 구성
