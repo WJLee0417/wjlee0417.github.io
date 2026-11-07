@@ -1,0 +1,167 @@
+{
+  "repository": "https://github.com/techeer-sv/Career-Skills",
+  "commit": "9a5d83c5d5176cf0f0918a543f443dbac2f67150",
+  "installed_date": "2026-11-07",
+  "scope": "project",
+  "destination": ".agents/skills",
+  "skill_count": 12,
+  "notes": [
+    "Upstream skills/hiring-index.md is replaced by the local README.md because writing-prep-cover-letter is listed upstream but absent from this commit.",
+    "All skill directories and shared references are copied without modification.",
+    "Installed with PowerShell because the Python runtime required by skill-installer is unavailable."
+  ],
+  "files": [
+    {
+      "path": "hiring-common/company-profiles.md",
+      "sha256": "d92b3693a7b391228ffd9c80b6a3c226cda6dcb3342014897fcb22939c5d9660"
+    },
+    {
+      "path": "hiring-common/evaluation-framework.md",
+      "sha256": "a6281d138f818821b9cf17dabb3d7448cbe106e079cb7aef2b8b628dbc1a855c"
+    },
+    {
+      "path": "hiring-common/input-parser.md",
+      "sha256": "e3340222cc620582bb39879f7bd5903a2ee91c04d2473ea99195cf9c3d75ec67"
+    },
+    {
+      "path": "hiring-common/interview-research.md",
+      "sha256": "3a792bbe4ee00cd6c6a3293fb8d9a7f544492a4d80bf9ec1b52ed5f5d2082634"
+    },
+    {
+      "path": "hiring-prep-coding-test/SKILL.md",
+      "sha256": "2bfe78a83d042ce8a8a178baef23e82d33f55a962346f11c30212153bb61d299"
+    },
+    {
+      "path": "hiring-prep-doc-feedback/SKILL.md",
+      "sha256": "dedf95b2423c90789caeeab3126bd1c459d16b1909eef724f3cc18087b73e771"
+    },
+    {
+      "path": "hiring-prep-interview/SKILL.md",
+      "sha256": "6dc701e1bb0cd9379ad13642e1321b5f476bac44ad3c4cd430aad442fc421773"
+    },
+    {
+      "path": "hiring-sim-coding-test/SKILL.md",
+      "sha256": "9915435e6eeab7eac599f6d8362ed981ad60a50198d8be10b8b423cabb993693"
+    },
+    {
+      "path": "hiring-sim-interview/SKILL.md",
+      "sha256": "6132713835eba3c8b0f59231435b1324d99654c31752139d7d33ba75414c2089"
+    },
+    {
+      "path": "hiring-sim-pipeline/SKILL.md",
+      "sha256": "a3e4b684aaae4e9b184d92f97bd247bc1ae076286c406bfd6c6a6312b1b3ca89"
+    },
+    {
+      "path": "hiring-sim-portfolio-redteam/SKILL.md",
+      "sha256": "112e47285b5942e98e54e23abe63da018d37fb7e84af0b7be7ad9af8b365c989"
+    },
+    {
+      "path": "hiring-sim-portfolio-review/SKILL.md",
+      "sha256": "9acb5cec38c3d0987f8123a70cfcf0d6ad14f13a5bf6c59ba635d8bbf6243d05"
+    },
+    {
+      "path": "hiring-sim-resume-redteam/SKILL.md",
+      "sha256": "8e1d950db10ba8b54d923ec69a615a0c8c54e8ff6be0954672141b5ac15df6be"
+    },
+    {
+      "path": "hiring-sim-resume-redteam/references/position-competency-map.md",
+      "sha256": "ba436ac87eb8d4f018ce0fed5194448f5e5291661008c7d327681967c7eb4f1f"
+    },
+    {
+      "path": "hiring-sim-resume-redteam/references/positions/ai-engineer.md",
+      "sha256": "0d60b068de5364cc4f75baccadd94a62e5c3eddc8f85e614155e5a636016995a"
+    },
+    {
+      "path": "hiring-sim-resume-redteam/references/positions/backend.md",
+      "sha256": "bd9aaaba4036c4e029ea1e0b8f5fd5cb0db3cd10e0d8bc18fa14b92f97be1bfe"
+    },
+    {
+      "path": "hiring-sim-resume-redteam/references/positions/embedded.md",
+      "sha256": "775e510a56c3f53d0c9a74fffc647fc0e25ebbfdebcd7a8df508c3613eeb7310"
+    },
+    {
+      "path": "hiring-sim-resume-redteam/references/positions/frontend.md",
+      "sha256": "42adf76b04215ea59913e7b59e80b29c9ae23e0e08835675183b694ba291c48f"
+    },
+    {
+      "path": "hiring-sim-resume-redteam/references/positions/fullstack.md",
+      "sha256": "c0836d1443229b513e762e9621a32986530637c7fd7bbf86789edfd1d2b19112"
+    },
+    {
+      "path": "hiring-sim-resume-redteam/references/positions/robotics.md",
+      "sha256": "14b2ec719b8dcde97b81c1150391645788597559654d236b1cb6ecf26fc11f79"
+    },
+    {
+      "path": "hiring-sim-resume-review/SKILL.md",
+      "sha256": "b16bcca888dee24e454343ca40e34e83b3acef666634a8bac94c4b8436356fff"
+    },
+    {
+      "path": "kevin-feedback/.gitignore",
+      "sha256": "5ec4a681816106ba6047efa7a983c936da416df05ba82bc99eb88e58c7518693"
+    },
+    {
+      "path": "kevin-feedback/README.md",
+      "sha256": "ae24d7372d777683e463e34ffa76453a089997cfb5589d11fa1cb55549771337"
+    },
+    {
+      "path": "kevin-feedback/resume.md",
+      "sha256": "14638c438fccb15d7723d61f8c6484d6dba9b838309044c74959df7b7b8ec2ad"
+    },
+    {
+      "path": "kevin-feedback/SKILL.md",
+      "sha256": "9a56e92fd2e68b19cc571a72f33ad03296e740c4d7fcfcb1f16e4366d8204a14"
+    },
+    {
+      "path": "kevin-feedback/references/feedback-structure.md",
+      "sha256": "d2411c0391e270b48a8d23e737a749160e8fab27ee06458b29ae7537e5d620e1"
+    },
+    {
+      "path": "kevin-feedback/references/style-analysis-guide.md",
+      "sha256": "9e1f18143fcfd2f7743a923090e788a49a792bd6917cf54dd0060fdac521ba03"
+    },
+    {
+      "path": "kevin-feedback/references/learned/kevin-style-profile.public.md",
+      "sha256": "eaed6b15ff94827c9e9544949a342ce59a65eae5c1e718ab9941728e3eacc7b6"
+    },
+    {
+      "path": "kevin-feedback/references/learned/kevin-style-profile.v2.public.md",
+      "sha256": "ca4dc5332afefa3af5da31d235fc64283ffe3013514a62964699f9df28a249dc"
+    },
+    {
+      "path": "portfolio-build/SKILL.md",
+      "sha256": "61bcdf20ce29427b625566722ef9b7a0c6a18266cf23c9641666f7376b8815d9"
+    },
+    {
+      "path": "portfolio-build/structure-guide.md",
+      "sha256": "379761239e963861afde5f637e86ccaa1065b23ac92108ea813b3ee210d93831"
+    },
+    {
+      "path": "portfolio-build/references/clean-white-azure.html",
+      "sha256": "af04fa5d8e35fa8f52f28b7b102826088ddb467e879245df4d9217742c1c782e"
+    },
+    {
+      "path": "portfolio-build/references/frosted-glass-teal.html",
+      "sha256": "a5b12548f5b6e39914479f7a0958c61d3c6544e0dba1d903895cf435e1b2ccfb"
+    },
+    {
+      "path": "portfolio-build/references/gradient-wash-violet.html",
+      "sha256": "70c0176b6e5ed4072a5bbab9e4625ccf08d5a808626480a389d7393b8c776977"
+    },
+    {
+      "path": "portfolio-build/references/README.md",
+      "sha256": "26b4651f6ff923eb30e02d168efdc88df18ab06b58033e20eb960255d6f7386b"
+    },
+    {
+      "path": "portfolio-build/references/soft-aurora-indigo.html",
+      "sha256": "f2893d35f82c17bddb5d754d1aab17fcc7066d836dcc3fd79d6f2e63261fa49d"
+    },
+    {
+      "path": "portfolio-build/references/warm-ivory-cobalt.html",
+      "sha256": "01009bef613cbc2b420ceb7d8117896deefeacbba91c71dae5f024350047d246"
+    },
+    {
+      "path": "portfolio-build/scripts/extract_pdf_images.py",
+      "sha256": "03343f6ea71252334c124e95fceca47081ed778a08894d605ab7c4214d3d8a8d"
+    }
+  ]
+}

@@ -1,0 +1,2 @@
+# Preserve vendored skill bytes so their recorded SHA-256 hashes stay portable.
+skills/** -text
