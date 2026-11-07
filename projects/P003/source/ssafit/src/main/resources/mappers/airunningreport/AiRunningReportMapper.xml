@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.ssafit.airunningreport.mapper.AiRunningReportMapper">
+
+    <resultMap id="aiRunningReportResultMap"
+               type="com.ssafy.ssafit.airunningreport.domain.AiRunningReport">
+        <id property="id" column="id"/>
+        <result property="memberId" column="member_id"/>
+        <result property="reportType" column="report_type"/>
+        <result property="analysisStartDate" column="analysis_start_date"/>
+        <result property="analysisEndDate" column="analysis_end_date"/>
+        <result property="inputSnapshotHash" column="input_snapshot_hash"/>
+        <result property="inputSnapshotJson" column="input_snapshot_json"/>
+        <result property="status" column="status"/>
+        <result property="generationSource" column="generation_source"/>
+        <result property="provider" column="provider"/>
+        <result property="modelName" column="model_name"/>
+        <result property="promptVersion" column="prompt_version"/>
+        <result property="reportContentJson" column="report_content_json"/>
+        <result property="errorCode" column="error_code"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+
+    <sql id="aiRunningReportColumns">
+        id,
+        member_id,
+        report_type,
+        analysis_start_date,
+        analysis_end_date,
+        input_snapshot_hash,
+        input_snapshot_json,
+        status,
+        generation_source,
+        provider,
+        model_name,
+        prompt_version,
+        report_content_json,
+        error_code,
+        created_at,
+        updated_at
+    </sql>
+
+    <insert id="insert"
+            parameterType="com.ssafy.ssafit.airunningreport.domain.AiRunningReport"
+            useGeneratedKeys="true"
+            keyProperty="id"
+            keyColumn="id">
+        INSERT INTO ai_running_reports (
+            member_id,
+            report_type,
+            analysis_start_date,
+            analysis_end_date,
+            input_snapshot_hash,
+            input_snapshot_json,
+            status,
+            generation_source,
+            provider,
+            model_name,
+            prompt_version,
+            report_content_json,
+            error_code
+        ) VALUES (
+            #{memberId},
+            #{reportType},
+            #{analysisStartDate},
+            #{analysisEndDate},
+            #{inputSnapshotHash},
+            #{inputSnapshotJson},
+            #{status},
+            #{generationSource},
+            #{provider},
+            #{modelName},
+            #{promptVersion},
+            #{reportContentJson},
+            #{errorCode}
+        )
+    </insert>
+
+    <select id="selectLatestByMemberIdAndType" resultMap="aiRunningReportResultMap">
+        SELECT <include refid="aiRunningReportColumns"/>
+        FROM ai_running_reports
+        WHERE member_id = #{memberId}
+          AND report_type = #{reportType}
+        ORDER BY created_at DESC, id DESC
+        LIMIT 1
+    </select>
+
+    <select id="selectLatestReusableBySnapshot" resultMap="aiRunningReportResultMap">
+        SELECT <include refid="aiRunningReportColumns"/>
+        FROM ai_running_reports
+        WHERE member_id = #{memberId}
+          AND report_type = #{reportType}
+          AND input_snapshot_hash = #{inputSnapshotHash}
+          AND status = 'COMPLETED'
+        ORDER BY created_at DESC, id DESC
+        LIMIT 1
+    </select>
+
+    <select id="selectByMemberIdTypeAndStatus" resultMap="aiRunningReportResultMap">
+        SELECT <include refid="aiRunningReportColumns"/>
+        FROM ai_running_reports
+        WHERE member_id = #{memberId}
+          AND report_type = #{reportType}
+          AND status = #{status}
+        ORDER BY created_at DESC, id DESC
+    </select>
+
+</mapper>
