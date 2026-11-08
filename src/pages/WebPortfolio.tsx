@@ -79,6 +79,7 @@ export function WebHome() {
 
 export function WebBackground() {
   const areas=data.profile.skillAreas;
+  const proficiency=data.profile.skillProficiency;
   const [selected,setSelected]=useState(areas[0].id);
   const chooseArea=(index:number)=>{
     const area=areas[(index+areas.length)%areas.length];
@@ -99,6 +100,7 @@ export function WebBackground() {
           <div className="background-certificates"><h2>Certificates</h2><ul>{data.profile.certifications.map(label=><li key={label}>{label}</li>)}</ul></div>
         </aside>
         <div className="background-skills" data-reveal="2">
+          <details className="skill-level-guide"><summary>숙련도 기준</summary><p>프로젝트 활용 범위 기준</p><dl>{proficiency.levels.map(level=><div key={level.id}><dt>{level.label}</dt><dd>{level.description}</dd></div>)}</dl></details>
           <div className="skill-selector" role="group" aria-label="기술 분야">{areas.map((area,index)=><button type="button" id={`skill-tab-${area.id}`} aria-controls={`skill-panel-${area.id}`} aria-pressed={selected===area.id} key={area.id} onClick={()=>setSelected(area.id)} onKeyDown={event=>{
             const target=event.key==='ArrowRight'?index+1:event.key==='ArrowLeft'?index-1:event.key==='Home'?0:event.key==='End'?areas.length-1:null;
             if(target!==null){event.preventDefault();chooseArea(target);}
@@ -107,7 +109,9 @@ export function WebBackground() {
             <div className="skill-card-heading"><span className="skill-number" aria-hidden="true">{slideNumber(index)}</span><h2 id={`skill-title-${area.id}`}>{area.title}</h2></div>
             <ul className="skill-technologies" aria-label={`${area.label} 기술 스택`}>{area.technologyIds.map(id=>{
               const tech=data.dimensions.technologies.find(tech=>tech.id===id)!;
-              return <li key={id}><strong>{tech.label}</strong><span>{tech.category}</span></li>;
+              const assessment=proficiency.assessments.find(item=>item.technologyId===id)!;
+              const level=proficiency.levels.find(level=>level.id===assessment.levelId)!;
+              return <li key={id}><strong>{tech.label}</strong><span>{tech.category}</span><span className="skill-level" data-level={level.id}>{level.label}</span></li>;
             })}</ul>
           </article>)}</div>
         </div>

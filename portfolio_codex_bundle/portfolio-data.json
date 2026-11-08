@@ -71,6 +71,28 @@
     },
     "contactPlaceholderPolicy": "연락처가 비어 있으면 버튼과 가짜 주소를 렌더링하지 않는다.",
     "intro": "Java·Spring Boot 기반 Backend·REST API 구현\nMySQL 데이터 모델링·SQL 데이터 연동\nPython 기반 차량 경로 탐색 알고리즘 구현\n서비스 업무 흐름·계약별 상태 이력 설계",
+    "skillProficiency": {
+      "levels": [
+        { "id": "design", "label": "설계·구현", "description": "구조·제약·예외 흐름 설계와 구현" },
+        { "id": "implementation", "label": "기능 구현", "description": "데이터 처리·저장·연동 기능 구현" },
+        { "id": "basic", "label": "기초 활용", "description": "기본 조회·변환·도구 활용" }
+      ],
+      "assessments": [
+        { "technologyId": "T009", "levelId": "design", "contributionIds": ["FC013", "FC014", "FC016", "FC017", "FC018"] },
+        { "technologyId": "T010", "levelId": "design", "contributionIds": ["FC016", "FC017", "FC018", "FC019"] },
+        { "technologyId": "T011", "levelId": "implementation", "contributionIds": ["FC018", "FC019"] },
+        { "technologyId": "T012", "levelId": "implementation", "contributionIds": ["FC015", "FC017"] },
+        { "technologyId": "T013", "levelId": "implementation", "contributionIds": ["FC016"] },
+        { "technologyId": "T005", "levelId": "design", "contributionIds": ["FC003", "FC004", "FC006"] },
+        { "technologyId": "T004", "levelId": "design", "contributionIds": ["FC003", "FC004", "FC006", "FC018", "FC019"] },
+        { "technologyId": "T006", "levelId": "basic", "contributionIds": ["FC005"] },
+        { "technologyId": "T001", "levelId": "basic", "contributionIds": ["FC001", "FC002"] },
+        { "technologyId": "T002", "levelId": "implementation", "contributionIds": ["FC005", "FC007", "FC008", "FC010"] },
+        { "technologyId": "T003", "levelId": "basic", "contributionIds": ["FC001", "FC007"] },
+        { "technologyId": "T007", "levelId": "basic", "contributionIds": ["FC007"] },
+        { "technologyId": "T008", "levelId": "design", "contributionIds": ["FC008", "FC009"] }
+      ]
+    },
     "skillAreas": [
       {
         "id": "backend",

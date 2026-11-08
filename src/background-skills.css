@@ -13,6 +13,14 @@
 .background-certificates ul { display: flex; flex-wrap: wrap; list-style: none; padding: 0; margin: 0; gap: 7px; }
 .background-certificates li { font-size: 13px; padding: 7px 12px; border: 1px solid var(--line); }
 .skill-selector { display: none; }
+.skill-level-guide { margin-bottom: 16px; font-size: 11px; color: var(--muted); }
+.skill-level-guide summary { width: fit-content; cursor: pointer; line-height: 1.8; }
+.skill-level-guide summary:focus-visible { outline: 2px solid var(--cobalt); outline-offset: 4px; }
+.skill-level-guide[open] { padding-bottom: 16px; border-bottom: 1px solid var(--line); }
+.skill-level-guide p { margin-top: 12px; }
+.skill-level-guide dl { display: flex; flex-wrap: wrap; gap: 10px 24px; margin-top: 12px; }
+.skill-level-guide dt { font-weight: 600; color: var(--ink); margin-bottom: 4px; }
+.skill-level-guide dd { line-height: 1.7; }
 .skill-cards { display: grid; gap: 16px; }
 .skill-card { display: grid; grid-template-columns: 180px minmax(0, 1fr); gap: 28px; padding: 26px; border: 1px solid var(--line); background: #fff; }
 .skill-number { color: var(--cobalt); font-size: 11px; font-weight: 600; }
@@ -21,6 +29,9 @@
 .skill-technologies li { border-left: 2px solid var(--sand); padding: 3px 0 3px 12px; min-width: 0; }
 .skill-technologies strong { display: block; font-size: 18px; font-weight: 600; line-height: 1.4; word-break: normal; overflow-wrap: anywhere; letter-spacing: -.025em; }
 .skill-technologies span { display: block; margin-top: 6px; font-size: 10px; line-height: 1.5; color: var(--muted); }
+.skill-technologies .skill-level { display: inline-block; padding: 3px 7px; margin-top: 10px; color: #57554e; background: var(--paper); font-size: 10px; }
+.skill-technologies .skill-level[data-level=design] { color: #1734c8; background: #eef0fd; }
+.skill-technologies .skill-level[data-level=implementation] { color: #343844; background: #eff0f3; }
 .skill-selector button:focus-visible { outline: 2px solid var(--cobalt); outline-offset: 4px; }
 @media (max-width: 1100px) {
   .background-layout { grid-template-columns: 215px minmax(0, 1fr); gap: 30px; }

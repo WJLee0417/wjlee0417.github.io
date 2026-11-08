@@ -26,6 +26,21 @@ const metrics=unique(dim.metrics,'metric definitions'), evidence=unique(dim.evid
 const contributions=unique(fact.contributions,'contributions'), mrecords=unique(fact.metricRecords,'metric records');
 unique(d.logicalSchema,'schema tables', x=>x.name);unique(d.diagrams,'diagrams');
 const cmap=new Map(fact.contributions.map(c=>[c.id,c]));
+const proficiency=d.profile.skillProficiency;
+const levelIds=unique(proficiency.levels,'skill proficiency levels');
+assert([...levelIds].sort().join(',')==='basic,design,implementation','invalid skill proficiency levels');
+for(const level of proficiency.levels)assert(level.label?.trim() && level.description?.trim(),`missing proficiency definition ${level.id}`);
+const assessedTechnologies=unique(proficiency.assessments,'skill proficiency assessments',item=>item.technologyId);
+for(const assessment of proficiency.assessments){
+  assert(technologies.has(assessment.technologyId) && levelIds.has(assessment.levelId),`invalid proficiency ${assessment.technologyId}`);
+  assert(assessment.contributionIds.length>0,`missing proficiency contributions ${assessment.technologyId}`);
+  for(const id of assessment.contributionIds){
+    assert(cmap.get(id)?.ownership==='DIRECT' && ['SOURCE_SUPPORTED','USER_CONFIRMED'].includes(cmap.get(id)?.evidenceStatus),`unsupported proficiency contribution ${assessment.technologyId}/${id}`);
+    assert(bridge.contributionTechnology.some(link=>link.technologyId===assessment.technologyId && link.contributionId===id),`proficiency technology differs from contribution ${assessment.technologyId}/${id}`);
+  }
+}
+const displayedTechnologies=new Set(d.profile.skillAreas.flatMap(area=>area.technologyIds));
+assert(assessedTechnologies.size===displayedTechnologies.size && [...displayedTechnologies].every(id=>assessedTechnologies.has(id)),'proficiency must cover exactly the displayed skills');
 assert(Array.isArray(d.profile.skillAreas) && d.profile.skillAreas.length===3,'three skill areas required');
 unique(d.profile.skillAreas,'skill areas');
 for(const area of d.profile.skillAreas){

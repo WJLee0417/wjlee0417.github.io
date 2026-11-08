@@ -58,6 +58,7 @@ export interface ProjectComparison {
 export interface Capability { id: string; label: string; description: string; noConfirmedContribution?: boolean }
 export interface Process { id: string; label: string; description: string }
 export type TechnologyGroup = 'Java / Backend' | 'Python / Data' | 'SQL / Database' | 'Optimization' | 'Interface / Tools';
+export type SkillProficiencyLevel = 'basic' | 'implementation' | 'design';
 export interface Technology {
   id: string; label: string; category: string; description: string;
   group: TechnologyGroup; groupOrder: number; displayOrder: number;
@@ -131,6 +132,10 @@ export interface PortfolioData {
   profile: {
     nameKo:string; nameEn:string; role:string; eyebrow:string; headline:string;
     shortKeywords:string[]; intro:string;
+    skillProficiency:{
+      levels:Array<{id:SkillProficiencyLevel;label:string;description:string}>;
+      assessments:Array<{technologyId:string;levelId:SkillProficiencyLevel;contributionIds:string[]}>;
+    };
     skillAreas:Array<{
       id:string; label:string; title:string; technologyIds:string[];
     }>;
