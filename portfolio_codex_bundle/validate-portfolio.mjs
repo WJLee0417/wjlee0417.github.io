@@ -216,8 +216,10 @@ for(const project of dim.projects){
   assert(visual.sources?.length>0 && visual.sources.every(source=>/^[0-9a-f]{64}$/.test(source.sha256) && (/^https:\/\/github\.com\/WJLee0417\/[A-Za-z0-9_.-]+\/blob\/[0-9a-f]{40}\//.test(source.url) || source.url==='https://wjlee0417.github.io/experiments/drt/2026-11-07/results.json')),`visual source missing ${project.id}`);
   if(visual.kind==='erd'){
     const tables=new Map(visual.tables.map(table=>[table.name,table]));
+    assert(new Set(visual.tables.map(table=>table.displayName??table.name)).size===tables.size,`duplicate ERD table display name ${project.id}`);
     assert(tables.size===visual.tables.length && tables.size===(project.id==='P001'?7:17),`unexpected ERD table scope ${project.id}`);
     for(const table of visual.tables){
+      if(project.id==='P001')assert(/^[a-z][a-z0-9]*(?:_[a-z0-9]+)*$/.test(table.displayName??''),`English ERD table name missing ${table.name}`);
       const columns=new Set(table.columns.map(column=>column.name));
       const displayNames=table.columns.map(column=>column.displayName??column.name);
       assert(new Set(displayNames).size===displayNames.length,`duplicate ERD column display name ${table.name}`);

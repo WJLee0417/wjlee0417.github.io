@@ -133,7 +133,8 @@
                 "상권_구분_코드"
               ],
               "uniqueKeys": [],
-              "foreignKeys": []
+              "foreignKeys": [],
+              "displayName": "commercial_area_type"
             },
             {
               "name": "자치구",
@@ -156,7 +157,8 @@
                 "자치구_코드"
               ],
               "uniqueKeys": [],
-              "foreignKeys": []
+              "foreignKeys": [],
+              "displayName": "district"
             },
             {
               "name": "행정동",
@@ -179,7 +181,8 @@
                 "행정동_코드"
               ],
               "uniqueKeys": [],
-              "foreignKeys": []
+              "foreignKeys": [],
+              "displayName": "admin_dong"
             },
             {
               "name": "서비스_업종",
@@ -202,7 +205,8 @@
                 "서비스_업종_코드"
               ],
               "uniqueKeys": [],
-              "foreignKeys": []
+              "foreignKeys": [],
+              "displayName": "service_industry"
             },
             {
               "name": "상권정보",
@@ -355,7 +359,8 @@
                     "행정동_코드"
                   ]
                 }
-              ]
+              ],
+              "displayName": "commercial_area"
             },
             {
               "name": "점포",
@@ -410,7 +415,8 @@
                     "서비스_업종_코드"
                   ]
                 }
-              ]
+              ],
+              "displayName": "area_industry_metrics"
             },
             {
               "name": "프랜차이즈",
@@ -593,7 +599,8 @@
                     "서비스_업종_코드"
                   ]
                 }
-              ]
+              ],
+              "displayName": "franchise"
             }
           ],
           "views": [

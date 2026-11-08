@@ -28,7 +28,7 @@ export interface Project {
 export interface VisualSource { url: string; sha256: string }
 export interface SchemaColumn { name: string; displayName?: string; type: string; nullable: boolean }
 export interface SchemaTable {
-  name: string; label: string; columns: SchemaColumn[]; primaryKey: string[]; uniqueKeys: string[][];
+  name: string; displayName?: string; label: string; columns: SchemaColumn[]; primaryKey: string[]; uniqueKeys: string[][];
   foreignKeys: Array<{columns: string[]; target: string; targetColumns: string[]}>;
 }
 export interface SchemaView { id: string; label: string; lanes: string[][]; focus: string }

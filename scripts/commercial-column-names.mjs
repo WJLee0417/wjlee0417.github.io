@@ -1,4 +1,13 @@
 // English presentation aliases; physical SQL identifiers stay unchanged.
+export const commercialTableNames={
+  '상권_구분':'commercial_area_type',
+  '자치구':'district',
+  '행정동':'admin_dong',
+  '서비스_업종':'service_industry',
+  '상권정보':'commercial_area',
+  '점포':'area_industry_metrics',
+  '프랜차이즈':'franchise',
+};
 export const commercialColumnNames={
   '상권_구분_코드':'area_type_code',
   '상권_구분명':'area_type_name',

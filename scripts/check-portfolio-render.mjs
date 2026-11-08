@@ -111,11 +111,11 @@ try {
       assert.ok(visualPage.includes(`data-visual-kind="${model.kind}"`) && visualPage.includes(escape(model.title)));
       for(const source of model.sources)assert.ok(visualPage.includes(source.url),`visual source link lost ${project.id}`);
       if(model.kind==='erd'){
-        for(const name of model.views[0].lanes.flat())assert.ok(visualPage.includes(escape(name)),`default ERD table lost ${name}`);
+        for(const name of model.views[0].lanes.flat()){const table=model.tables.find(table=>table.name===name);assert.ok(visualPage.includes(`class="erd-table-name">${escape(table.displayName??name)}</text>`),`default ERD table label lost ${name}`);}
         assert.ok(visualPage.includes('전체 컬럼') && visualPage.includes('크게 보기'));
         const focus=model.tables.find(table=>table.name===model.views[0].focus);
         for(const column of focus.columns)assert.ok(visualPage.includes(`<th scope="row">${escape(column.displayName??column.name)}</th>`) && visualPage.includes(escape(column.type)),`ERD detail lost ${focus.name}/${column.name}`);
-        if(project.id==='P001')assert.ok(visualPage.includes('service_industry_code + commercial_area_code') && visualPage.includes('SQL 컬럼명 대응표'));
+        if(project.id==='P001')assert.ok(visualPage.includes('service_industry_code + commercial_area_code') && visualPage.includes('SQL 이름 대응표') && visualPage.replace(/<!--[\s\S]*?-->/g,'').includes('area_industry_metrics.'));
       }else if(model.kind==='report-flow'){
         for(const scenario of model.scenarios)assert.ok(visualPage.includes(escape(scenario.label)));
         assert.ok(visualPage.includes('generationSource') && visualPage.includes('cacheHit'));
