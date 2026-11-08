@@ -19,12 +19,19 @@ export function DaErdOverview({model,view,selected,onSelect}:{model:ErdVisualiza
         return [button.dataset.erdTable!,{x:box.left-bounds.left-element.clientLeft,y:box.top-bounds.top-element.clientTop,width:box.width,height:box.height}];
       }));
       const edges:ErdConnection[]=[];
+      const anchors=new Map(Array.from(element.querySelectorAll<HTMLElement>('[data-erd-table]')).flatMap(table=>Array.from(table.querySelectorAll<HTMLElement>('[data-erd-column]')).map(column=>{
+        const row=column.getBoundingClientRect();
+        return [JSON.stringify([table.dataset.erdTable,column.dataset.erdColumn]),{y:row.top-bounds.top-element.clientTop+row.height/2,height:row.height}] as const;
+      })));
       for(const child of model.tables){
         const c=boxes.get(child.name);if(!c)continue;
         child.foreignKeys.forEach((key,index)=>{
           const p=boxes.get(key.target);if(!p)return;
           const unique=[child.primaryKey,...child.uniqueKeys].some(columns=>columns.length===key.columns.length&&columns.every(column=>key.columns.includes(column)));
-          edges.push({id:`${child.name}-${index}`,parent:key.target,child:child.name,unique,label:`${key.target} → ${child.name}: ${key.columns.map(id=>child.columns.find(column=>column.name===id)?.displayName??id).join(', ')}`});
+          key.columns.forEach((column,pair)=>{
+            const targetColumn=key.targetColumns[pair],parent=model.tables.find(table=>table.name===key.target)!;
+            edges.push({id:`${child.name}-${index}-${pair}`,parent:key.target,child:child.name,unique,parentColumn:targetColumn,childColumn:column,parentAnchor:anchors.get(JSON.stringify([key.target,targetColumn]))!,childAnchor:anchors.get(JSON.stringify([child.name,column]))!,label:`${name(child)}.${child.columns.find(c=>c.name===column)?.displayName??column} → ${name(parent)}.${parent.columns.find(c=>c.name===targetColumn)?.displayName??targetColumn}`});
+          });
         });
       }
       const routed=routeErdConnections(boxes,edges,element.clientWidth,element.clientHeight);
@@ -37,7 +44,7 @@ export function DaErdOverview({model,view,selected,onSelect}:{model:ErdVisualiza
   },[model,view]);
   const connected=(edge:RoutedConnection)=>edge.child===selected||edge.parent===selected;
   return <><div className="da-overview-tools"><div className="da-relationship-tools" role="group" aria-label="관계선 표시"><button type="button" aria-pressed={!focusedOnly} onClick={()=>setFocusedOnly(false)}>전체 관계</button><button type="button" aria-pressed={focusedOnly} onClick={()=>setFocusedOnly(true)}>선택 테이블 관계</button></div><p>PK 기본키 · FK 외래키</p></div><div className="da-overview" ref={root} style={{'--erd-lanes':lanes.length} as CSSProperties} aria-label="ERD 전체 구조" data-erd-overview data-columns="all">
-    <svg className="da-overview-lines" width={drawing.width} height={drawing.height} aria-hidden="true">{[...drawing.edges].sort((a,b)=>Number(connected(a))-Number(connected(b))).filter(edge=>!focusedOnly||connected(edge)).map(edge=><g className={connected(edge)?'is-connected':''} key={edge.id} data-reused-segments={edge.reusedSegments}><title>{edge.label}</title><path className="da-edge-halo" d={edge.path}/><path d={edge.path}/><path d={edge.ending}/></g>)}</svg>
+    <svg className="da-overview-lines" width={drawing.width} height={drawing.height} aria-hidden="true">{[...drawing.edges].sort((a,b)=>Number(connected(a))-Number(connected(b))).filter(edge=>!focusedOnly||connected(edge)).map(edge=><g className={connected(edge)?'is-connected':''} key={edge.id} data-source-table={edge.child} data-source-column={edge.childColumn} data-target-table={edge.parent} data-target-column={edge.parentColumn} data-reused-segments={edge.reusedSegments}><title>{edge.label}</title><path className="da-edge-halo" d={edge.path}/><path className="erd-connection-path" d={edge.path}/><path d={edge.ending}/></g>)}</svg>
     <div className="da-overview-grid">{lanes.map((lane,index)=><div className="da-overview-lane" key={index}>{lane.map(id=>{
       const table=model.tables.find(table=>table.name===id)!;
       const columns=table.columns;

@@ -41,7 +41,11 @@ function ErdWorkspace({model, expanded=false, initial, onExpand}: {model: ErdVis
     const edges:ErdConnection[]=nodes.nodes.flatMap(node=>node.table.foreignKeys.flatMap((key,index)=>{
       if(!boxes.has(key.target))return [];
       const unique=[node.table.primaryKey,...node.table.uniqueKeys].some(columns=>columns.length===key.columns.length&&columns.every(column=>key.columns.includes(column)));
-      return [{id:`${node.table.name}-${index}`,parent:key.target,child:node.table.name,unique,label:`${tableName(model.tables.find(table=>table.name===key.target)!)} → ${tableName(node.table)} · ${keyNames(node.table,key.columns)}`}];
+      const parent=nodes.nodes.find(parent=>parent.table.name===key.target)!;
+      return key.columns.map((column,pair)=>{
+        const targetColumn=key.targetColumns[pair];
+        return {id:`${node.table.name}-${index}-${pair}`,parent:key.target,child:node.table.name,unique,childColumn:column,parentColumn:targetColumn,childAnchor:{y:node.y+HEAD+node.columns.findIndex(c=>c.name===column)*ROW+15,height:30},parentAnchor:{y:parent.y+HEAD+parent.columns.findIndex(c=>c.name===targetColumn)*ROW+15,height:30},label:`${tableName(node.table)}.${columnName(node.table,column)} → ${tableName(parent.table)}.${columnName(parent.table,targetColumn)}`};
+      });
     }));
     return routeErdConnections(boxes,edges,nodes.width,nodes.height);
   },[model,view,all,overview]);
@@ -70,13 +74,13 @@ function ErdWorkspace({model, expanded=false, initial, onExpand}: {model: ErdVis
     <div className="erd-viewport" ref={viewport} tabIndex={0} role="region" aria-label="확대·가로 이동 가능한 ERD">
       <svg className="erd-svg" width={layout.width*zoom} height={layout.height*zoom} viewBox={`0 0 ${layout.width} ${layout.height}`} aria-label={model.title}>
         <defs><marker id={marker} markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0 L7 3.5 L0 7" fill="none" stroke="currentColor"/></marker></defs>
-        {[...detailedEdges].sort((a,b)=>Number(a.child===selected||a.parent===selected)-Number(b.child===selected||b.parent===selected)).map(edge=><g key={edge.id} className={`erd-edge ${edge.child===selected||edge.parent===selected?'is-connected':''}`} aria-label={edge.label}><title>{edge.label}</title><path className="da-edge-halo" d={edge.path}/><path d={edge.path}/><path d={edge.ending}/></g>)}
-        {layout.nodes.map(node=><g key={node.table.name} transform={`translate(${node.x},${node.y})`} className={`erd-entity ${selected===node.table.name?'is-selected':''}`} role="button" tabIndex={0} aria-pressed={selected===node.table.name} aria-label={`${tableOption(node.table)} 테이블 선택`} onClick={()=>setSelected(node.table.name)} onKeyDown={event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();setSelected(node.table.name);}}}>
+        {[...detailedEdges].sort((a,b)=>Number(a.child===selected||a.parent===selected)-Number(b.child===selected||b.parent===selected)).map(edge=><g key={edge.id} className={`erd-edge ${edge.child===selected||edge.parent===selected?'is-connected':''}`} aria-label={edge.label} data-source-table={edge.child} data-source-column={edge.childColumn} data-target-table={edge.parent} data-target-column={edge.parentColumn}><title>{edge.label}</title><path className="da-edge-halo" d={edge.path}/><path className="erd-connection-path" d={edge.path}/><path d={edge.ending}/></g>)}
+        {layout.nodes.map(node=><g key={node.table.name} data-erd-table={node.table.name} transform={`translate(${node.x},${node.y})`} className={`erd-entity ${selected===node.table.name?'is-selected':''}`} role="button" tabIndex={0} aria-pressed={selected===node.table.name} aria-label={`${tableOption(node.table)} 테이블 선택`} onClick={()=>setSelected(node.table.name)} onKeyDown={event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();setSelected(node.table.name);}}}>
           <rect width={NODE_WIDTH} height={node.height} className="erd-entity-body"/><rect width={NODE_WIDTH} height={HEAD-8} className="erd-entity-head"/>
           <text x={14} y={25} className="erd-table-name">{tableName(node.table)}</text><text x={14} y={49} className="erd-table-label erd-head-label">{node.table.label===tableName(node.table)?`${node.table.columns.length} columns`:node.table.label}</text>
           {node.columns.map((column,index)=>{
             const pk=node.table.primaryKey.includes(column.name),fk=node.table.foreignKeys.some(key=>key.columns.includes(column.name));
-            return <g key={column.name} transform={`translate(0,${HEAD+index*ROW})`}><text x={12} y={17} className="erd-key">{pk&&fk?'PK·FK':pk?'PK':fk?'FK':''}</text><text x={74} y={17} className="erd-column">{column.displayName??column.name}</text><text x={74} y={38} className="erd-type">{column.type}</text></g>;
+            return <g key={column.name} data-erd-column={column.name} transform={`translate(0,${HEAD+index*ROW})`}><text x={12} y={17} className="erd-key">{pk&&fk?'PK·FK':pk?'PK':fk?'FK':''}</text><text x={74} y={17} className="erd-column">{column.displayName??column.name}</text><text x={74} y={38} className="erd-type">{column.type}</text></g>;
           })}
           <text x={14} y={node.height-10} className="erd-table-label">{all?'전체 컬럼':`${node.columns.length} / ${node.table.columns.length} 컬럼 · 선택하여 상세 보기`}</text>
         </g>)}
