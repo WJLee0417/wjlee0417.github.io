@@ -8,7 +8,7 @@ const server = await createServer({ server: { middlewareMode: true }, appType: '
 try {
   const { DeckDocument } = await server.ssrLoadModule('/src/pages/Deck.tsx');
   const data = JSON.parse(readFileSync('portfolio_codex_bundle/portfolio-data.json', 'utf8'));
-  const css = readFileSync('src/deck.css', 'utf8');
+  const css = readFileSync('src/deck.css', 'utf8') + '\n' + readFileSync('src/responsive-deck.css', 'utf8');
   const script = readFileSync('scripts/deck-runtime.js', 'utf8');
   const escape = value => value.replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]);
   const html = `<!DOCTYPE html>

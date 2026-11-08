@@ -1,0 +1,83 @@
+/* Semantic panels share one source with the full-size deck and print export. */
+.deck-panel { display: contents; }
+.deck-part-number, .deck-panel-name, .deck-menu-close { display: none; }
+.deck-page-number { align-items: center; }
+.deck-menu-close { border: 0; background: transparent; }
+
+@media screen and (max-width: 900px) {
+  .deck-main { grid-template-rows: 56px minmax(0, 1fr) 72px; }
+  .deck-toolbar { padding-inline: 18px; }
+  .deck-toolbar button, .deck-toolbar a { min-height: 44px; display: inline-flex; align-items: center; }
+  .deck-toolbar [data-go-slide], .deck-toolbar [data-deck-action=fullscreen] { display: none; }
+  .deck-menu-close { display: block; position: absolute; top: 17px; right: 10px; min-height: 44px; padding: 10px; font-size: 12px; }
+  .deck-brand { padding-right: 70px; }
+  .deck-viewport { overflow: hidden; }
+  .deck-stage-space, .deck-stage, .slide-slot { height: 100% !important; }
+  .portfolio-slide { height: 100%; min-height: 0; overflow: hidden; grid-template-columns: 7px minmax(0, 1fr); }
+  .slide-paper { height: 100%; min-height: 0; display: grid; grid-template-rows: auto minmax(0, 1fr); padding: 20px 20px 18px; gap: 18px; }
+  .slide-heading { gap: 12px; padding-bottom: 15px; }
+  .slide-heading h2 { font-size: clamp(21px, 3.5vw, 28px); line-height: 1.35; }
+  .slide-heading p { font-size: 9px; }
+  .slide-footer { display: none; }
+  .slide-body { overflow: auto; overscroll-behavior: contain; scrollbar-width: thin; }
+  .deck-panel { display: block; min-width: 0; }
+  .deck-panel[data-panel-active=false] { display: none !important; }
+  .cover-center, .deck-contents, .deck-overview, .overview-copy, .work-cards { display: contents; }
+  .deck-cover-content { display: grid; grid-template-rows: auto minmax(0, 1fr); height: 100%; min-height: 0; padding: 24px 22px; gap: 30px; }
+  .deck-cover-content > .deck-panel, .cover-center > .deck-panel { overflow: auto; overscroll-behavior: contain; }
+  .cover-role { font-size: 12px; letter-spacing: .16em; }
+  .cover-center h1 { font-size: clamp(34px, 6.6vw, 54px); }
+  .cover-center .deck-bullets { font-size: 14px; }
+  .cover-projects { grid-template-columns: 1fr; gap: 10px; }
+  .cover-projects > button { grid-template-columns: 25px minmax(0, 1fr) 14px; min-height: 88px; padding: 17px; align-items: center; }
+  .cover-projects > button > span:last-child { display: inline; }
+  .cover-projects strong { font-size: 16px; }
+  .cover-projects small { font-size: 8px; margin-bottom: 5px; }
+  .cover-contact { padding-top: 22px; gap: 30px; }
+  .cover-contact a, .cover-contact strong { font-size: 15px; overflow-wrap: anywhere; }
+  .deck-contents .contents-projects { height: auto; }
+  .contents-projects > button { padding: 16px; }
+  .contents-projects div > span { font-size: 12px; }
+  .profile-panel { padding: 22px; gap: 20px; }
+  .deck-project-name { font-size: 22px; }
+  .overview-summary { font-size: 14px; line-height: 1.85; }
+  .deck-project-meta { gap: 14px; }
+  .deck-project-meta > div { grid-template-columns: 50px minmax(0, 1fr); }
+  .deck-project-meta dd { font-size: 13px; }
+  .deck-stack { margin-bottom: 0; }
+  .deck-metrics { flex-wrap: wrap; }
+  .design-principle { margin-top: 0; }
+  .work-layout, .single-work, .with-diagram-strip { display: block; }
+  .deck-work, .with-diagram-strip .deck-work { padding: 20px 18px; }
+  .deck-work h3, .single-work .deck-work h3, .with-diagram-strip .deck-work h3 { font-size: 19px; margin-bottom: 14px; }
+  .deck-work-details, .with-diagram-strip .deck-work-details { margin-top: 16px; gap: 14px; }
+  .deck-work-details > div { grid-template-columns: 26px minmax(0, 1fr); }
+  .deck-code-links { margin-top: 16px; }
+  .deck-code-links a { font-size: 11px; padding-block: 5px; overflow-wrap: anywhere; }
+  .diagram-panel .deck-diagram { min-width: 0; height: auto; }
+  .relation-lines > div { grid-template-columns: minmax(0, 1fr) 16px minmax(0, 1fr); }
+  .relation-lines strong { min-width: 0; overflow-wrap: anywhere; }
+  .deck-controls { padding: 10px 18px; gap: 12px; }
+  .deck-page-controls { gap: 12px; }
+  .deck-page-controls button { width: 44px; height: 44px; }
+  .deck-page-number { display: flex; flex-wrap: wrap; column-gap: 5px; row-gap: 1px; width: 58px; }
+  .deck-part-number { display: block; flex-basis: 100%; text-align: center; font-size: 10px; color: var(--muted); font-weight: 450; }
+  .deck-chapter-name { display: none; }
+  .deck-panel-name { display: block; max-width: 45%; font-size: 11px; line-height: 1.5; color: var(--muted); text-align: right; overflow-wrap: anywhere; }
+  .closing-content { height: 100%; padding: 30px 24px; display: flex; flex-direction: column; align-items: stretch; justify-content: center; gap: 35px; overflow: auto; }
+  .closing-content h2 { font-size: 36px; margin: 0; }
+  .closing-contact { gap: 22px; padding-top: 22px; }
+  .closing-contact a { font-size: 15px; }
+  .closing-contact > button { min-height: 48px; margin-top: 8px; }
+}
+
+@media screen and (max-width: 360px) {
+  .slide-paper { padding: 18px 15px 14px; }
+  .deck-cover-content { padding: 22px 18px; }
+  .deck-controls { padding-inline: 12px; }
+  .deck-panel-name { max-width: 38%; font-size: 10px; }
+}
+
+@media print {
+  .deck-panel, .deck-panel[data-panel-active=false] { display: contents !important; }
+}

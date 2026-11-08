@@ -3,7 +3,7 @@
     "version": "1.0.0",
     "lastUpdated": "2026-11-08",
     "locale": "ko-KR",
-    "portfolioTitle": "LEE WONJUN · SOFTWARE DEVELOPMENT PORTFOLIO",
+    "portfolioTitle": "LEE WONJUN · PORTFOLIO",
     "purpose": "채용 포트폴리오: 개인 수행 작업 중심, 증빙 수준 구분, 정적 인터랙티브 웹",
     "contentLock": "LOCKED",
     "notProductionData": true,
@@ -35,8 +35,8 @@
   "profile": {
     "nameKo": "이원준",
     "nameEn": "LEE WONJUN",
-    "role": "Software Developer",
-    "eyebrow": "SOFTWARE DEVELOPMENT PORTFOLIO",
+    "role": "",
+    "eyebrow": "PORTFOLIO",
     "headline": "문제 정의부터 설계와 구현까지",
     "shortKeywords": [
       "Industrial Engineering",
@@ -2869,14 +2869,14 @@
     "theme": "warm-ivory-cobalt",
     "title": "LEE WONJUN / PORTFOLIO",
     "coverTitle": "문제 정의부터\n설계와 구현까지",
-    "closingTitle": "다음 프로젝트를\n함께 만들겠습니다.",
+    "closingTitle": "CONTACT",
     "slides": [
       {
         "id": "cover",
         "type": "cover",
         "title": "이원준 포트폴리오",
         "chapter": "PORTFOLIO",
-        "eyebrow": "SOFTWARE DEVELOPMENT",
+        "eyebrow": "PORTFOLIO",
         "projectId": null,
         "contributionIds": [],
         "diagramId": null
@@ -3102,9 +3102,9 @@
       {
         "id": "closing",
         "type": "closing",
-        "title": "다음 프로젝트를 함께",
+        "title": "Contact",
         "chapter": "CONTACT",
-        "eyebrow": "LET’S BUILD TOGETHER",
+        "eyebrow": "CONTACT",
         "projectId": null,
         "contributionIds": [],
         "diagramId": null
