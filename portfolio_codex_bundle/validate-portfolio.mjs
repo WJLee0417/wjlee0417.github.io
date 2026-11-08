@@ -26,6 +26,23 @@ const metrics=unique(dim.metrics,'metric definitions'), evidence=unique(dim.evid
 const contributions=unique(fact.contributions,'contributions'), mrecords=unique(fact.metricRecords,'metric records');
 unique(d.logicalSchema,'schema tables', x=>x.name);unique(d.diagrams,'diagrams');
 const cmap=new Map(fact.contributions.map(c=>[c.id,c]));
+assert(Array.isArray(d.profile.skillAreas) && d.profile.skillAreas.length===3,'three skill areas required');
+unique(d.profile.skillAreas,'skill areas');
+for(const area of d.profile.skillAreas){
+  assert(/^[a-z-]+$/.test(area.id) && area.label?.trim() && area.title?.trim(),`invalid skill area ${area.id}`);
+  const workIds=area.highlights.flatMap(item=>item.contributionIds);
+  for(const item of area.highlights){
+    assert(item.text?.trim() && item.contributionIds.length>0,`missing skill work ${area.id}`);
+    for(const id of item.contributionIds)assert(contributions.has(id),`unknown skill contribution ${area.id}/${id}`);
+  }
+  for(const id of area.technologyIds){
+    assert(technologies.has(id) && bridge.contributionTechnology.some(link=>link.technologyId===id && workIds.includes(link.contributionId)),`skill technology lacks linked work ${area.id}/${id}`);
+  }
+  for(const link of area.projects){
+    assert(projects.has(link.projectId) && workIds.some(id=>cmap.get(id)?.projectId===link.projectId),`skill project lacks linked work ${area.id}/${link.projectId}`);
+    assert(link.label?.trim() && link.section==='visualization' && dim.projects.find(p=>p.id===link.projectId)?.visualization,`invalid skill destination ${area.id}`);
+  }
+}
 const presentation=d.presentation;
 assert(presentation?.theme==='warm-ivory-cobalt','slide theme must be warm-ivory-cobalt');
 assert(Array.isArray(presentation?.slides) && presentation.slides.length>2,'slide deck missing');

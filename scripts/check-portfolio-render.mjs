@@ -64,7 +64,16 @@ try {
   assert.ok(home.includes(`href="mailto:${data.profile.contact.email}"`) && home.includes(`href="${data.profile.contact.githubUrl}"`));
   assert.ok(home.includes('GitHub · WJLee0417') && !home.includes('href="tel:'));
   assert.ok(!home.includes('class="web-about"') && !home.includes('web-project-choices') && !home.includes('class="web-contact"'));
-  assert.ok(renderPage('/background').includes('01 / BACKGROUND &amp; SKILLS'));
+  const background=renderPage('/background');
+  assert.ok(background.includes('01 / BACKGROUND &amp; SKILLS'));
+  for(const area of data.profile.skillAreas){
+    assert.ok(background.includes(`id="skill-panel-${area.id}"`));
+    for(const item of area.highlights) assert.ok(background.includes(escape(item.text)));
+    for(const link of area.projects){
+      const project=data.dimensions.projects.find(project=>project.id===link.projectId);
+      assert.ok(background.includes(`href="/projects/${project.slug}?section=${link.section}"`));
+    }
+  }
   const projectList=renderPage('/projects');
   assert.ok(projectList.includes('02 / PROJECTS'));
   for(const project of data.dimensions.projects)assert.ok(projectList.includes(`href="/projects/${project.slug}"`));

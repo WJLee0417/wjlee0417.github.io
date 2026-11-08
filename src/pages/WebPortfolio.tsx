@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link, Outlet, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { data, getFeaturedTechnologiesByProject, type Project } from '../data';
 import { deckSlides, slideNumber } from '../deck-model';
@@ -78,9 +78,41 @@ export function WebHome() {
 }
 
 export function WebBackground() {
+  const areas=data.profile.skillAreas;
+  const [selected,setSelected]=useState(areas[0].id);
+  const chooseArea=(index:number)=>{
+    const area=areas[(index+areas.length)%areas.length];
+    setSelected(area.id);
+    document.getElementById(`skill-tab-${area.id}`)?.focus({preventScroll:true});
+  };
   useEffect(()=>{document.title='Background & Skills · '+data.profile.nameEn;},[]);
   return <main className="web-background-page">
-<section className="web-about" id="about"><div className="web-wrap"><div className="web-section-heading" data-reveal><h1 className="web-section-label">01 / BACKGROUND &amp; SKILLS</h1></div><div className="web-about-grid"><div className="web-about-education" data-reveal><h3>Education & Training</h3>{data.profile.education.map(item=><div key={item.institution}><strong>{item.institution}</strong><p>{item.major} · {item.degree}</p></div>)}{data.profile.training.map(item=><div key={item.institution}><strong>{item.institution}</strong><p>{item.track} · {item.display}</p></div>)}<h3>Certificates</h3><p className="web-certificates">{data.profile.certifications.join(' · ')}</p></div><div className="web-about-tools" data-reveal="2">{['Java / Backend','Python / Data','SQL / Database','Optimization','Interface / Tools'].map(group=><div key={group}><h3>{group}</h3><p>{data.dimensions.technologies.filter(tech=>tech.group===group && data.bridges.contributionTechnology.some(link=>link.technologyId===tech.id)).map(tech=>tech.label).join(' · ')}</p></div>)}</div></div></div></section>
+    <section className="web-about" id="about"><div className="web-wrap">
+      <div className="web-section-heading" data-reveal><h1 className="web-section-label">01 / BACKGROUND &amp; SKILLS</h1></div>
+      <div className="background-layout">
+        <aside className="background-history" aria-label="학력·교육·자격" data-reveal>
+          <h2>Education &amp; Training</h2>
+          <ol className="background-timeline">
+            {data.profile.education.map(item=><li key={item.institution}><span>EDUCATION</span><h3>{item.institution}</h3><p>{item.major} · {item.degree}</p></li>)}
+            {data.profile.training.map(item=><li key={item.institution}><span>TRAINING</span><h3>{item.institution}</h3><p>{item.track}<br/>{item.display}</p></li>)}
+          </ol>
+          <div className="background-certificates"><h2>Certificates</h2><ul>{data.profile.certifications.map(label=><li key={label}>{label}</li>)}</ul></div>
+        </aside>
+        <div className="background-skills" data-reveal="2">
+          <div className="skill-selector" role="group" aria-label="기술 분야">{areas.map((area,index)=><button type="button" id={`skill-tab-${area.id}`} aria-controls={`skill-panel-${area.id}`} aria-pressed={selected===area.id} key={area.id} onClick={()=>setSelected(area.id)} onKeyDown={event=>{
+            const target=event.key==='ArrowRight'?index+1:event.key==='ArrowLeft'?index-1:event.key==='Home'?0:event.key==='End'?areas.length-1:null;
+            if(target!==null){event.preventDefault();chooseArea(target);}
+          }}>{area.label}</button>)}</div>
+          <div className="skill-cards">{areas.map((area,index)=><article className="skill-card" id={`skill-panel-${area.id}`} data-active={selected===area.id} aria-labelledby={`skill-title-${area.id}`} key={area.id}>
+            <div className="skill-card-heading"><span className="skill-number" aria-hidden="true">{slideNumber(index)}</span><h2 id={`skill-title-${area.id}`}>{area.title}</h2><ul className="skill-technologies" aria-label="사용 기술">{area.technologyIds.map(id=><li key={id}>{data.dimensions.technologies.find(tech=>tech.id===id)!.label}</li>)}</ul></div>
+            <div className="skill-card-work"><ul className="skill-highlights">{area.highlights.map(item=><li key={item.text}>{item.text}</li>)}</ul><nav className="skill-project-links" aria-label={`${area.label} 관련 프로젝트`}>{area.projects.map(link=>{
+              const project=data.dimensions.projects.find(project=>project.id===link.projectId)!;
+              return <Link key={link.projectId} to={`/projects/${project.slug}?section=${link.section}`}>{link.label}<span aria-hidden="true">↗</span></Link>;
+            })}</nav></div>
+          </article>)}</div>
+        </div>
+      </div>
+    </div></section>
   </main>;
 }
 

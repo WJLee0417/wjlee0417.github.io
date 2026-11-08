@@ -131,6 +131,11 @@ export interface PortfolioData {
   profile: {
     nameKo:string; nameEn:string; role:string; eyebrow:string; headline:string;
     shortKeywords:string[]; intro:string;
+    skillAreas:Array<{
+      id:string; label:string; title:string; technologyIds:string[];
+      highlights:Array<{text:string;contributionIds:string[]}>;
+      projects:Array<{projectId:string;section:string;label:string}>;
+    }>;
     education:Array<{institution:string;major:string;degree:string}>;
     training:Array<{institution:string;track:string;display:string}>;
     certifications:string[];
