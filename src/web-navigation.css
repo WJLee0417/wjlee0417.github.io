@@ -20,8 +20,8 @@
 .web-entry-actions .web-button-secondary { background: transparent; color: var(--cobalt); border: 1px solid var(--cobalt); }
 .web-entry-actions .web-button-secondary:hover { background: #e5e7f9; }
 .web-hub { flex: 1; padding-block: 42px; }
-.web-project-choices { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
-.web-project-choice { display: grid; grid-template-columns: 28px minmax(0, 1fr) 22px; gap: 20px; align-items: center; min-height: 180px; padding: 28px; background: #fff; border: 1px solid transparent; }
+.web-project-choices { display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; }
+.web-project-choice { display: grid; grid-template-columns: 40px minmax(0, 1fr) 28px; gap: 26px; align-items: center; min-height: 140px; padding: 26px 30px; background: #fff; border: 1px solid transparent; }
 .web-choice-number { font-size: 20px; font-weight: 700; color: var(--cobalt); align-self: start; }
 .web-project-choice small { display: block; font-size: 14px; letter-spacing: .08em; color: var(--muted); margin-bottom: 12px; }
 .web-project-choice h2 { font-size: 23px; line-height: 1.4; font-weight: 700; }

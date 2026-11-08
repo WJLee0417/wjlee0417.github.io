@@ -8,7 +8,7 @@ import { webDestination } from '../web-navigation';
 import { ProjectVisual } from './ProjectVisuals';
 
 const overviews = deckSlides.filter(slide => slide.type === 'overview');
-export const webProjects = overviews.map(slide => data.dimensions.projects.find(project => project.id === slide.projectId)!);
+export const webProjects = [...data.dimensions.projects].sort((a,b)=>a.sortOrder-b.sortOrder);
 
 function Stack({ project }: { project: Project }) {
   const labels = project.implementationStack ?? getFeaturedTechnologiesByProject(data,project.id).map(tech => tech.label);
@@ -124,7 +124,7 @@ export function WebProjects() {
   useEffect(()=>{document.title=`Projects · ${data.profile.nameEn}`;},[]);
   return <main className="web-hub web-wrap"><header className="web-section-heading" data-reveal><h1 className="web-section-label">02 / PROJECTS</h1></header>
     <div className="web-project-choices">{webProjects.map((project,index)=><Link className="web-project-choice" to={`/projects/${project.slug}`} key={project.id} data-reveal={index%2+1}>
-      <span className="web-choice-number">{slideNumber(index)}</span><div><small>{overviews[index].eyebrow.split(' / ')[1]}</small><h2>{project.name}</h2><p>{project.periodLabel ?? `${project.periodStart} — ${project.periodEnd}`}</p></div><span className="web-choice-arrow" aria-hidden="true">↗</span>
+      <span className="web-choice-number">{slideNumber(index)}</span><div><small>{overviews.find(slide=>slide.projectId===project.id)!.eyebrow.split(' / ')[1]}</small><h2>{project.name}</h2><p>{project.periodLabel ?? `${project.periodStart} — ${project.periodEnd}`}</p></div><span className="web-choice-arrow" aria-hidden="true">↗</span>
     </Link>)}</div>
   </main>;
 }
@@ -159,14 +159,14 @@ export function WebProject() {
   const visual=data.diagrams.find(diagram=>diagram.id===group?.diagramId);
   return <main className="web-project-page" data-project-view={active}><div className="web-wrap">
     <nav className="web-breadcrumb" aria-label="현재 위치"><Link to="/projects">Projects</Link><span>/</span><span>{slideNumber(index)} · {project.name}</span></nav>
-    <header className="web-project-masthead"><p className="web-eyebrow">{overview?.eyebrow}</p><h1>{project.name}</h1><p className="web-project-english">{project.nameEn}</p>{project.visualization && active!=='visualization' && <Link className="web-visual-entry" to={`/projects/${project.slug}?section=visualization`}>{visualLabel} 보기 ↗</Link>}</header>
+    <header className="web-project-masthead"><p className="web-eyebrow">{slideNumber(index)} / {overview?.eyebrow.split(' / ')[1]}</p><h1>{project.name}</h1><p className="web-project-english">{project.nameEn}</p>{project.visualization && active!=='visualization' && <Link className="web-visual-entry" to={`/projects/${project.slug}?section=visualization`}>{visualLabel} 보기 ↗</Link>}</header>
     <nav className="web-project-tabs" ref={tabsRef} aria-label="프로젝트 내용">{tabs.map(tab=><Link key={tab.id} to={tab.id==='overview'?`/projects/${project.slug}`:`/projects/${project.slug}?section=${tab.id}`} aria-current={active===tab.id?'page':undefined}>{tab.title}</Link>)}</nav>
     <div className="web-content-panel" key={active}>
       {active==='overview' && <><section className="web-project-hero" aria-label="프로젝트 개요" data-reveal><div><Bullets text={project.summary}/><Stack project={project}/><dl className="web-project-facts"><div><dt>ROLE</dt><dd>{project.role}</dd></div><div><dt>PERIOD</dt><dd>{project.periodLabel ?? `${project.periodStart} — ${project.periodEnd}`}</dd></div><div><dt>CONTEXT</dt><dd>{project.kind}</dd></div></dl><ProjectLinks project={project}/></div>{diagram && <DeckDiagram diagram={diagram}/>}</section><ProjectMetrics project={project}/></>}
       {active==='implementation' && <Implementation project={project}/>}
       {active==='visualization' && <ProjectVisual project={project}/>}
       {active==='validation-results' && <ExperimentComparison project={project}/>}
-      {group && <section className="web-work-section" id={group.id} data-reveal><div className="web-work-heading"><p className="web-eyebrow">{group.eyebrow}</p><h2>{group.title}</h2></div><div className="web-work-grid">{work.map(item=><WorkCard work={item} key={item.id}/>)}</div>{project.visualization?.kind==='erd' && ['commercial-model','rental-model'].includes(group.id)?<ProjectVisual project={project}/>:visual && <DeckDiagram diagram={visual}/>}</section>}
+      {group && <section className="web-work-section" id={group.id} data-reveal><div className="web-work-heading"><p className="web-eyebrow">{slideNumber(index)} / {group.eyebrow.split(' / ')[1]}</p><h2>{group.title}</h2></div><div className="web-work-grid">{work.map(item=><WorkCard work={item} key={item.id}/>)}</div>{project.visualization?.kind==='erd' && ['commercial-model','rental-model'].includes(group.id)?<ProjectVisual project={project}/>:visual && <DeckDiagram diagram={visual}/>}</section>}
     </div>
     <nav className="web-project-pagination" aria-label="다른 프로젝트"><Link to="/projects"><small>ALL PROJECTS</small><strong>프로젝트 목록 ↗</strong></Link><Link to={`/projects/${webProjects[(index+1)%webProjects.length].slug}`}><small>NEXT PROJECT →</small><strong>{webProjects[(index+1)%webProjects.length].name}</strong></Link></nav>
   </div></main>;

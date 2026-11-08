@@ -1,6 +1,8 @@
-import { useEffect, useId, useRef, useState } from 'react';
+import { useEffect, useId, useMemo, useRef, useState } from 'react';
 import { type ErdVisualization, type FlowVisualization, type Project, type SchemaTable } from '../data';
 import { Bullets } from './Deck';
+import { DaErdOverview } from './DaErdOverview';
+import { routeErdConnections, type ErdConnection } from '../erd-routing';
 
 const NODE_WIDTH=460,ROW=50,HEAD=72,GAP=96;
 const tableName=(table:SchemaTable)=>table.displayName??table.name;
@@ -25,13 +27,24 @@ function schemaLayout(model: ErdVisualization, view: number, all: boolean) {
   return {nodes,width:80+model.views[view].lanes.length*NODE_WIDTH+(model.views[view].lanes.length-1)*GAP,height:Math.max(...nodes.map(node=>node.y+node.height))+40};
 }
 
-type ErdSelection={view: number; all: boolean; selected: string};
+type ErdSelection={view: number; all: boolean; selected: string; overview:boolean};
 function ErdWorkspace({model, expanded=false, initial, onExpand}: {model: ErdVisualization; expanded?: boolean; initial?: ErdSelection; onExpand?:(selection:ErdSelection)=>void}) {
   const [view,setView]=useState(initial?.view??0),[all,setAll]=useState(initial?.all??false),[zoom,setZoom]=useState(1),[selected,setSelected]=useState(initial?.selected??model.views[0].focus);
   const [settings,setSettings]=useState(false);
+  const [overview,setOverview]=useState(initial?.overview??true);
   const viewport=useRef<HTMLDivElement>(null),marker=useId().replaceAll(':','');
   const currentSelection=useRef(selected);currentSelection.current=selected;
   const layout=schemaLayout(model,view,all);
+  const detailedEdges=useMemo(()=>{
+    if(overview)return [];
+    const nodes=schemaLayout(model,view,all),boxes=new Map(nodes.nodes.map(node=>[node.table.name,{x:node.x,y:node.y,width:NODE_WIDTH,height:node.height}]));
+    const edges:ErdConnection[]=nodes.nodes.flatMap(node=>node.table.foreignKeys.flatMap((key,index)=>{
+      if(!boxes.has(key.target))return [];
+      const unique=[node.table.primaryKey,...node.table.uniqueKeys].some(columns=>columns.length===key.columns.length&&columns.every(column=>key.columns.includes(column)));
+      return [{id:`${node.table.name}-${index}`,parent:key.target,child:node.table.name,unique,label:`${tableName(model.tables.find(table=>table.name===key.target)!)} → ${tableName(node.table)} · ${keyNames(node.table,key.columns)}`}];
+    }));
+    return routeErdConnections(boxes,edges,nodes.width,nodes.height);
+  },[model,view,all,overview]);
   const table=model.tables.find(table=>table.name===selected)!;
   const resetZoom=()=>setZoom(1);
   useEffect(()=>{
@@ -43,32 +56,21 @@ function ErdWorkspace({model, expanded=false, initial, onExpand}: {model: ErdVis
     };
     resize();const observer=new ResizeObserver(resize);observer.observe(element);
     return()=>{observer.disconnect();cancelAnimationFrame(frame);};
-  },[view,all,expanded]);
+  },[view,all,expanded,overview]);
   const connected=model.tables.flatMap(child=>child.foreignKeys.map(key=>({child,key}))).filter(item=>item.child.name===selected||item.key.target===selected);
   const nodeMap=new Map(layout.nodes.map(node=>[node.table.name,node]));
   const changeView=(index:number)=>{setView(index);setSelected(model.views[index].focus);};
   return <div className="erd-workspace">
     <div className="visual-options" role="group" aria-label="ERD 영역">{model.views.map((item,index)=><button type="button" key={item.id} aria-pressed={view===index} onClick={()=>changeView(index)}>{item.label}</button>)}</div>
-    <div className="erd-mobile-tools"><button type="button" aria-expanded={settings} aria-controls={`erd-settings-${marker}`} onClick={()=>setSettings(!settings)}>보기 설정 {settings?'−':'+'}</button>{onExpand && <button type="button" onClick={()=>onExpand({view,all,selected})}>크게 보기 ↗</button>}</div>
-    <div className="erd-toolbar" id={`erd-settings-${marker}`} data-open={settings}><div><span><b>PK</b> 기본키</span><span><b>FK</b> 외래키</span><span>0..N 여러 행</span></div><div><button type="button" disabled={zoom<=1} onClick={()=>setZoom(Math.max(1,zoom-.15))} aria-label="ERD 축소">−</button><output aria-label="ERD 배율">{Math.round(zoom*100)}%</output><button type="button" onClick={()=>setZoom(Math.min(2,zoom+.15))} aria-label="ERD 확대">+</button><button type="button" onClick={resetZoom}>기본 배율</button><button type="button" aria-pressed={all} onClick={()=>setAll(!all)}>{all?'키 중심':'전체 컬럼'}</button>{onExpand && <button className="erd-desktop-expand" type="button" onClick={()=>onExpand({view,all,selected})}>크게 보기 ↗</button>}</div></div>
+    <div className="erd-display-modes" role="group" aria-label="ERD 표시 방식"><button type="button" aria-pressed={overview} onClick={()=>setOverview(true)}>전체 구조</button><button type="button" aria-pressed={!overview} onClick={()=>setOverview(false)}>컬럼 상세</button><span>PK 기본키 · 테이블 선택 시 상세 표시</span>{onExpand&&<button type="button" className="erd-overview-expand" onClick={()=>onExpand({view,all,selected,overview})}>크게 보기 ↗</button>}</div>
+    {!overview&&<><div className="erd-mobile-tools"><button type="button" aria-expanded={settings} aria-controls={`erd-settings-${marker}`} onClick={()=>setSettings(!settings)}>보기 설정 {settings?'−':'+'}</button></div>
+    <div className="erd-toolbar" id={`erd-settings-${marker}`} data-open={settings}><div><span><b>PK</b> 기본키</span><span><b>FK</b> 외래키</span><span>0..N 여러 행</span></div><div><button type="button" disabled={zoom<=1} onClick={()=>setZoom(Math.max(1,zoom-.15))} aria-label="ERD 축소">−</button><output aria-label="ERD 배율">{Math.round(zoom*100)}%</output><button type="button" onClick={()=>setZoom(Math.min(2,zoom+.15))} aria-label="ERD 확대">+</button><button type="button" onClick={resetZoom}>기본 배율</button><button type="button" aria-pressed={all} onClick={()=>setAll(!all)}>{all?'키 중심':'전체 컬럼'}</button></div></div></>}
     <label className="erd-table-picker">테이블 선택 <select value={selected} onChange={event=>{setSelected(event.target.value);const node=nodeMap.get(event.target.value)!;viewport.current?.scrollTo({left:Math.max(0,node.x*zoom-20),top:Math.max(0,node.y*zoom-20),behavior:'instant'});}}>{layout.nodes.map(node=><option key={node.table.name} value={node.table.name}>{tableOption(node.table)}</option>)}</select></label>
-    <p className="visual-hint">테이블을 선택하면 전체 컬럼·키·연결 관계 표시</p>
+    {overview?<DaErdOverview model={model} view={view} selected={selected} onSelect={setSelected}/>:<><p className="visual-hint">테이블을 선택하면 전체 컬럼·키·연결 관계 표시</p>
     <div className="erd-viewport" ref={viewport} tabIndex={0} role="region" aria-label="확대·가로 이동 가능한 ERD">
       <svg className="erd-svg" width={layout.width*zoom} height={layout.height*zoom} viewBox={`0 0 ${layout.width} ${layout.height}`} aria-label={model.title}>
         <defs><marker id={marker} markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0 L7 3.5 L0 7" fill="none" stroke="currentColor"/></marker></defs>
-        {layout.nodes.flatMap(child=>child.table.foreignKeys.map((key,index)=>{
-          const parent=nodeMap.get(key.target);if(!parent)return null;
-          const active=selected===child.table.name||selected===parent.table.name;
-          const same=parent.x===child.x,forward=parent.x<child.x;
-          const py=parent.y+HEAD+Math.max(0,parent.columns.findIndex(c=>c.name===key.targetColumns[0]))*ROW+11;
-          const cy=child.y+HEAD+Math.max(0,child.columns.findIndex(c=>c.name===key.columns[0]))*ROW+11;
-          const px=same?parent.x+NODE_WIDTH:parent.x+(forward?NODE_WIDTH:0),cx=same?child.x+NODE_WIDTH:child.x+(forward?0:NODE_WIDTH);
-          const bend=same?px+48+(index%3)*12:(px+cx)/2+(index%3)*12;
-          const path=`M${px},${py} C${bend},${py} ${bend},${cy} ${cx},${cy}`;
-          const unique=[child.table.primaryKey,...child.table.uniqueKeys].some(columns=>columns.length===key.columns.length && columns.every(column=>key.columns.includes(column)));
-          const optional=key.columns.some(name=>child.table.columns.find(column=>column.name===name)?.nullable);
-          return <g key={`${child.table.name}-${index}`} className={`erd-edge ${active?'is-connected':''}`} aria-label={`${tableName(parent.table)} ${optional?'0..1':'1'} 대 ${tableName(child.table)} ${unique?'0..1':'0..N'} · ${keyNames(child.table,key.columns)}`}><path d={path} markerEnd={`url(#${marker})`}/><text x={px+(forward||same?8:-10)} y={py-7} textAnchor={forward||same?'start':'end'}>{optional?'0..1':'1'}</text><text x={cx+(forward?-8:10)} y={cy-7} textAnchor={forward?'end':'start'}>{unique?'0..1':'0..N'}</text></g>;
-        }))}
+        {[...detailedEdges].sort((a,b)=>Number(a.child===selected||a.parent===selected)-Number(b.child===selected||b.parent===selected)).map(edge=><g key={edge.id} className={`erd-edge ${edge.child===selected||edge.parent===selected?'is-connected':''}`} aria-label={edge.label}><title>{edge.label}</title><path className="da-edge-halo" d={edge.path}/><path d={edge.path}/><path d={edge.ending}/></g>)}
         {layout.nodes.map(node=><g key={node.table.name} transform={`translate(${node.x},${node.y})`} className={`erd-entity ${selected===node.table.name?'is-selected':''}`} role="button" tabIndex={0} aria-pressed={selected===node.table.name} aria-label={`${tableOption(node.table)} 테이블 선택`} onClick={()=>setSelected(node.table.name)} onKeyDown={event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();setSelected(node.table.name);}}}>
           <rect width={NODE_WIDTH} height={node.height} className="erd-entity-body"/><rect width={NODE_WIDTH} height={HEAD-8} className="erd-entity-head"/>
           <text x={14} y={25} className="erd-table-name">{tableName(node.table)}</text><text x={14} y={49} className="erd-table-label erd-head-label">{node.table.label===tableName(node.table)?`${node.table.columns.length} columns`:node.table.label}</text>
@@ -79,7 +81,7 @@ function ErdWorkspace({model, expanded=false, initial, onExpand}: {model: ErdVis
           <text x={14} y={node.height-10} className="erd-table-label">{all?'전체 컬럼':`${node.columns.length} / ${node.table.columns.length} 컬럼 · 선택하여 상세 보기`}</text>
         </g>)}
       </svg>
-    </div>
+    </div></>}
     <section className="erd-inspector" aria-label="선택 테이블 상세"><div className="erd-inspector-heading"><div><p className="web-eyebrow">TABLE DETAIL</p><h3 aria-live="polite">{table.displayName??table.label}{(table.displayName?table.label:table.name)!==(table.displayName??table.label) && <small>{table.displayName?table.label:table.name}</small>}</h3></div><div className="erd-key-summary"><p><b>PK</b> {keyNames(table,table.primaryKey)}</p>{table.uniqueKeys.map((key,index)=><p key={index}><b>UNIQUE</b> {keyNames(table,key)}</p>)}</div></div>
       <div className="erd-detail-grid"><div className="erd-column-scroll"><table><caption>컬럼·타입·NULL 허용</caption><thead><tr><th>키</th><th>컬럼</th><th>타입</th><th>NULL</th></tr></thead><tbody>{table.columns.map(column=><tr key={column.name}><td>{[table.primaryKey.includes(column.name)?'PK':'',table.foreignKeys.some(key=>key.columns.includes(column.name))?'FK':''].filter(Boolean).join(' / ')||'—'}</td><th scope="row">{column.displayName??column.name}</th><td>{column.type}</td><td>{column.nullable?'허용':'불가'}</td></tr>)}</tbody></table></div>
       <div className="erd-relations"><h4>연결 관계</h4>{connected.length?connected.map(({child,key},index)=>{const target=model.tables.find(table=>table.name===key.target)!;return <p key={index}><code>{tableName(child)}.{keyNames(child,key.columns)}</code><span>→</span><code>{tableName(target)}.{keyNames(target,key.targetColumns)}</code></p>;}):<p>외래키 연결 없음</p>}</div></div>
