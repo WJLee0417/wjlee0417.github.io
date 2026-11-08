@@ -60,7 +60,7 @@ try {
   assert.ok(!presentationChrome.test(home));
   assert.ok(!/Software Developer|소프트웨어 개발자/.test(home));
   const renderPage=path=>renderToString(createElement(MemoryRouter,{initialEntries:[path]},createElement(PortfolioRoutes)));
-  assert.ok(home.includes('포트폴리오 보기') && home.includes('href="/projects"'));
+  assert.ok(home.includes('기술 스택 보기') && home.includes('프로젝트 보기') && !home.includes('포트폴리오 보기'));
   assert.ok(home.includes(`href="mailto:${data.profile.contact.email}"`) && home.includes(`href="${data.profile.contact.githubUrl}"`));
   assert.ok(home.includes('GitHub · WJLee0417') && !home.includes('href="tel:'));
   assert.ok(!home.includes('class="web-about"') && !home.includes('web-project-choices') && !home.includes('class="web-contact"'));

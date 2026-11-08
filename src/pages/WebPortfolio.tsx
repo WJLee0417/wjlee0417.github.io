@@ -73,7 +73,7 @@ export function WebHome() {
   return <main className="web-entry web-wrap"><div className="web-entry-copy" data-reveal>
     <p className="web-eyebrow">{data.profile.eyebrow}</p><p className="web-hero-name">{data.profile.nameKo} <span>/ {data.profile.nameEn}</span></p>
     <h1>{data.presentation.coverTitle.split('\n').map(line=><span key={line}>{line}</span>)}</h1><div className="web-rule"/><Bullets text={data.profile.intro}/>
-    <Link className="web-button web-entry-button" to="/projects">포트폴리오 보기 <span>↗</span></Link>
+    <div className="web-entry-actions"><Link className="web-button web-entry-button web-button-secondary" to="/background">기술 스택 보기 <span aria-hidden="true">↗</span></Link><Link className="web-button web-entry-button" to="/projects">프로젝트 보기 <span aria-hidden="true">↗</span></Link></div>
   </div></main>;
 }
 
