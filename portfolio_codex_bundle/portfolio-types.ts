@@ -26,7 +26,7 @@ export interface Project {
   visualization?: ProjectVisualization;
 }
 export interface VisualSource { url: string; sha256: string }
-export interface SchemaColumn { name: string; type: string; nullable: boolean }
+export interface SchemaColumn { name: string; displayName?: string; type: string; nullable: boolean }
 export interface SchemaTable {
   name: string; label: string; columns: SchemaColumn[]; primaryKey: string[]; uniqueKeys: string[][];
   foreignKeys: Array<{columns: string[]; target: string; targetColumns: string[]}>;

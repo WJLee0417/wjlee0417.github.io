@@ -119,12 +119,14 @@
                 {
                   "name": "상권_구분_코드",
                   "type": "CHAR(1)",
-                  "nullable": false
+                  "nullable": false,
+                  "displayName": "area_type_code"
                 },
                 {
                   "name": "상권_구분명",
                   "type": "VARCHAR(20)",
-                  "nullable": true
+                  "nullable": true,
+                  "displayName": "area_type_name"
                 }
               ],
               "primaryKey": [
@@ -140,12 +142,14 @@
                 {
                   "name": "자치구_코드",
                   "type": "INT",
-                  "nullable": false
+                  "nullable": false,
+                  "displayName": "district_code"
                 },
                 {
                   "name": "자치구명",
                   "type": "VARCHAR(20)",
-                  "nullable": true
+                  "nullable": true,
+                  "displayName": "district_name"
                 }
               ],
               "primaryKey": [
@@ -161,12 +165,14 @@
                 {
                   "name": "행정동_코드",
                   "type": "INT",
-                  "nullable": false
+                  "nullable": false,
+                  "displayName": "admin_dong_code"
                 },
                 {
                   "name": "행정동명",
                   "type": "VARCHAR(20)",
-                  "nullable": true
+                  "nullable": true,
+                  "displayName": "admin_dong_name"
                 }
               ],
               "primaryKey": [
@@ -182,12 +188,14 @@
                 {
                   "name": "서비스_업종_코드",
                   "type": "VARCHAR(50)",
-                  "nullable": false
+                  "nullable": false,
+                  "displayName": "service_industry_code"
                 },
                 {
                   "name": "서비스_업종명",
                   "type": "VARCHAR(50)",
-                  "nullable": true
+                  "nullable": true,
+                  "displayName": "service_industry_name"
                 }
               ],
               "primaryKey": [
@@ -203,97 +211,116 @@
                 {
                   "name": "상권_구분_코드",
                   "type": "CHAR(1)",
-                  "nullable": true
+                  "nullable": true,
+                  "displayName": "area_type_code"
                 },
                 {
                   "name": "상권_코드",
                   "type": "INT",
-                  "nullable": false
+                  "nullable": false,
+                  "displayName": "commercial_area_code"
                 },
                 {
                   "name": "상권_코드_명",
                   "type": "VARCHAR(255)",
-                  "nullable": true
+                  "nullable": true,
+                  "displayName": "commercial_area_name"
                 },
                 {
                   "name": "엑스좌표_값",
                   "type": "INT",
-                  "nullable": true
+                  "nullable": true,
+                  "displayName": "x_coordinate"
                 },
                 {
                   "name": "와이좌표_값",
                   "type": "INT",
-                  "nullable": true
+                  "nullable": true,
+                  "displayName": "y_coordinate"
                 },
                 {
                   "name": "자치구_코드",
                   "type": "INT",
-                  "nullable": true
+                  "nullable": true,
+                  "displayName": "district_code"
                 },
                 {
                   "name": "행정동_코드",
                   "type": "INT",
-                  "nullable": true
+                  "nullable": true,
+                  "displayName": "admin_dong_code"
                 },
                 {
                   "name": "영역_면적",
                   "type": "FLOAT",
-                  "nullable": true
+                  "nullable": true,
+                  "displayName": "area_size"
                 },
                 {
                   "name": "집객시설_수",
                   "type": "INT",
-                  "nullable": true
+                  "nullable": true,
+                  "displayName": "attraction_facility_count"
                 },
                 {
                   "name": "아파트_단지_수",
                   "type": "INT",
-                  "nullable": true
+                  "nullable": true,
+                  "displayName": "apartment_complex_count"
                 },
                 {
                   "name": "남성_직장_인구_수",
                   "type": "INT",
-                  "nullable": true
+                  "nullable": true,
+                  "displayName": "male_workplace_population"
                 },
                 {
                   "name": "여성_직장_인구_수",
                   "type": "INT",
-                  "nullable": true
+                  "nullable": true,
+                  "displayName": "female_workplace_population"
                 },
                 {
                   "name": "총_상주인구_수",
                   "type": "INT",
-                  "nullable": true
+                  "nullable": true,
+                  "displayName": "resident_population"
                 },
                 {
                   "name": "남성_유동인구_수",
                   "type": "INT",
-                  "nullable": true
+                  "nullable": true,
+                  "displayName": "male_floating_population"
                 },
                 {
                   "name": "여성_유동인구_수",
                   "type": "INT",
-                  "nullable": true
+                  "nullable": true,
+                  "displayName": "female_floating_population"
                 },
                 {
                   "name": "월_평균_소득_금액",
                   "type": "INT",
-                  "nullable": true
+                  "nullable": true,
+                  "displayName": "avg_monthly_income"
                 },
                 {
                   "name": "소득_구간_코드",
                   "type": "INT",
-                  "nullable": true
+                  "nullable": true,
+                  "displayName": "income_bracket_code"
                 },
                 {
                   "name": "지출_총금액",
                   "type": "INT",
-                  "nullable": true
+                  "nullable": true,
+                  "displayName": "total_expenditure"
                 },
                 {
                   "name": "점포_수",
                   "type": "INT",
-                  "nullable": true
+                  "nullable": true,
+                  "displayName": "store_count"
                 }
               ],
               "primaryKey": [
@@ -337,22 +364,26 @@
                 {
                   "name": "서비스_업종_코드",
                   "type": "VARCHAR(50)",
-                  "nullable": false
+                  "nullable": false,
+                  "displayName": "service_industry_code"
                 },
                 {
                   "name": "상권_코드",
                   "type": "INT",
-                  "nullable": false
+                  "nullable": false,
+                  "displayName": "commercial_area_code"
                 },
                 {
                   "name": "매출",
                   "type": "BIGINT",
-                  "nullable": true
+                  "nullable": true,
+                  "displayName": "sales"
                 },
                 {
                   "name": "점포_수",
                   "type": "INT",
-                  "nullable": true
+                  "nullable": true,
+                  "displayName": "store_count"
                 }
               ],
               "primaryKey": [
@@ -388,137 +419,164 @@
                 {
                   "name": "상호명",
                   "type": "VARCHAR(100)",
-                  "nullable": false
+                  "nullable": false,
+                  "displayName": "company_name"
                 },
                 {
                   "name": "등록번호",
                   "type": "BIGINT",
-                  "nullable": false
+                  "nullable": false,
+                  "displayName": "registration_number"
                 },
                 {
                   "name": "자산",
                   "type": "BIGINT",
-                  "nullable": true
+                  "nullable": true,
+                  "displayName": "assets"
                 },
                 {
                   "name": "부채",
                   "type": "BIGINT",
-                  "nullable": true
+                  "nullable": true,
+                  "displayName": "liabilities"
                 },
                 {
                   "name": "자본",
                   "type": "BIGINT",
-                  "nullable": true
+                  "nullable": true,
+                  "displayName": "equity"
                 },
                 {
                   "name": "매출액",
                   "type": "BIGINT",
-                  "nullable": true
+                  "nullable": true,
+                  "displayName": "revenue"
                 },
                 {
                   "name": "영업이익",
                   "type": "BIGINT",
-                  "nullable": true
+                  "nullable": true,
+                  "displayName": "operating_profit"
                 },
                 {
                   "name": "당기순이익",
                   "type": "BIGINT",
-                  "nullable": true
+                  "nullable": true,
+                  "displayName": "net_income"
                 },
                 {
                   "name": "가맹점수",
                   "type": "INT",
-                  "nullable": true
+                  "nullable": true,
+                  "displayName": "franchise_store_count"
                 },
                 {
                   "name": "직영점수",
                   "type": "INT",
-                  "nullable": true
+                  "nullable": true,
+                  "displayName": "company_owned_store_count"
                 },
                 {
                   "name": "신규개점",
                   "type": "INT",
-                  "nullable": true
+                  "nullable": true,
+                  "displayName": "new_store_count"
                 },
                 {
                   "name": "계약종료",
                   "type": "INT",
-                  "nullable": true
+                  "nullable": true,
+                  "displayName": "expired_contract_count"
                 },
                 {
                   "name": "계약해지",
                   "type": "INT",
-                  "nullable": true
+                  "nullable": true,
+                  "displayName": "terminated_contract_count"
                 },
                 {
                   "name": "평균매출액",
                   "type": "BIGINT",
-                  "nullable": true
+                  "nullable": true,
+                  "displayName": "avg_sales"
                 },
                 {
                   "name": "면적당_평균_매출액",
                   "type": "BIGINT",
-                  "nullable": true
+                  "nullable": true,
+                  "displayName": "avg_sales_per_area"
                 },
                 {
                   "name": "광고비",
                   "type": "BIGINT",
-                  "nullable": true
+                  "nullable": true,
+                  "displayName": "advertising_cost"
                 },
                 {
                   "name": "판촉비",
                   "type": "BIGINT",
-                  "nullable": true
+                  "nullable": true,
+                  "displayName": "promotion_cost"
                 },
                 {
                   "name": "가입비",
                   "type": "BIGINT",
-                  "nullable": true
+                  "nullable": true,
+                  "displayName": "initial_fee"
                 },
                 {
                   "name": "교육비",
                   "type": "BIGINT",
-                  "nullable": true
+                  "nullable": true,
+                  "displayName": "training_fee"
                 },
                 {
                   "name": "보증금",
                   "type": "BIGINT",
-                  "nullable": true
+                  "nullable": true,
+                  "displayName": "deposit"
                 },
                 {
                   "name": "기타비용",
                   "type": "BIGINT",
-                  "nullable": true
+                  "nullable": true,
+                  "displayName": "other_cost"
                 },
                 {
                   "name": "단위면적당_인테리어비용",
                   "type": "BIGINT",
-                  "nullable": true
+                  "nullable": true,
+                  "displayName": "interior_cost_per_unit_area"
                 },
                 {
                   "name": "인테리어_비용",
                   "type": "BIGINT",
-                  "nullable": true
+                  "nullable": true,
+                  "displayName": "interior_cost"
                 },
                 {
                   "name": "최초_계약기간",
                   "type": "INT",
-                  "nullable": true
+                  "nullable": true,
+                  "displayName": "initial_contract_term"
                 },
                 {
                   "name": "연장_계약기간",
                   "type": "INT",
-                  "nullable": true
+                  "nullable": true,
+                  "displayName": "renewal_contract_term"
                 },
                 {
                   "name": "업종코드",
                   "type": "VARCHAR(50)",
-                  "nullable": true
+                  "nullable": true,
+                  "displayName": "service_industry_code"
                 },
                 {
                   "name": "영업명",
                   "type": "VARCHAR(100)",
-                  "nullable": true
+                  "nullable": true,
+                  "displayName": "brand_name"
                 }
               ],
               "primaryKey": [

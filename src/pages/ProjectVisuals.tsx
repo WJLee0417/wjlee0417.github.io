@@ -3,6 +3,8 @@ import { type ErdVisualization, type FlowVisualization, type Project, type Schem
 import { Bullets } from './Deck';
 
 const NODE_WIDTH=370,ROW=25,HEAD=60,GAP=92;
+const columnName=(table:SchemaTable,name:string)=>table.columns.find(column=>column.name===name)?.displayName??name;
+const keyNames=(table:SchemaTable,names:string[])=>names.map(name=>columnName(table,name)).join(' + ');
 function displayedColumns(table: SchemaTable, all: boolean) {
   if(all)return table.columns;
   const keys=new Set([...table.primaryKey,...table.foreignKeys.flatMap(key=>key.columns)]);
@@ -63,22 +65,23 @@ function ErdWorkspace({model, expanded=false, initial, onExpand}: {model: ErdVis
           const path=`M${px},${py} C${bend},${py} ${bend},${cy} ${cx},${cy}`;
           const unique=[child.table.primaryKey,...child.table.uniqueKeys].some(columns=>columns.length===key.columns.length && columns.every(column=>key.columns.includes(column)));
           const optional=key.columns.some(name=>child.table.columns.find(column=>column.name===name)?.nullable);
-          return <g key={`${child.table.name}-${index}`} className={`erd-edge ${active?'is-connected':''}`} aria-label={`${parent.table.name} ${optional?'0..1':'1'} 대 ${child.table.name} ${unique?'0..1':'0..N'} · ${key.columns.join(', ')}`}><path d={path} markerEnd={`url(#${marker})`}/><text x={px+(forward||same?8:-10)} y={py-7} textAnchor={forward||same?'start':'end'}>{optional?'0..1':'1'}</text><text x={cx+(forward?-8:10)} y={cy-7} textAnchor={forward?'end':'start'}>{unique?'0..1':'0..N'}</text></g>;
+          return <g key={`${child.table.name}-${index}`} className={`erd-edge ${active?'is-connected':''}`} aria-label={`${parent.table.name} ${optional?'0..1':'1'} 대 ${child.table.name} ${unique?'0..1':'0..N'} · ${keyNames(child.table,key.columns)}`}><path d={path} markerEnd={`url(#${marker})`}/><text x={px+(forward||same?8:-10)} y={py-7} textAnchor={forward||same?'start':'end'}>{optional?'0..1':'1'}</text><text x={cx+(forward?-8:10)} y={cy-7} textAnchor={forward?'end':'start'}>{unique?'0..1':'0..N'}</text></g>;
         }))}
         {layout.nodes.map(node=><g key={node.table.name} transform={`translate(${node.x},${node.y})`} className={`erd-entity ${selected===node.table.name?'is-selected':''}`} role="button" tabIndex={0} aria-pressed={selected===node.table.name} aria-label={`${node.table.label} ${node.table.name} 테이블 선택`} onClick={()=>setSelected(node.table.name)} onKeyDown={event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();setSelected(node.table.name);}}}>
           <rect width={NODE_WIDTH} height={node.height} className="erd-entity-body"/><rect width={NODE_WIDTH} height={HEAD-8} className="erd-entity-head"/>
           <text x={14} y={22} className="erd-table-name">{node.table.name}</text><text x={14} y={40} className="erd-table-label erd-head-label">{node.table.label===node.table.name?`${node.table.columns.length} columns`:node.table.label}</text>
           {node.columns.map((column,index)=>{
             const pk=node.table.primaryKey.includes(column.name),fk=node.table.foreignKeys.some(key=>key.columns.includes(column.name));
-            return <g key={column.name} transform={`translate(0,${HEAD+index*ROW})`}><text x={12} y={13} className="erd-key">{pk&&fk?'PK·FK':pk?'PK':fk?'FK':''}</text><text x={57} y={13} className="erd-column">{column.name}</text><text x={NODE_WIDTH-12} y={13} textAnchor="end" className="erd-type">{column.type}</text></g>;
+            return <g key={column.name} transform={`translate(0,${HEAD+index*ROW})`}><text x={12} y={13} className="erd-key">{pk&&fk?'PK·FK':pk?'PK':fk?'FK':''}</text><text x={57} y={13} className="erd-column">{column.displayName??column.name}</text><text x={NODE_WIDTH-12} y={13} textAnchor="end" className="erd-type">{column.type}</text></g>;
           })}
           <text x={14} y={node.height-10} className="erd-table-label">{all?'전체 컬럼':`${node.columns.length} / ${node.table.columns.length} 컬럼 · 선택하여 상세 보기`}</text>
         </g>)}
       </svg>
     </div>
-    <section className="erd-inspector" aria-label="선택 테이블 상세"><div className="erd-inspector-heading"><div><p className="web-eyebrow">TABLE DETAIL</p><h3 aria-live="polite">{table.label}<small>{table.name}</small></h3></div><div className="erd-key-summary"><p><b>PK</b> {table.primaryKey.join(' + ')}</p>{table.uniqueKeys.map((key,index)=><p key={index}><b>UNIQUE</b> {key.join(' + ')}</p>)}</div></div>
-      <div className="erd-detail-grid"><div className="erd-column-scroll"><table><caption>컬럼·타입·NULL 허용</caption><thead><tr><th>키</th><th>컬럼</th><th>타입</th><th>NULL</th></tr></thead><tbody>{table.columns.map(column=><tr key={column.name}><td>{[table.primaryKey.includes(column.name)?'PK':'',table.foreignKeys.some(key=>key.columns.includes(column.name))?'FK':''].filter(Boolean).join(' / ')||'—'}</td><th scope="row">{column.name}</th><td>{column.type}</td><td>{column.nullable?'허용':'불가'}</td></tr>)}</tbody></table></div>
-      <div className="erd-relations"><h4>연결 관계</h4>{connected.length?connected.map(({child,key},index)=><p key={index}><code>{child.name}.{key.columns.join(' + ')}</code><span>→</span><code>{key.target}.{key.targetColumns.join(' + ')}</code></p>):<p>외래키 연결 없음</p>}</div></div>
+    <section className="erd-inspector" aria-label="선택 테이블 상세"><div className="erd-inspector-heading"><div><p className="web-eyebrow">TABLE DETAIL</p><h3 aria-live="polite">{table.label}<small>{table.name}</small></h3></div><div className="erd-key-summary"><p><b>PK</b> {keyNames(table,table.primaryKey)}</p>{table.uniqueKeys.map((key,index)=><p key={index}><b>UNIQUE</b> {keyNames(table,key)}</p>)}</div></div>
+      <div className="erd-detail-grid"><div className="erd-column-scroll"><table><caption>컬럼·타입·NULL 허용</caption><thead><tr><th>키</th><th>컬럼</th><th>타입</th><th>NULL</th></tr></thead><tbody>{table.columns.map(column=><tr key={column.name}><td>{[table.primaryKey.includes(column.name)?'PK':'',table.foreignKeys.some(key=>key.columns.includes(column.name))?'FK':''].filter(Boolean).join(' / ')||'—'}</td><th scope="row">{column.displayName??column.name}</th><td>{column.type}</td><td>{column.nullable?'허용':'불가'}</td></tr>)}</tbody></table></div>
+      <div className="erd-relations"><h4>연결 관계</h4>{connected.length?connected.map(({child,key},index)=><p key={index}><code>{child.name}.{keyNames(child,key.columns)}</code><span>→</span><code>{key.target}.{keyNames(model.tables.find(table=>table.name===key.target)!,key.targetColumns)}</code></p>):<p>외래키 연결 없음</p>}</div></div>
+      {table.columns.some(column=>column.displayName) && <details className="erd-original-names"><summary>SQL 컬럼명 대응표</summary><div className="erd-column-scroll"><table><thead><tr><th>영문명</th><th>SQL 컬럼명</th></tr></thead><tbody>{table.columns.map(column=><tr key={column.name}><th scope="row">{column.displayName??column.name}</th><td>{column.name}</td></tr>)}</tbody></table></div></details>}
     </section>
   </div>;
 }

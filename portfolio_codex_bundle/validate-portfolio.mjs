@@ -219,6 +219,9 @@ for(const project of dim.projects){
     assert(tables.size===visual.tables.length && tables.size===(project.id==='P001'?7:17),`unexpected ERD table scope ${project.id}`);
     for(const table of visual.tables){
       const columns=new Set(table.columns.map(column=>column.name));
+      const displayNames=table.columns.map(column=>column.displayName??column.name);
+      assert(new Set(displayNames).size===displayNames.length,`duplicate ERD column display name ${table.name}`);
+      if(project.id==='P001')assert(table.columns.every(column=>/^[a-z][a-z0-9]*(?:_[a-z0-9]+)*$/.test(column.displayName??'')),`English ERD column name missing ${table.name}`);
       assert(columns.size===table.columns.length && table.primaryKey.length>0,`ERD columns/PK invalid ${table.name}`);
       assert(table.columns.every(column=>typeof column.nullable==='boolean' && /^[A-Z]+(?:\(\d+(?:,\d+)?\))?(?: UNSIGNED)?$/.test(column.type)),`ERD column type invalid ${table.name}`);
       for(const key of [table.primaryKey,...table.uniqueKeys])assert(key.length>0 && key.every(name=>columns.has(name)),`ERD key references missing column ${table.name}`);

@@ -67,6 +67,8 @@
 .erd-relations p { display: flex; flex-direction: column; gap: 5px; padding: 12px 0; border-bottom: 1px solid var(--line); }
 .erd-relations code { overflow-wrap: anywhere; font-size: 11px; }
 .erd-relations span { color: var(--cobalt); }
+.erd-original-names { margin-top: 22px; border-top: 1px solid var(--line); padding-top: 15px; font-size: 11px; }
+.erd-original-names summary { cursor: pointer; color: var(--muted); min-height: 30px; }
 .visual-source-links { display: flex; flex-wrap: wrap; gap: 20px; border-top: 1px solid var(--line); margin-top: 25px; padding-top: 18px; font-size: 11px; color: var(--cobalt); }
 .visual-source-links a { display: inline-flex; min-height: 35px; align-items: center; text-decoration: underline; text-underline-offset: 4px; }
 .visual-dialog { width: min(96vw, 1800px); max-width: 96vw; max-height: 94dvh; padding: 28px; border: 1px solid var(--line); background: var(--paper); color: var(--ink); }
