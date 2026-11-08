@@ -81,7 +81,7 @@ function Overview({ project, slide }: { project: Project; slide: DeckSlide }) {
     <div className="overview-copy">
       <p className="deck-project-name">{project.name}</p>
       <Bullets text={project.summary} className="overview-summary"/>
-      <dl className="deck-project-meta"><div><dt>ROLE</dt><dd>{project.role}</dd></div><div><dt>PERIOD</dt><dd>{project.periodStart} — {project.periodEnd}</dd></div><div><dt>CONTEXT</dt><dd>{project.kind}</dd></div>{project.followUpPeriod && <div><dt>FOLLOW-UP</dt><dd>{project.followUpPeriod}</dd></div>}</dl>
+      <dl className="deck-project-meta"><div><dt>ROLE</dt><dd>{project.role}</dd></div><div><dt>PERIOD</dt><dd>{project.periodLabel ?? `${project.periodStart} — ${project.periodEnd}`}</dd></div><div><dt>CONTEXT</dt><dd>{project.kind}</dd></div></dl>
       <div className="deck-stack">{project.implementationStack ? project.implementationStack.map(label=><span key={label}>{label}</span>) : getFeaturedTechnologiesByProject(data, project.id).map(tech => <span key={tech.id}>{tech.label}</span>)}</div>
       {metrics.length > 0 && <div className="deck-metrics">{metrics.map(record => {
         const definition = data.dimensions.metrics.find(item => item.id === record.metricId)!;
@@ -130,7 +130,7 @@ export function SlideContent({ slide, index, go = () => {} }: { slide: DeckSlide
   return <section className={`portfolio-slide slide-${slide.type}`} data-slide-id={slide.id} aria-label={`${slideNumber(index)}. ${slide.title}`}>
     <div className="slide-rail"><span>{slide.chapter}</span></div>
     {slide.type === 'cover' ? <Cover go={go}/> : slide.type === 'closing' ? <Closing go={go}/> : <div className="slide-paper">
-      <header className="slide-heading"><div><p>{slide.eyebrow}</p><h2>{slide.title}</h2></div><span>{project ? project.followUpPeriod && (slide.type==='overview' || work.some(item=>item.origin==='FOLLOW_UP_IMPLEMENTATION')) ? `${project.followUpPeriod.slice(0,7).replace('-','.')} / UPDATE` : project.periodStart.slice(0,4) : data.profile.role}</span></header>
+      <header className="slide-heading"><div><p>{slide.eyebrow}</p><h2>{slide.title}</h2></div><span>{project ? project.followUpPeriod && (slide.type==='overview' || work.some(item=>item.origin==='FOLLOW_UP_IMPLEMENTATION')) ? `${project.followUpPeriod.slice(0,7).replace('-','.')}` : project.periodStart.slice(0,4) : data.profile.role}</span></header>
       <div className={`slide-body ${slide.type === 'work' ? `work-layout ${work.length === 1 ? 'single-work' : ''} ${diagram && work.length > 1 ? 'with-diagram-strip' : ''}` : ''}`}>
         {slide.type === 'contents' && <Contents go={go}/>}
         {slide.type === 'overview' && project && <Overview project={project} slide={slide}/>}

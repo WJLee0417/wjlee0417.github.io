@@ -18,6 +18,7 @@ export interface Project {
   featuredContributionIds: string[]; sortOrder: number; provenanceNote?: string;
   scopeNotes?: string[];
   followUpPeriod?: string;
+  periodLabel?: string;
   implementationStack?: string[];
   implementationNotes?: Array<{ title: string; body: string }>;
   links?: Array<{ label: string; url: string }>;

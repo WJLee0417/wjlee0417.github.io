@@ -41,9 +41,12 @@ try {
   const app=renderToString(createElement(MemoryRouter,{initialEntries:['/?slide=running-storage']},createElement(PortfolioDeck)));
   assert.ok(app.includes('data-slide-index="6"'));
   assert.ok(all.includes('이전 차수 보존과 검수 기준 고정'));
-  assert.ok(all.includes('2026-11 · ERD 개편·웹 구현'));
+  assert.ok(all.includes('2026.07–08 · 기능 확장 2026.11'));
+  assert.ok(all.includes('2025.05–06 · 추가 검증 2026.11'));
+  const workLogCopy=/원본 공유본|원본 입력 재실행|FOLLOW-UP EXPERIMENT|\/ UPDATE|후속 ERD|개편 작업|이 대화|FOLLOW-UP<\/dt>/;
+  assert.ok(!workLogCopy.test(all),'slide copy must address portfolio readers');
   assert.ok(all.includes('https://wjlee0417.github.io/RentalTrack/'));
-  assert.ok(all.includes('팀 프로젝트 · ERD 개편·웹 구현'));
+  assert.ok(all.includes('팀 프로젝트 · 대여 이력 관리 서비스'));
   assert.ok(!all.includes('CONCEPT DESIGN'));
   assert.ok(!all.includes('당시 Python 원본 코드는 현재 미확보'));
   assert.ok(!all.includes('Python으로 2-opt 후보 경로 생성'));
@@ -56,14 +59,24 @@ try {
     for(const c of work)for(const field of ['problem','decision','action','output'])for(const item of c[field].split('\n'))assert.ok(page.includes(`<li>${escape(item)}</li>`),`web/${c.id}: missing bullet`);
     for(const metric of data.facts.metricRecords.filter(r=>r.projectId===project.id))assert.ok(page.includes(escape(metric.context)),`web/${metric.id}: missing metric context`);
     assert.ok(page.includes(project.kind));
+    assert.ok(!workLogCopy.test(page),'project copy must address portfolio readers');
+    if(project.periodLabel)assert.ok(page.includes(project.periodLabel));
     if(project.comparison){
       const result=project.comparison;
       assert.ok(page.includes(escape(result.title)) && page.includes(result.artifactPath));
-      assert.ok(page.includes('입력별 5개 시드 결과'));
-      for(const row of result.rows){
-        assert.ok(page.replace(/<!--[\s\S]*?-->/g,'').includes(`${row.feasibleRuns}/${row.runs}`));
-        assert.ok(page.includes(row.cost===null?'완료해 없음':row.cost.toLocaleString('ko-KR')));
+      const clean=page.replace(/<!--[\s\S]*?-->/g,'');
+      assert.ok(clean.includes('소규모 2입력 · 입력별 5개 시드 · 추가 검증 2026.11'));
+      assert.ok(clean.includes('초기 / 탐색 후 비용'));
+      assert.equal((clean.match(/<tbody><tr>|<\/tr><tr>/g)??[]).length,2);
+      for(const caseId of new Set(result.rows.map(row=>row.caseId))){
+        const before=result.rows.find(row=>row.caseId===caseId && row.variant==='archive-original');
+        const initial=result.rows.find(row=>row.caseId===caseId && row.variant==='arrival-fixed' && row.stage==='initial');
+        const after=result.rows.find(row=>row.caseId===caseId && row.variant==='arrival-fixed' && row.stage==='final');
+        assert.ok(clean.includes(before.unassignedPassengers+'→'+after.unassignedPassengers+'명'));
+        assert.ok(clean.includes(after.servedPassengers+'/'+after.totalPassengers+'명'));
+        assert.ok(clean.includes(initial.cost+' / '+after.cost));
       }
+      for(const item of result.interpretation.split('\n'))assert.ok(page.includes('<li>'+escape(item)+'</li>'));
     }
     assert.ok(!/검증·추가 설명|담당 범위·자료 출처|소스 자료로 기록|미확보|추가 확인 필요/.test(page));
   }
