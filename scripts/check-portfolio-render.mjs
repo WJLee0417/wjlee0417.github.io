@@ -68,11 +68,7 @@ try {
   assert.ok(background.includes('01 / BACKGROUND &amp; SKILLS'));
   for(const area of data.profile.skillAreas){
     assert.ok(background.includes(`id="skill-panel-${area.id}"`));
-    for(const item of area.highlights) assert.ok(background.includes(escape(item.text)));
-    for(const link of area.projects){
-      const project=data.dimensions.projects.find(project=>project.id===link.projectId);
-      assert.ok(background.includes(`href="/projects/${project.slug}?section=${link.section}"`));
-    }
+    for(const id of area.technologyIds) assert.ok(background.includes(escape(data.dimensions.technologies.find(tech=>tech.id===id).label)));
   }
   const projectList=renderPage('/projects');
   assert.ok(projectList.includes('02 / PROJECTS'));

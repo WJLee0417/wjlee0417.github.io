@@ -76,40 +76,19 @@
         "id": "backend",
         "label": "Backend",
         "title": "Java / Backend",
-        "technologyIds": ["T009", "T010", "T011", "T012", "T013"],
-        "highlights": [
-          { "text": "러닝 기록 집계·리포트 생성·조회 REST API 구현", "contributionIds": ["FC013", "FC019"] },
-          { "text": "Provider 예외·JSON 응답 처리와 Fallback 분리", "contributionIds": ["FC016", "FC017"] },
-          { "text": "SHA-256 Snapshot 기반 완료 리포트 재사용", "contributionIds": ["FC018"] }
-        ],
-        "projects": [{ "projectId": "P003", "section": "visualization", "label": "러닝 리포트 · 처리 흐름" }]
+        "technologyIds": ["T009", "T010", "T011", "T012", "T013"]
       },
       {
         "id": "database",
         "label": "Database",
-        "title": "SQL / Data Modeling",
-        "technologyIds": ["T005", "T004", "T006", "T001"],
-        "highlights": [
-          { "text": "상권·업종 기준 테이블 분리·PK/FK·복합키 설계", "contributionIds": ["FC003", "FC004"] },
-          { "text": "Excel 업종 매핑·JOIN 조회·DataFrame 연동", "contributionIds": ["FC002", "FC005", "FC006"] },
-          { "text": "계약별 상태·사진·손상·검수의 관계형 모델 구현", "contributionIds": ["FC021"] }
-        ],
-        "projects": [
-          { "projectId": "P001", "section": "visualization", "label": "상권 분석 DB · ERD" },
-          { "projectId": "P004", "section": "visualization", "label": "RentalTrack · ERD" }
-        ]
+        "title": "SQL / Database",
+        "technologyIds": ["T005", "T004", "T006", "T001"]
       },
       {
         "id": "optimization",
         "label": "Optimization",
         "title": "Python / Optimization",
-        "technologyIds": ["T002", "T003", "T007", "T008"],
-        "highlights": [
-          { "text": "Pandas·NumPy 기반 수요·위치·시간 데이터 처리", "contributionIds": ["FC007"] },
-          { "text": "도보거리·용량·시간창 제약과 Mosel 수리모형 구성", "contributionIds": ["FC008", "FC009"] },
-          { "text": "승객 제거·재삽입 기반 Python ALNS 탐색 구현", "contributionIds": ["FC010"] }
-        ],
-        "projects": [{ "projectId": "P002", "section": "visualization", "label": "차량 경로 최적화 · 탐색 비교" }]
+        "technologyIds": ["T002", "T003", "T007", "T008"]
       }
     ]
   },

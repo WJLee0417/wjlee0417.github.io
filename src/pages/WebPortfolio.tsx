@@ -104,11 +104,11 @@ export function WebBackground() {
             if(target!==null){event.preventDefault();chooseArea(target);}
           }}>{area.label}</button>)}</div>
           <div className="skill-cards">{areas.map((area,index)=><article className="skill-card" id={`skill-panel-${area.id}`} data-active={selected===area.id} aria-labelledby={`skill-title-${area.id}`} key={area.id}>
-            <div className="skill-card-heading"><span className="skill-number" aria-hidden="true">{slideNumber(index)}</span><h2 id={`skill-title-${area.id}`}>{area.title}</h2><ul className="skill-technologies" aria-label="사용 기술">{area.technologyIds.map(id=><li key={id}>{data.dimensions.technologies.find(tech=>tech.id===id)!.label}</li>)}</ul></div>
-            <div className="skill-card-work"><ul className="skill-highlights">{area.highlights.map(item=><li key={item.text}>{item.text}</li>)}</ul><nav className="skill-project-links" aria-label={`${area.label} 관련 프로젝트`}>{area.projects.map(link=>{
-              const project=data.dimensions.projects.find(project=>project.id===link.projectId)!;
-              return <Link key={link.projectId} to={`/projects/${project.slug}?section=${link.section}`}>{link.label}<span aria-hidden="true">↗</span></Link>;
-            })}</nav></div>
+            <div className="skill-card-heading"><span className="skill-number" aria-hidden="true">{slideNumber(index)}</span><h2 id={`skill-title-${area.id}`}>{area.title}</h2></div>
+            <ul className="skill-technologies" aria-label={`${area.label} 기술 스택`}>{area.technologyIds.map(id=>{
+              const tech=data.dimensions.technologies.find(tech=>tech.id===id)!;
+              return <li key={id}><strong>{tech.label}</strong><span>{tech.category}</span></li>;
+            })}</ul>
           </article>)}</div>
         </div>
       </div>
