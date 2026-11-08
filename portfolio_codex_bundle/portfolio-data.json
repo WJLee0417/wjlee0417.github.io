@@ -2183,12 +2183,12 @@
               "label": "전체 업무 모델",
               "lanes": [
                 [
-                  "business",
-                  "member",
                   "common_code_group",
-                  "common_code"
+                  "common_code",
+                  "business"
                 ],
                 [
+                  "member",
                   "rental_item",
                   "rental_contract"
                 ],
@@ -2199,7 +2199,9 @@
                 ],
                 [
                   "return_inspection",
-                  "damage_observation",
+                  "damage_observation"
+                ],
+                [
                   "damage_assessment",
                   "damage_photo"
                 ]

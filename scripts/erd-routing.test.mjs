@@ -7,6 +7,17 @@ const source=ts.transpileModule(readFileSync(new URL('../src/erd-routing.ts',imp
 new Function('exports','module',source)(module.exports,module);
 const {routeErdConnections}=module.exports;
 const data=JSON.parse(readFileSync(new URL('../portfolio_codex_bundle/portfolio-data.json',import.meta.url),'utf8'));
+const overviewModule={exports:{}};
+new Function('exports','module',ts.transpileModule(readFileSync(new URL('../src/erd-overview.ts',import.meta.url),'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText)(overviewModule.exports,overviewModule);
+test('overview keeps every PK/FK and shows actual ordinary fields',()=>{
+ for(const project of data.dimensions.projects.filter(p=>p.visualization?.kind==='erd'))for(const table of project.visualization.tables){
+  const shown=overviewModule.exports.overviewColumns(table),names=shown.map(c=>c.name),keys=new Set([...table.primaryKey,...table.foreignKeys.flatMap(key=>key.columns)]);
+  for(const key of keys)assert.ok(names.includes(key));
+  const attributes=table.columns.filter(c=>!keys.has(c.name));
+  if(attributes.length)assert.ok(shown.some(c=>!keys.has(c.name)));
+  assert.deepEqual(overviewModule.exports.overviewColumns(table,true),table.columns);
+ }
+});
 
 function segments(path){
  const values=path.match(/-?\d+(?:\.\d+)?/g).map(Number),result=[];

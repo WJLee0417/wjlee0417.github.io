@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import type { ErdVisualization, SchemaTable } from '../data';
 import { routeErdConnections, type ErdConnection, type RoutedConnection } from '../erd-routing';
+import { overviewColumns } from '../erd-overview';
 
 const name=(table:SchemaTable)=>table.displayName??table.name;
 
@@ -8,6 +9,7 @@ export function DaErdOverview({model,view,selected,onSelect}:{model:ErdVisualiza
   const root=useRef<HTMLDivElement>(null);
   const [drawing,setDrawing]=useState<{width:number;height:number;edges:RoutedConnection[]}>({width:1,height:1,edges:[]});
   const [focusedOnly,setFocusedOnly]=useState(false);
+  const [allColumns,setAllColumns]=useState(false);
   const lanes=model.views[view].lanes;
   useEffect(()=>{
     const element=root.current;if(!element)return;
@@ -34,15 +36,23 @@ export function DaErdOverview({model,view,selected,onSelect}:{model:ErdVisualiza
     const observer=new ResizeObserver(update);observer.observe(element);update();
     document.fonts.ready.then(()=>{if(alive)update();});
     return()=>{alive=false;cancelAnimationFrame(frame);observer.disconnect();};
-  },[model,view]);
+  },[model,view,allColumns]);
   const connected=(edge:RoutedConnection)=>edge.child===selected||edge.parent===selected;
-  return <><div className="da-relationship-tools" role="group" aria-label="관계선 표시"><button type="button" aria-pressed={!focusedOnly} onClick={()=>setFocusedOnly(false)}>전체 관계</button><button type="button" aria-pressed={focusedOnly} onClick={()=>setFocusedOnly(true)}>선택 테이블 관계</button></div><div className="da-overview" ref={root} style={{'--erd-lanes':lanes.length} as CSSProperties} aria-label="ERD 전체 구조" data-erd-overview>
+  return <><div className="da-overview-tools"><div className="da-relationship-tools" role="group" aria-label="관계선 표시"><button type="button" aria-pressed={!focusedOnly} onClick={()=>setFocusedOnly(false)}>전체 관계</button><button type="button" aria-pressed={focusedOnly} onClick={()=>setFocusedOnly(true)}>선택 테이블 관계</button></div><div className="da-column-tools" role="group" aria-label="전체 구조의 컬럼 표시"><button type="button" aria-pressed={!allColumns} onClick={()=>setAllColumns(false)}>주요 컬럼</button><button type="button" aria-pressed={allColumns} onClick={()=>setAllColumns(true)}>모든 컬럼</button></div><p>PK 기본키 · FK 외래키 · 주요 컬럼: 모든 키와 일반 컬럼 3개</p></div><div className="da-overview" ref={root} style={{'--erd-lanes':lanes.length} as CSSProperties} aria-label="ERD 전체 구조" data-erd-overview data-columns={allColumns?'all':'main'}>
     <svg className="da-overview-lines" width={drawing.width} height={drawing.height} aria-hidden="true">{[...drawing.edges].sort((a,b)=>Number(connected(a))-Number(connected(b))).filter(edge=>!focusedOnly||connected(edge)).map(edge=><g className={connected(edge)?'is-connected':''} key={edge.id} data-reused-segments={edge.reusedSegments}><title>{edge.label}</title><path className="da-edge-halo" d={edge.path}/><path d={edge.path}/><path d={edge.ending}/></g>)}</svg>
     <div className="da-overview-grid">{lanes.map((lane,index)=><div className="da-overview-lane" key={index}>{lane.map(id=>{
       const table=model.tables.find(table=>table.name===id)!;
+      const columns=overviewColumns(table,allColumns);
+      const keys=columns.filter(column=>table.primaryKey.includes(column.name)||table.foreignKeys.some(key=>key.columns.includes(column.name)));
+      const attributes=columns.filter(column=>!keys.includes(column));
+      const field=(column:typeof columns[number])=>{
+        const pk=table.primaryKey.includes(column.name),fk=table.foreignKeys.some(key=>key.columns.includes(column.name));
+        return <span className="da-column" key={column.name} data-erd-column={column.name} data-key={pk&&fk?'PK/FK':pk?'PK':fk?'FK':'attribute'}><b>{pk&&fk?'PK/FK':pk?'PK':fk?'FK':''}</b><span>{column.displayName??column.name}</span></span>;
+      };
       return <button type="button" className="da-entity" data-erd-table={id} key={id} aria-pressed={selected===id} aria-label={`${name(table)} 테이블 선택`} onClick={()=>onSelect(id)}>
         <span className="da-entity-heading"><strong>{name(table)}</strong>{table.label!==name(table)&&<span>{table.label}</span>}</span>
-        <span className="da-entity-keys">{table.primaryKey.map(key=><span key={key}><b>PK</b><span>{table.columns.find(column=>column.name===key)?.displayName??key}</span></span>)}</span>
+        <span className="da-entity-keys">{keys.map(field)}</span>
+        {attributes.length>0&&<span className="da-entity-attributes">{attributes.map(field)}</span>}
       </button>;
     })}</div>)}</div>
   </div></>;

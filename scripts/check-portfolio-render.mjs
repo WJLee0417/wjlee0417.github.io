@@ -119,6 +119,8 @@ try {
       for(const source of model.sources)assert.ok(visualPage.includes(source.url),`visual source link lost ${project.id}`);
       if(model.kind==='erd'){
         for(const name of model.views[0].lanes.flat()){const table=model.tables.find(table=>table.name===name);assert.ok(visualPage.includes(`data-erd-table="${escape(name)}"`) && visualPage.includes(`<strong>${escape(table.displayName??name)}</strong>`),`default ERD table label lost ${name}`);}
+        assert.ok(visualPage.includes('data-key="FK"') || visualPage.includes('data-key="PK/FK"'),'overview must show foreign keys');
+        assert.ok(visualPage.includes('data-key="attribute"') && visualPage.includes('모든 컬럼'),'overview must show ordinary columns and provide all fields');
         assert.ok(visualPage.includes('전체 구조') && visualPage.includes('컬럼 상세') && visualPage.includes('크게 보기'));
         const focus=model.tables.find(table=>table.name===model.views[0].focus);
         for(const column of focus.columns)assert.ok(visualPage.includes(`<th scope="row">${escape(column.displayName??column.name)}</th>`) && visualPage.includes(escape(column.type)),`ERD detail lost ${focus.name}/${column.name}`);
