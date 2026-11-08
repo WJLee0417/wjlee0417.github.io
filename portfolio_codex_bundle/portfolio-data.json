@@ -270,7 +270,7 @@
       {
         "id": "P004",
         "slug": "rentaltrack",
-        "name": "RentalTrack · 대여·상태 기록·반납 검수",
+        "name": "RentalTrack",
         "nameEn": "RentalTrack Rental & Condition History",
         "organization": "삼성청년SW·AI아카데미(SSAFY)",
         "periodStart": "2026-07",
