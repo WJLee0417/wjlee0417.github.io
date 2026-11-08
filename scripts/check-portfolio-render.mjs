@@ -59,7 +59,14 @@ try {
   const presentationChrome=/deck-sidebar|deck-toolbar|deck-page-controls|슬라이드로 보기|인쇄 \/ PDF|HTML 저장/;
   assert.ok(!presentationChrome.test(home));
   assert.ok(!/Software Developer|소프트웨어 개발자/.test(home));
-  assert.ok(home.includes('01 / BACKGROUND &amp; SKILLS') && home.includes('02 / PROJECTS'));
+  const renderPage=path=>renderToString(createElement(MemoryRouter,{initialEntries:[path]},createElement(PortfolioRoutes)));
+  assert.ok(home.includes('포트폴리오 보기') && home.includes('href="/projects"'));
+  assert.ok(home.includes(`href="mailto:${data.profile.contact.email}"`) && home.includes(`href="tel:${data.profile.contact.phone}"`));
+  assert.ok(!home.includes('class="web-about"') && !home.includes('web-project-choices') && !home.includes('class="web-contact"'));
+  assert.ok(renderPage('/background').includes('01 / BACKGROUND &amp; SKILLS'));
+  const projectList=renderPage('/projects');
+  assert.ok(projectList.includes('02 / PROJECTS'));
+  for(const project of data.dimensions.projects)assert.ok(projectList.includes(`href="/projects/${project.slug}"`));
   for(const [index,slide] of data.presentation.slides.entries()){
     const panels=slidePanels(slide);
     for(const [part,label] of panels.entries()){
@@ -73,45 +80,62 @@ try {
     for(const bad of ['-1','100','NaN','0.5'])assert.equal(resolvePanel(slide,`?part=${bad}`),0);
   }
   for(const project of data.dimensions.projects){
-    const page=renderToString(createElement(MemoryRouter,{initialEntries:[`/projects/${project.slug}`]},createElement(PortfolioRoutes)));
+    const page=renderPage(`/projects/${project.slug}`);
     assert.ok(page.includes(`<h1>${escape(project.name)}</h1>`),`project route failed ${project.id}`);
     assert.ok(!presentationChrome.test(page));
-    const work=data.facts.contributions.filter(c=>c.projectId===project.id);
-    assert.equal((page.match(/data-contribution="FC/g)??[]).length,work.length);
-    for(const c of work)for(const field of ['problem','decision','action','output'])for(const item of c[field].split('\n'))assert.ok(page.includes(`<li>${escape(item)}</li>`),`${c.id}/${field}: missing web bullet`);
-    for(const metric of data.facts.metricRecords.filter(r=>r.projectId===project.id))assert.ok(page.includes(escape(metric.context)),`web/${metric.id}: missing metric context`);
-    for(const c of work)for(const id of data.bridges.contributionEvidence.filter(link=>link.contributionId===c.id).map(link=>link.evidenceId)){
-      const evidence=data.dimensions.evidence.find(e=>e.id===id);if(evidence?.url)assert.ok(page.includes(evidence.url),`web/${id}: lost code link`);
+    assert.equal((page.match(/data-contribution="FC/g)??[]).length,0,'overview must not stack every work section');
+    const groups=data.presentation.slides.filter(s=>s.projectId===project.id && s.type==='work');
+    for(const group of groups){
+      const selected=renderPage(`/projects/${project.slug}?section=${group.id}`);
+      assert.equal((selected.match(/data-contribution="FC/g)??[]).length,group.contributionIds.length);
+      assert.ok(!workLogCopy.test(selected) && !presentationChrome.test(selected));
+      for(const id of group.contributionIds){
+        const c=data.facts.contributions.find(c=>c.id===id);
+        for(const field of ['problem','decision','action','output'])for(const item of c[field].split('\n'))assert.ok(selected.includes(`<li>${escape(item)}</li>`),`${c.id}/${field}: missing web bullet`);
+        for(const link of data.bridges.contributionEvidence.filter(link=>link.contributionId===id)){
+          const evidence=data.dimensions.evidence.find(e=>e.id===link.evidenceId);if(evidence?.url)assert.ok(selected.includes(evidence.url),`web/${evidence.id}: lost code link`);
+        }
+        const firstGroup=groups.find(g=>g.contributionIds.some(id=>data.facts.contributions.find(c=>c.id===id).sectionAnchor===c.sectionAnchor));
+        const firstId=firstGroup.contributionIds.find(id=>data.facts.contributions.find(c=>c.id===id).sectionAnchor===c.sectionAnchor);
+        assert.ok(renderPage(`/projects/${project.slug}?section=${c.sectionAnchor}`).includes(`data-contribution="${firstId}"`),`legacy section failed ${c.sectionAnchor}`);
+      }
     }
+    for(const metric of data.facts.metricRecords.filter(r=>r.projectId===project.id))assert.ok(page.includes(escape(metric.context)),`web/${metric.id}: missing metric context`);
     assert.ok(page.includes(project.kind));
     assert.ok(!workLogCopy.test(page),'project copy must address portfolio readers');
     if(project.periodLabel)assert.ok(page.includes(project.periodLabel));
+    if(project.implementationNotes?.length){
+      const implementation=renderPage(`/projects/${project.slug}?section=implementation`);
+      for(const note of project.implementationNotes){assert.ok(implementation.includes(escape(note.title)));for(const line of note.body.split('\n'))assert.ok(implementation.includes(`<li>${escape(line)}</li>`));}
+    }
     if(project.comparison){
-      assert.ok(page.includes(project.comparison.artifactPath));
-      const clean=page.replace(/<!--[\s\S]*?-->/g,'');
+      const comparison=renderPage(`/projects/${project.slug}?section=validation-results`);
+      assert.ok(comparison.includes(project.comparison.artifactPath));
+      const clean=comparison.replace(/<!--[\s\S]*?-->/g,'');
       for(const caseId of new Set(project.comparison.rows.map(r=>r.caseId))){
         const rows=project.comparison.rows.filter(r=>r.caseId===caseId),before=rows[0],initial=rows[1],after=rows[2];
         assert.ok(clean.includes(`${before.unassignedPassengers}→${after.unassignedPassengers}명`));
         assert.ok(clean.includes(`${after.servedPassengers}/${after.totalPassengers}명`));
         assert.ok(clean.includes(`${initial.cost} / ${after.cost}`));
       }
-      for(const item of project.comparison.interpretation.split('\n'))assert.ok(page.includes(`<li>${escape(item)}</li>`));
+      for(const item of project.comparison.interpretation.split('\n'))assert.ok(comparison.includes(`<li>${escape(item)}</li>`));
     }
     assert.ok(!/검증·추가 설명|담당 범위·자료 출처|소스 자료로 기록|미확보|추가 확인 필요/.test(page));
   }
   for(const slide of data.presentation.slides){
     const destination=webDestination(`?slide=${slide.id}`);
     if(slide.projectId){const project=data.dimensions.projects.find(p=>p.id===slide.projectId);assert.equal(destination.pathname,`/projects/${project.slug}`);}
-    else assert.equal(destination.pathname,'/');
+    else assert.ok(['/','/projects','/background'].includes(destination.pathname));
   }
   assert.equal(webDestination('?slide=closing').hash,'#contact');
-  assert.equal(webDestination('?slide=contents&part=1').hash,'#about');
+  assert.equal(webDestination('?slide=contents&part=1').pathname,'/background');
   assert.equal(webDestination('?slide=rental-model&part=1').search,'?section=data-model');
+  assert.equal(webDestination('?slide=routing-results').search,'?section=routing-results');
   if(existsSync('dist/portfolio.html')){
     const offline=readFileSync('dist/portfolio.html','utf8');
     assert.equal((offline.match(/class="portfolio-slide /g)??[]).length,20);
     assert.ok(!/<script[^>]+src=|<link[^>]+(?:stylesheet|href=)/i.test(offline),'offline deck must be self-contained');
     assert.ok(offline.includes('hashchange') && offline.includes('data-state-content'));
   }
-  console.log('PASS: responsive website + 4 project pages; legacy links; 25 contributions; comparison results; code links; standalone export');
+  console.log('PASS: compact home + content destinations; project section navigation; 25 contributions; legacy links; comparisons; source links; standalone export');
 } finally {console.error=originalError;await server.close();}

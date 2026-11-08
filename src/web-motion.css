@@ -6,11 +6,6 @@
 .web-header nav > a::after { content: ''; position: absolute; left: 0; bottom: 5px; width: 100%; height: 2px; background: var(--cobalt); transform: scaleX(0); transform-origin: left; transition: transform .25s ease; }
 .web-header nav > a:hover::after, .web-header nav > a[aria-current]::after { transform: scaleX(1); }
 .web-header nav > a[aria-current] { color: var(--cobalt); }
-.web-reading-progress { position: absolute; inset: auto 0 -1px; height: 2px; background: var(--cobalt); transform: scaleX(var(--page-progress, 0)); transform-origin: left; pointer-events: none; }
-.web-hero { min-height: calc(100svh - 82px); padding-block: clamp(70px, 10vh, 130px); }
-.web-about { min-height: 82svh; display: flex; align-items: center; }
-.web-section { min-height: 90svh; }
-.web-contact { min-height: 55svh; display: flex; align-items: center; }
 .web-page { animation: web-page-enter .4s cubic-bezier(.22, 1, .36, 1) both; }
 .web-shell[data-motion=ready] [data-reveal] {
   transition: opacity .65s ease, transform .65s cubic-bezier(.22, 1, .36, 1), background .2s, box-shadow .25s;
@@ -44,10 +39,6 @@
 @media (hover: hover) and (prefers-reduced-motion: no-preference) {
   .web-shell[data-motion=ready] .web-project-card[data-reveal-state=visible]:hover { transform: translateY(-5px); border-color: #d7d3c8; box-shadow: 0 16px 30px #302b2108; }
 }
-@media (min-width: 1060px) and (min-height: 700px) and (prefers-reduced-motion: no-preference) {
-  html.web-home { scroll-snap-type: y proximity; scroll-padding-top: 82px; }
-  .web-home .web-hero, .web-home .web-about, .web-home #projects, .web-home .web-contact { scroll-snap-align: start; scroll-margin-top: 0; }
-}
 @media (max-width: 1000px) {
   .web-hero { min-height: 0; }
   .web-about, .web-section { min-height: 0; }
@@ -73,6 +64,5 @@
   html, body, #root { width: auto !important; height: auto !important; }
   .web-shell [data-reveal] { opacity: 1 !important; transform: none !important; }
   .web-page { animation: none; }
-  .web-reading-progress { display: none; }
   .web-about, .web-section, .web-hero, .web-contact { min-height: 0; }
 }

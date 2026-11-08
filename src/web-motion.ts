@@ -1,7 +1,6 @@
-import { useEffect, useState, type RefObject } from 'react';
+import { useEffect, type RefObject } from 'react';
 
-export function useWebMotion(root: RefObject<HTMLDivElement>, routeKey: string, home: boolean) {
-  const [activeSection, setActiveSection] = useState('');
+export function useWebMotion(root: RefObject<HTMLDivElement>, routeKey: string) {
   useEffect(() => {
     const shell = root.current;
     if (!shell) return;
@@ -26,28 +25,9 @@ export function useWebMotion(root: RefObject<HTMLDivElement>, routeKey: string, 
     };
     setup();
     reduced.addEventListener('change', setup);
-    let frame = 0;
-    const update = () => {
-      frame = 0;
-      const range = document.documentElement.scrollHeight - window.innerHeight;
-      shell.style.setProperty('--page-progress', String(range > 0 ? Math.min(1, Math.max(0, window.scrollY / range)) : 0));
-      let current = '';
-      if (home) for (const id of ['about','projects','contact']) {
-        const box = document.getElementById(id)?.getBoundingClientRect();
-        if (box && box.top <= window.innerHeight * .45 && box.bottom > 100) current = id;
-      }
-      setActiveSection(current);
-    };
-    const schedule = () => { if (!frame) frame = requestAnimationFrame(update); };
-    update();
-    window.addEventListener('scroll', schedule, { passive: true });
-    window.addEventListener('resize', schedule);
-    const resize = new ResizeObserver(schedule); resize.observe(shell);
     return () => {
-      observer?.disconnect();resize.disconnect();cancelAnimationFrame(frame);
+      observer?.disconnect();
       reduced.removeEventListener('change', setup);
-      window.removeEventListener('scroll', schedule);window.removeEventListener('resize', schedule);
     };
-  }, [root, routeKey, home]);
-  return activeSection;
+  }, [root, routeKey]);
 }
