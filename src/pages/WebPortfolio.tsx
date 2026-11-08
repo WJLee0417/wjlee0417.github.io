@@ -51,7 +51,7 @@ function SiteHeader() {
   return <header className="web-header"><div className="web-wrap web-header-inner">
     <Link className="web-brand" to="/">LEE WONJUN<span>PORTFOLIO</span></Link>
     <nav aria-label="주 메뉴"><Link to="/background" aria-current={location.pathname==='/background'?'page':undefined}>배경·기술</Link><Link to="/projects" aria-current={location.pathname.startsWith('/projects')?'page':undefined}>프로젝트</Link></nav>
-    <div className="web-header-contact" id="contact" role="group" aria-label="연락처"><a href={`mailto:${data.profile.contact.email}`}>{data.profile.contact.email}</a><a href={`tel:${data.profile.contact.phone}`}>{data.profile.contact.phone}</a></div>
+    <div className="web-header-contact" id="contact" role="group" aria-label="연락처"><a href={`mailto:${data.profile.contact.email}`}>{data.profile.contact.email}</a>{data.profile.contact.githubUrl && <a href={data.profile.contact.githubUrl} target="_blank" rel="noreferrer" aria-label="GitHub 프로필 · WJLee0417">GitHub · WJLee0417 ↗</a>}</div>
   </div></header>;
 }
 
