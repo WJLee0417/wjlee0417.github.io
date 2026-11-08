@@ -29,7 +29,7 @@ function schemaLayout(model: ErdVisualization, view: number, all: boolean) {
 
 type ErdSelection={view: number; all: boolean; selected: string; overview:boolean};
 function ErdWorkspace({model, expanded=false, initial, onExpand}: {model: ErdVisualization; expanded?: boolean; initial?: ErdSelection; onExpand?:(selection:ErdSelection)=>void}) {
-  const [view,setView]=useState(initial?.view??0),[all,setAll]=useState(initial?.all??false),[zoom,setZoom]=useState(1),[selected,setSelected]=useState(initial?.selected??model.views[0].focus);
+  const [view,setView]=useState(initial?.view??0),[all,setAll]=useState(initial?.all??true),[zoom,setZoom]=useState(1),[selected,setSelected]=useState(initial?.selected??model.views[0].focus);
   const [settings,setSettings]=useState(false);
   const [overview,setOverview]=useState(initial?.overview??true);
   const viewport=useRef<HTMLDivElement>(null),marker=useId().replaceAll(':','');

@@ -2185,24 +2185,24 @@
                 [
                   "common_code_group",
                   "common_code",
-                  "business"
+                  "member"
                 ],
                 [
-                  "member",
+                  "business",
                   "rental_item",
                   "rental_contract"
                 ],
                 [
                   "condition_record",
-                  "condition_photo",
-                  "image_analysis_result"
+                  "condition_photo"
                 ],
                 [
                   "return_inspection",
-                  "damage_observation"
+                  "damage_observation",
+                  "damage_assessment"
                 ],
                 [
-                  "damage_assessment",
+                  "image_analysis_result",
                   "damage_photo"
                 ]
               ],
