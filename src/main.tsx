@@ -4,7 +4,8 @@ import { HashRouter } from 'react-router-dom';
 import PortfolioRoutes from './App';
 import { data } from './data';
 import './deck.css';
-import './responsive-deck.css';
+import './web.css';
+import './web-motion.css';
 
 document.documentElement.lang = data.meta.locale.slice(0, 2);
 createRoot(document.getElementById('root')!).render(<React.StrictMode><HashRouter><PortfolioRoutes/></HashRouter></React.StrictMode>);

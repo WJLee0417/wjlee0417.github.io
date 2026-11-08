@@ -1,11 +1,19 @@
-import { Navigate, Route, Routes } from 'react-router-dom';
-import PortfolioDeck from './pages/Deck';
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
+import { WebHome, WebLayout, WebNotFound, WebProject } from './pages/WebPortfolio';
+import { webDestination } from './web-navigation';
+
+function LegacyDeckLink() {
+  const location = useLocation();
+  return <Navigate to={webDestination(location.search)} replace/>;
+}
 
 export default function PortfolioRoutes() {
   return <Routes>
-    <Route path="/" element={<PortfolioDeck/>}/>
-    <Route path="/deck" element={<PortfolioDeck/>}/>
-    <Route path="/projects/:slug" element={<PortfolioDeck/>}/>
-    <Route path="*" element={<Navigate to="/" replace/>}/>
+    <Route path="/deck" element={<LegacyDeckLink/>}/>
+    <Route path="/" element={<WebLayout/>}>
+      <Route index element={<WebHome/>}/>
+      <Route path="projects/:slug" element={<WebProject/>}/>
+      <Route path="*" element={<WebNotFound/>}/>
+    </Route>
   </Routes>;
 }
