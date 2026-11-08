@@ -23,7 +23,31 @@ export interface Project {
   implementationNotes?: Array<{ title: string; body: string }>;
   links?: Array<{ label: string; url: string }>;
   comparison?: ProjectComparison;
+  visualization?: ProjectVisualization;
 }
+export interface VisualSource { url: string; sha256: string }
+export interface SchemaColumn { name: string; type: string; nullable: boolean }
+export interface SchemaTable {
+  name: string; label: string; columns: SchemaColumn[]; primaryKey: string[]; uniqueKeys: string[][];
+  foreignKeys: Array<{columns: string[]; target: string; targetColumns: string[]}>;
+}
+export interface SchemaView { id: string; label: string; lanes: string[][]; focus: string }
+export interface ErdVisualization {
+  kind: 'erd'; title: string; summary: string; sources: VisualSource[];
+  tables: SchemaTable[]; views: SchemaView[];
+}
+export interface ReportScenario {
+  id: string; label: string; description: string; path: string[];
+  source: 'LLM' | 'FALLBACK' | 'UNCHANGED'; generated: boolean; cacheHit: boolean; httpStatus: number;
+  providerCall: boolean;
+}
+export interface FlowVisualization {
+  kind: 'report-flow'; title: string; summary: string; sources: VisualSource[];
+  nodes: Array<{id: string; title: string; detail: string; x: number; y: number}>;
+  scenarios: ReportScenario[];
+}
+export interface RoutingVisualization { kind: 'routing'; title: string; summary: string; sources: VisualSource[] }
+export type ProjectVisualization = ErdVisualization | FlowVisualization | RoutingVisualization;
 export interface ProjectComparison {
   date: string; title: string; setup: string; change: string; interpretation: string; scope: string;
   artifactPath: string; artifactSha256: string; figurePath: string; figureAlt: string;

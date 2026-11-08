@@ -5,6 +5,7 @@ import { deckSlides, slideNumber } from '../deck-model';
 import { Bullets, DeckDiagram, WorkCard, ProjectLinks } from './Deck';
 import { useWebMotion } from '../web-motion';
 import { webDestination } from '../web-navigation';
+import { ProjectVisual } from './ProjectVisuals';
 
 const overviews = deckSlides.filter(slide => slide.type === 'overview');
 export const webProjects = overviews.map(slide => data.dimensions.projects.find(project => project.id === slide.projectId)!);
@@ -105,7 +106,7 @@ export function WebProject() {
   const diagram=data.diagrams.find(diagram=>diagram.id===overview?.diagramId);
   const requested=new URLSearchParams(location.search).get('section');
   const group=groups.find(group=>group.id===requested || group.contributionIds.some(id=>data.facts.contributions.find(work=>work.id===id)?.sectionAnchor===requested));
-  const active=group?.id ?? (requested==='implementation' && project?.implementationNotes?.length ? 'implementation' : requested==='validation-results' && project?.comparison ? 'validation-results' : 'overview');
+  const active=group?.id ?? (requested==='visualization' && project?.visualization ? 'visualization' : requested==='implementation' && project?.implementationNotes?.length ? 'implementation' : requested==='validation-results' && project?.comparison ? 'validation-results' : 'overview');
   const tabsRef=useRef<HTMLElement>(null);
   useEffect(()=>{
     document.title=project?`${project.name} · ${data.profile.nameEn}`:'페이지를 찾을 수 없습니다';
@@ -116,18 +117,20 @@ export function WebProject() {
     if(nav && link)nav.scrollTo({left:Math.max(0,link.offsetLeft-12),behavior:'instant'});
   },[slug,active]);
   if(!project)return <WebNotFound/>;
-  const tabs=[{id:'overview',title:'개요'},...(project.implementationNotes?.length?[{id:'implementation',title:'핵심 구현'}]:[]),...groups.map(group=>({id:group.id,title:group.title})),...(project.comparison?[{id:'validation-results',title:'검증 결과'}]:[])];
+  const visualLabel=project.visualization?.kind==='erd'?'ERD':project.visualization?.kind==='report-flow'?'처리 흐름':'탐색 비교';
+  const tabs=[{id:'overview',title:'개요'},...(project.visualization?[{id:'visualization',title:visualLabel}]:[]),...(project.implementationNotes?.length?[{id:'implementation',title:'핵심 구현'}]:[]),...groups.map(group=>({id:group.id,title:group.title})),...(project.comparison?[{id:'validation-results',title:'검증 결과'}]:[])];
   const work=group?.contributionIds.map(id=>data.facts.contributions.find(work=>work.id===id)!) ?? [];
   const visual=data.diagrams.find(diagram=>diagram.id===group?.diagramId);
-  return <main className="web-project-page"><div className="web-wrap">
+  return <main className="web-project-page" data-project-view={active}><div className="web-wrap">
     <nav className="web-breadcrumb" aria-label="현재 위치"><Link to="/projects">Projects</Link><span>/</span><span>{slideNumber(index)} · {project.name}</span></nav>
-    <header className="web-project-masthead"><p className="web-eyebrow">{overview?.eyebrow}</p><h1>{project.name}</h1><p className="web-project-english">{project.nameEn}</p></header>
+    <header className="web-project-masthead"><p className="web-eyebrow">{overview?.eyebrow}</p><h1>{project.name}</h1><p className="web-project-english">{project.nameEn}</p>{project.visualization && active!=='visualization' && <Link className="web-visual-entry" to={`/projects/${project.slug}?section=visualization`}>{visualLabel} 보기 ↗</Link>}</header>
     <nav className="web-project-tabs" ref={tabsRef} aria-label="프로젝트 내용">{tabs.map(tab=><Link key={tab.id} to={tab.id==='overview'?`/projects/${project.slug}`:`/projects/${project.slug}?section=${tab.id}`} aria-current={active===tab.id?'page':undefined}>{tab.title}</Link>)}</nav>
     <div className="web-content-panel" key={active}>
       {active==='overview' && <><section className="web-project-hero" aria-label="프로젝트 개요" data-reveal><div><Bullets text={project.summary}/><Stack project={project}/><dl className="web-project-facts"><div><dt>ROLE</dt><dd>{project.role}</dd></div><div><dt>PERIOD</dt><dd>{project.periodLabel ?? `${project.periodStart} — ${project.periodEnd}`}</dd></div><div><dt>CONTEXT</dt><dd>{project.kind}</dd></div></dl><ProjectLinks project={project}/></div>{diagram && <DeckDiagram diagram={diagram}/>}</section><ProjectMetrics project={project}/></>}
       {active==='implementation' && <Implementation project={project}/>}
+      {active==='visualization' && <ProjectVisual project={project}/>}
       {active==='validation-results' && <ExperimentComparison project={project}/>}
-      {group && <section className="web-work-section" id={group.id} data-reveal><div className="web-work-heading"><p className="web-eyebrow">{group.eyebrow}</p><h2>{group.title}</h2></div><div className="web-work-grid">{work.map(item=><WorkCard work={item} key={item.id}/>)}</div>{visual && <DeckDiagram diagram={visual}/>}</section>}
+      {group && <section className="web-work-section" id={group.id} data-reveal><div className="web-work-heading"><p className="web-eyebrow">{group.eyebrow}</p><h2>{group.title}</h2></div><div className="web-work-grid">{work.map(item=><WorkCard work={item} key={item.id}/>)}</div>{project.visualization?.kind==='erd' && ['commercial-model','rental-model'].includes(group.id)?<ProjectVisual project={project}/>:visual && <DeckDiagram diagram={visual}/>}</section>}
     </div>
     <nav className="web-project-pagination" aria-label="다른 프로젝트"><Link to="/projects"><small>ALL PROJECTS</small><strong>프로젝트 목록 ↗</strong></Link><Link to={`/projects/${webProjects[(index+1)%webProjects.length].slug}`}><small>NEXT PROJECT →</small><strong>{webProjects[(index+1)%webProjects.length].name}</strong></Link></nav>
   </div></main>;

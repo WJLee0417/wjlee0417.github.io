@@ -4,6 +4,7 @@ import type { PortfolioData } from '../portfolio_codex_bundle/portfolio-types';
 // The bundled JSON remains the only source for portfolio facts and copy.
 export const data = raw as PortfolioData;
 export type { PortfolioData, Project, Contribution, Diagram, EvidenceVerificationStatus, LogicalTable, Technology, TechnologyGroup } from '../portfolio_codex_bundle/portfolio-types';
+export type { ErdVisualization, FlowVisualization, SchemaTable, SchemaView, ProjectVisualization } from '../portfolio_codex_bundle/portfolio-types';
 export * from '../portfolio_codex_bundle/portfolio-selectors';
 
 export const projectPath = (slug: string) => `/projects/${slug}`;

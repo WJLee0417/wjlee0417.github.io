@@ -100,7 +100,467 @@
         "scopeNotes": [
           "개인 담당: 데이터 정제, Excel 업종 매핑, MySQL 설계, Python 연동 및 SQL 후보 조회.",
           "추천 점수 계산·유사도 분석·지도 시각화는 개인 담당 범위에서 제외됩니다."
-        ]
+        ],
+        "visualization": {
+          "kind": "erd",
+          "title": "업종과 상권을 연결하는 데이터 모델",
+          "summary": "공통 코드 기준 테이블 분리\n상권·업종 복합키로 집계 단위 고정\n프랜차이즈 업종에서 상권 매출로 연결",
+          "sources": [
+            {
+              "url": "https://github.com/WJLee0417/wjlee0417.github.io/blob/782a00371d2e5859ecc0e22504cb7c2632a9047a/projects/P001/source/sql/schema.sql",
+              "sha256": "d9f8c4e6a7aada4483bb4bbb0d818a9c3a2eac11344cc1817d1b5fb5c7aee918"
+            }
+          ],
+          "tables": [
+            {
+              "name": "상권_구분",
+              "label": "상권_구분",
+              "columns": [
+                {
+                  "name": "상권_구분_코드",
+                  "type": "CHAR(1)",
+                  "nullable": false
+                },
+                {
+                  "name": "상권_구분명",
+                  "type": "VARCHAR(20)",
+                  "nullable": true
+                }
+              ],
+              "primaryKey": [
+                "상권_구분_코드"
+              ],
+              "uniqueKeys": [],
+              "foreignKeys": []
+            },
+            {
+              "name": "자치구",
+              "label": "자치구",
+              "columns": [
+                {
+                  "name": "자치구_코드",
+                  "type": "INT",
+                  "nullable": false
+                },
+                {
+                  "name": "자치구명",
+                  "type": "VARCHAR(20)",
+                  "nullable": true
+                }
+              ],
+              "primaryKey": [
+                "자치구_코드"
+              ],
+              "uniqueKeys": [],
+              "foreignKeys": []
+            },
+            {
+              "name": "행정동",
+              "label": "행정동",
+              "columns": [
+                {
+                  "name": "행정동_코드",
+                  "type": "INT",
+                  "nullable": false
+                },
+                {
+                  "name": "행정동명",
+                  "type": "VARCHAR(20)",
+                  "nullable": true
+                }
+              ],
+              "primaryKey": [
+                "행정동_코드"
+              ],
+              "uniqueKeys": [],
+              "foreignKeys": []
+            },
+            {
+              "name": "서비스_업종",
+              "label": "서비스_업종",
+              "columns": [
+                {
+                  "name": "서비스_업종_코드",
+                  "type": "VARCHAR(50)",
+                  "nullable": false
+                },
+                {
+                  "name": "서비스_업종명",
+                  "type": "VARCHAR(50)",
+                  "nullable": true
+                }
+              ],
+              "primaryKey": [
+                "서비스_업종_코드"
+              ],
+              "uniqueKeys": [],
+              "foreignKeys": []
+            },
+            {
+              "name": "상권정보",
+              "label": "상권정보",
+              "columns": [
+                {
+                  "name": "상권_구분_코드",
+                  "type": "CHAR(1)",
+                  "nullable": true
+                },
+                {
+                  "name": "상권_코드",
+                  "type": "INT",
+                  "nullable": false
+                },
+                {
+                  "name": "상권_코드_명",
+                  "type": "VARCHAR(255)",
+                  "nullable": true
+                },
+                {
+                  "name": "엑스좌표_값",
+                  "type": "INT",
+                  "nullable": true
+                },
+                {
+                  "name": "와이좌표_값",
+                  "type": "INT",
+                  "nullable": true
+                },
+                {
+                  "name": "자치구_코드",
+                  "type": "INT",
+                  "nullable": true
+                },
+                {
+                  "name": "행정동_코드",
+                  "type": "INT",
+                  "nullable": true
+                },
+                {
+                  "name": "영역_면적",
+                  "type": "FLOAT",
+                  "nullable": true
+                },
+                {
+                  "name": "집객시설_수",
+                  "type": "INT",
+                  "nullable": true
+                },
+                {
+                  "name": "아파트_단지_수",
+                  "type": "INT",
+                  "nullable": true
+                },
+                {
+                  "name": "남성_직장_인구_수",
+                  "type": "INT",
+                  "nullable": true
+                },
+                {
+                  "name": "여성_직장_인구_수",
+                  "type": "INT",
+                  "nullable": true
+                },
+                {
+                  "name": "총_상주인구_수",
+                  "type": "INT",
+                  "nullable": true
+                },
+                {
+                  "name": "남성_유동인구_수",
+                  "type": "INT",
+                  "nullable": true
+                },
+                {
+                  "name": "여성_유동인구_수",
+                  "type": "INT",
+                  "nullable": true
+                },
+                {
+                  "name": "월_평균_소득_금액",
+                  "type": "INT",
+                  "nullable": true
+                },
+                {
+                  "name": "소득_구간_코드",
+                  "type": "INT",
+                  "nullable": true
+                },
+                {
+                  "name": "지출_총금액",
+                  "type": "INT",
+                  "nullable": true
+                },
+                {
+                  "name": "점포_수",
+                  "type": "INT",
+                  "nullable": true
+                }
+              ],
+              "primaryKey": [
+                "상권_코드"
+              ],
+              "uniqueKeys": [],
+              "foreignKeys": [
+                {
+                  "columns": [
+                    "상권_구분_코드"
+                  ],
+                  "target": "상권_구분",
+                  "targetColumns": [
+                    "상권_구분_코드"
+                  ]
+                },
+                {
+                  "columns": [
+                    "자치구_코드"
+                  ],
+                  "target": "자치구",
+                  "targetColumns": [
+                    "자치구_코드"
+                  ]
+                },
+                {
+                  "columns": [
+                    "행정동_코드"
+                  ],
+                  "target": "행정동",
+                  "targetColumns": [
+                    "행정동_코드"
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "점포",
+              "label": "점포",
+              "columns": [
+                {
+                  "name": "서비스_업종_코드",
+                  "type": "VARCHAR(50)",
+                  "nullable": false
+                },
+                {
+                  "name": "상권_코드",
+                  "type": "INT",
+                  "nullable": false
+                },
+                {
+                  "name": "매출",
+                  "type": "BIGINT",
+                  "nullable": true
+                },
+                {
+                  "name": "점포_수",
+                  "type": "INT",
+                  "nullable": true
+                }
+              ],
+              "primaryKey": [
+                "서비스_업종_코드",
+                "상권_코드"
+              ],
+              "uniqueKeys": [],
+              "foreignKeys": [
+                {
+                  "columns": [
+                    "상권_코드"
+                  ],
+                  "target": "상권정보",
+                  "targetColumns": [
+                    "상권_코드"
+                  ]
+                },
+                {
+                  "columns": [
+                    "서비스_업종_코드"
+                  ],
+                  "target": "서비스_업종",
+                  "targetColumns": [
+                    "서비스_업종_코드"
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "프랜차이즈",
+              "label": "프랜차이즈",
+              "columns": [
+                {
+                  "name": "상호명",
+                  "type": "VARCHAR(100)",
+                  "nullable": false
+                },
+                {
+                  "name": "등록번호",
+                  "type": "BIGINT",
+                  "nullable": false
+                },
+                {
+                  "name": "자산",
+                  "type": "BIGINT",
+                  "nullable": true
+                },
+                {
+                  "name": "부채",
+                  "type": "BIGINT",
+                  "nullable": true
+                },
+                {
+                  "name": "자본",
+                  "type": "BIGINT",
+                  "nullable": true
+                },
+                {
+                  "name": "매출액",
+                  "type": "BIGINT",
+                  "nullable": true
+                },
+                {
+                  "name": "영업이익",
+                  "type": "BIGINT",
+                  "nullable": true
+                },
+                {
+                  "name": "당기순이익",
+                  "type": "BIGINT",
+                  "nullable": true
+                },
+                {
+                  "name": "가맹점수",
+                  "type": "INT",
+                  "nullable": true
+                },
+                {
+                  "name": "직영점수",
+                  "type": "INT",
+                  "nullable": true
+                },
+                {
+                  "name": "신규개점",
+                  "type": "INT",
+                  "nullable": true
+                },
+                {
+                  "name": "계약종료",
+                  "type": "INT",
+                  "nullable": true
+                },
+                {
+                  "name": "계약해지",
+                  "type": "INT",
+                  "nullable": true
+                },
+                {
+                  "name": "평균매출액",
+                  "type": "BIGINT",
+                  "nullable": true
+                },
+                {
+                  "name": "면적당_평균_매출액",
+                  "type": "BIGINT",
+                  "nullable": true
+                },
+                {
+                  "name": "광고비",
+                  "type": "BIGINT",
+                  "nullable": true
+                },
+                {
+                  "name": "판촉비",
+                  "type": "BIGINT",
+                  "nullable": true
+                },
+                {
+                  "name": "가입비",
+                  "type": "BIGINT",
+                  "nullable": true
+                },
+                {
+                  "name": "교육비",
+                  "type": "BIGINT",
+                  "nullable": true
+                },
+                {
+                  "name": "보증금",
+                  "type": "BIGINT",
+                  "nullable": true
+                },
+                {
+                  "name": "기타비용",
+                  "type": "BIGINT",
+                  "nullable": true
+                },
+                {
+                  "name": "단위면적당_인테리어비용",
+                  "type": "BIGINT",
+                  "nullable": true
+                },
+                {
+                  "name": "인테리어_비용",
+                  "type": "BIGINT",
+                  "nullable": true
+                },
+                {
+                  "name": "최초_계약기간",
+                  "type": "INT",
+                  "nullable": true
+                },
+                {
+                  "name": "연장_계약기간",
+                  "type": "INT",
+                  "nullable": true
+                },
+                {
+                  "name": "업종코드",
+                  "type": "VARCHAR(50)",
+                  "nullable": true
+                },
+                {
+                  "name": "영업명",
+                  "type": "VARCHAR(100)",
+                  "nullable": true
+                }
+              ],
+              "primaryKey": [
+                "등록번호"
+              ],
+              "uniqueKeys": [],
+              "foreignKeys": [
+                {
+                  "columns": [
+                    "업종코드"
+                  ],
+                  "target": "서비스_업종",
+                  "targetColumns": [
+                    "서비스_업종_코드"
+                  ]
+                }
+              ]
+            }
+          ],
+          "views": [
+            {
+              "id": "all",
+              "label": "전체 7개 테이블",
+              "lanes": [
+                [
+                  "상권_구분",
+                  "자치구",
+                  "행정동"
+                ],
+                [
+                  "상권정보",
+                  "점포"
+                ],
+                [
+                  "서비스_업종",
+                  "프랜차이즈"
+                ]
+              ],
+              "focus": "점포"
+            }
+          ]
+        }
       },
       {
         "id": "P002",
@@ -236,7 +696,18 @@
             }
           ]
         },
-        "periodLabel": "2025.05–06 · 추가 검증 2026.11"
+        "periodLabel": "2025.05–06 · 추가 검증 2026.11",
+        "visualization": {
+          "kind": "routing",
+          "title": "시간창 검사에 따른 승객 배정 변화",
+          "summary": "도착 시각과 하차 처리 시간을 분리한 시간창 검사\n전체 배정·운행 제약 충족 여부와 비용을 함께 비교",
+          "sources": [
+            {
+              "url": "https://wjlee0417.github.io/experiments/drt/2026-11-07/results.json",
+              "sha256": "5a87029583779175d7164cde412753d761773002319f103817bc65834fabd239"
+            }
+          ]
+        }
       },
       {
         "id": "P003",
@@ -265,7 +736,195 @@
           "개인 담당 범위는 러닝 기록 집계와 외부 LLM 연동, 응답 처리, 결과 재사용 및 저장·조회 API입니다.",
           "분기 테스트 코드의 존재가 자료에 기록되어 있으나, 테스트 실행 성공 여부와 개인 작성 범위는 추가 확인이 필요합니다.",
           "실제 Provider 활성화 환경과 외부 호출 실행 결과는 현재 공개 자료에 연결되어 있지 않습니다."
-        ]
+        ],
+        "visualization": {
+          "kind": "report-flow",
+          "title": "같은 입력의 재사용과 생성 실패 처리",
+          "summary": "서버 집계 → Snapshot·해시 → 재사용 판단\n필드 보완과 전체 Fallback을 분리한 생성 흐름",
+          "sources": [
+            {
+              "url": "https://github.com/WJLee0417/wjlee0417.github.io/blob/782a00371d2e5859ecc0e22504cb7c2632a9047a/projects/P003/source/ssafit/src/main/java/com/ssafy/ssafit/airunningreport/service/AiRunningReportGenerationService.java",
+              "sha256": "54c725d950164a7b991504a824d34cd2898d60b87d89c01beba72e86e600fbc3"
+            },
+            {
+              "url": "https://github.com/WJLee0417/wjlee0417.github.io/blob/782a00371d2e5859ecc0e22504cb7c2632a9047a/projects/P003/source/ssafit/src/main/resources/mappers/airunningreport/AiRunningReportMapper.xml",
+              "sha256": "0b032251048d3a13473cdbb43303d2eede9a9e0a9c3662e9efce6f91dfc6354f"
+            },
+            {
+              "url": "https://github.com/WJLee0417/wjlee0417.github.io/blob/782a00371d2e5859ecc0e22504cb7c2632a9047a/projects/P003/source/ssafit/src/main/java/com/ssafy/ssafit/airunningreport/controller/api/AiRunningReportApiController.java",
+              "sha256": "b327f33a5252dc45cab531415f42a39c70955540050969e009dd923cc1d5a850"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "aggregate",
+              "title": "서버 집계",
+              "detail": "러닝 기록·품질 상태",
+              "x": 30,
+              "y": 195
+            },
+            {
+              "id": "snapshot",
+              "title": "Snapshot",
+              "detail": "집계 JSON · SHA-256",
+              "x": 250,
+              "y": 195
+            },
+            {
+              "id": "reuse",
+              "title": "완료 결과 조회",
+              "detail": "회원·유형·입력 해시",
+              "x": 470,
+              "y": 55
+            },
+            {
+              "id": "provider",
+              "title": "LLM Provider",
+              "detail": "호출·JSON 파싱",
+              "x": 470,
+              "y": 195
+            },
+            {
+              "id": "normalize",
+              "title": "필드 보완",
+              "detail": "빈 필드만 대체",
+              "x": 690,
+              "y": 195
+            },
+            {
+              "id": "fallback",
+              "title": "전체 Fallback",
+              "detail": "데이터 부족·호출 실패",
+              "x": 470,
+              "y": 355
+            },
+            {
+              "id": "save",
+              "title": "리포트 저장",
+              "detail": "COMPLETED · 출처 보존",
+              "x": 910,
+              "y": 195
+            },
+            {
+              "id": "response",
+              "title": "REST 응답",
+              "detail": "generated · cacheHit",
+              "x": 910,
+              "y": 55
+            }
+          ],
+          "scenarios": [
+            {
+              "id": "reuse",
+              "label": "동일 입력 재사용",
+              "description": "완료된 Snapshot이 있으면 Provider 호출·저장을 생략하고 기존 결과 반환",
+              "path": [
+                "aggregate",
+                "snapshot",
+                "reuse",
+                "response"
+              ],
+              "source": "UNCHANGED",
+              "generated": false,
+              "cacheHit": true,
+              "httpStatus": 200,
+              "providerCall": false
+            },
+            {
+              "id": "generate",
+              "label": "새 리포트 생성",
+              "description": "재사용 결과가 없고 집계 품질·Provider 응답이 정상인 요청",
+              "path": [
+                "aggregate",
+                "snapshot",
+                "reuse",
+                "provider",
+                "normalize",
+                "save",
+                "response"
+              ],
+              "source": "LLM",
+              "generated": true,
+              "cacheHit": false,
+              "httpStatus": 201,
+              "providerCall": true
+            },
+            {
+              "id": "normalize",
+              "label": "일부 필드 보완",
+              "description": "응답의 빈 필드만 기본 내용으로 보완하고 LLM 출처 유지",
+              "path": [
+                "aggregate",
+                "snapshot",
+                "reuse",
+                "provider",
+                "normalize",
+                "save",
+                "response"
+              ],
+              "source": "LLM",
+              "generated": true,
+              "cacheHit": false,
+              "httpStatus": 201,
+              "providerCall": true
+            },
+            {
+              "id": "failure",
+              "label": "호출·파싱 실패",
+              "description": "Provider 예외 또는 JSON 파싱 실패 시 전체 기본 리포트를 완료 상태로 저장",
+              "path": [
+                "aggregate",
+                "snapshot",
+                "reuse",
+                "provider",
+                "fallback",
+                "save",
+                "response"
+              ],
+              "source": "FALLBACK",
+              "generated": true,
+              "cacheHit": false,
+              "httpStatus": 201,
+              "providerCall": true
+            },
+            {
+              "id": "insufficient",
+              "label": "전체 데이터 부족",
+              "description": "재사용 결과가 없고 전체 품질이 INSUFFICIENT이면 Provider 호출 없이 Fallback 저장",
+              "path": [
+                "aggregate",
+                "snapshot",
+                "reuse",
+                "fallback",
+                "save",
+                "response"
+              ],
+              "source": "FALLBACK",
+              "generated": true,
+              "cacheHit": false,
+              "httpStatus": 201,
+              "providerCall": false
+            },
+            {
+              "id": "force",
+              "label": "강제 갱신",
+              "description": "forceRefresh=true에서 재사용 조회를 건너뛰고 정상 응답을 새로 생성하는 경우",
+              "path": [
+                "aggregate",
+                "snapshot",
+                "provider",
+                "normalize",
+                "save",
+                "response"
+              ],
+              "source": "LLM",
+              "generated": true,
+              "cacheHit": false,
+              "httpStatus": 201,
+              "providerCall": true
+            }
+          ]
+        }
       },
       {
         "id": "P004",
@@ -327,7 +986,1213 @@
             "body": "일반회원의 본인 계약과 담당자의 검수 대상 구분\n계약별 인수·반납 비교와 이전 차수 열람"
           }
         ],
-        "periodLabel": "2026.07–08 · 기능 확장 2026.11"
+        "periodLabel": "2026.07–08 · 기능 확장 2026.11",
+        "visualization": {
+          "kind": "erd",
+          "title": "계약을 중심으로 연결한 대여 이력",
+          "summary": "상품과 계약을 분리한 반복 대여 모델\n계약·단계·차수의 복합 UNIQUE\n인수·반납 기록을 참조하는 검수와 손상 판정",
+          "sources": [
+            {
+              "url": "https://github.com/WJLee0417/RentalTrack/blob/3c1adca8bfd18fd5737617123c8644b3fc73d6ee/backend/src/main/resources/db/migration/V11__rebuild_rental_inspection_model.sql",
+              "sha256": "8861887d1b004201c280ae6f716c340a06b2d5c27259f8b83b45d49c781259f9"
+            },
+            {
+              "url": "https://github.com/WJLee0417/RentalTrack/blob/3c1adca8bfd18fd5737617123c8644b3fc73d6ee/backend/src/main/resources/db/migration/V12__add_legacy_import_tracking.sql",
+              "sha256": "634534e86c3efc0f1a99e2f67eb0949bd362dd18e92464dd2037c1263f6b2ba4"
+            }
+          ],
+          "tables": [
+            {
+              "name": "common_code_group",
+              "label": "공통 코드 그룹",
+              "columns": [
+                {
+                  "name": "code_group_id",
+                  "type": "VARCHAR(40)",
+                  "nullable": false
+                },
+                {
+                  "name": "code_group_name",
+                  "type": "VARCHAR(100)",
+                  "nullable": false
+                },
+                {
+                  "name": "code_group_description",
+                  "type": "VARCHAR(500)",
+                  "nullable": true
+                },
+                {
+                  "name": "use_yn",
+                  "type": "CHAR(1)",
+                  "nullable": false
+                },
+                {
+                  "name": "created_at",
+                  "type": "DATETIME(3)",
+                  "nullable": false
+                },
+                {
+                  "name": "updated_at",
+                  "type": "DATETIME(3)",
+                  "nullable": false
+                }
+              ],
+              "primaryKey": [
+                "code_group_id"
+              ],
+              "uniqueKeys": [],
+              "foreignKeys": []
+            },
+            {
+              "name": "common_code",
+              "label": "공통 코드",
+              "columns": [
+                {
+                  "name": "code_group_id",
+                  "type": "VARCHAR(40)",
+                  "nullable": false
+                },
+                {
+                  "name": "code_value",
+                  "type": "VARCHAR(40)",
+                  "nullable": false
+                },
+                {
+                  "name": "code_name",
+                  "type": "VARCHAR(100)",
+                  "nullable": false
+                },
+                {
+                  "name": "code_description",
+                  "type": "VARCHAR(500)",
+                  "nullable": true
+                },
+                {
+                  "name": "display_order",
+                  "type": "INT",
+                  "nullable": false
+                },
+                {
+                  "name": "use_yn",
+                  "type": "CHAR(1)",
+                  "nullable": false
+                },
+                {
+                  "name": "created_at",
+                  "type": "DATETIME(3)",
+                  "nullable": false
+                },
+                {
+                  "name": "updated_at",
+                  "type": "DATETIME(3)",
+                  "nullable": false
+                }
+              ],
+              "primaryKey": [
+                "code_group_id",
+                "code_value"
+              ],
+              "uniqueKeys": [],
+              "foreignKeys": [
+                {
+                  "columns": [
+                    "code_group_id"
+                  ],
+                  "target": "common_code_group",
+                  "targetColumns": [
+                    "code_group_id"
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "member",
+              "label": "회원",
+              "columns": [
+                {
+                  "name": "member_id",
+                  "type": "BIGINT UNSIGNED",
+                  "nullable": false
+                },
+                {
+                  "name": "login_id",
+                  "type": "VARCHAR(50)",
+                  "nullable": false
+                },
+                {
+                  "name": "member_name",
+                  "type": "VARCHAR(100)",
+                  "nullable": false
+                },
+                {
+                  "name": "email",
+                  "type": "VARCHAR(254)",
+                  "nullable": false
+                },
+                {
+                  "name": "member_role_cd",
+                  "type": "VARCHAR(20)",
+                  "nullable": false
+                },
+                {
+                  "name": "created_at",
+                  "type": "DATETIME(3)",
+                  "nullable": false
+                }
+              ],
+              "primaryKey": [
+                "member_id"
+              ],
+              "uniqueKeys": [
+                [
+                  "login_id"
+                ],
+                [
+                  "email"
+                ]
+              ],
+              "foreignKeys": []
+            },
+            {
+              "name": "business",
+              "label": "사업자",
+              "columns": [
+                {
+                  "name": "business_id",
+                  "type": "BIGINT UNSIGNED",
+                  "nullable": false
+                },
+                {
+                  "name": "business_no",
+                  "type": "VARCHAR(10)",
+                  "nullable": false
+                },
+                {
+                  "name": "business_name",
+                  "type": "VARCHAR(200)",
+                  "nullable": false
+                },
+                {
+                  "name": "business_status_cd",
+                  "type": "VARCHAR(20)",
+                  "nullable": false
+                },
+                {
+                  "name": "contact_email",
+                  "type": "VARCHAR(254)",
+                  "nullable": true
+                },
+                {
+                  "name": "created_at",
+                  "type": "DATETIME(3)",
+                  "nullable": false
+                }
+              ],
+              "primaryKey": [
+                "business_id"
+              ],
+              "uniqueKeys": [
+                [
+                  "business_no"
+                ]
+              ],
+              "foreignKeys": []
+            },
+            {
+              "name": "rental_item",
+              "label": "대여 상품",
+              "columns": [
+                {
+                  "name": "item_id",
+                  "type": "BIGINT UNSIGNED",
+                  "nullable": false
+                },
+                {
+                  "name": "business_id",
+                  "type": "BIGINT UNSIGNED",
+                  "nullable": false
+                },
+                {
+                  "name": "asset_code",
+                  "type": "VARCHAR(40)",
+                  "nullable": false
+                },
+                {
+                  "name": "item_name",
+                  "type": "VARCHAR(200)",
+                  "nullable": false
+                },
+                {
+                  "name": "category_cd",
+                  "type": "VARCHAR(30)",
+                  "nullable": false
+                },
+                {
+                  "name": "item_status_cd",
+                  "type": "VARCHAR(20)",
+                  "nullable": false
+                },
+                {
+                  "name": "description",
+                  "type": "VARCHAR(1000)",
+                  "nullable": true
+                },
+                {
+                  "name": "created_at",
+                  "type": "DATETIME(3)",
+                  "nullable": false
+                }
+              ],
+              "primaryKey": [
+                "item_id"
+              ],
+              "uniqueKeys": [
+                [
+                  "business_id",
+                  "asset_code"
+                ]
+              ],
+              "foreignKeys": [
+                {
+                  "columns": [
+                    "business_id"
+                  ],
+                  "target": "business",
+                  "targetColumns": [
+                    "business_id"
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "rental_contract",
+              "label": "대여 계약",
+              "columns": [
+                {
+                  "name": "contract_id",
+                  "type": "BIGINT UNSIGNED",
+                  "nullable": false
+                },
+                {
+                  "name": "contract_no",
+                  "type": "VARCHAR(50)",
+                  "nullable": false
+                },
+                {
+                  "name": "member_id",
+                  "type": "BIGINT UNSIGNED",
+                  "nullable": false
+                },
+                {
+                  "name": "item_id",
+                  "type": "BIGINT UNSIGNED",
+                  "nullable": false
+                },
+                {
+                  "name": "requested_at",
+                  "type": "DATETIME(3)",
+                  "nullable": false
+                },
+                {
+                  "name": "rental_start_at",
+                  "type": "DATETIME(3)",
+                  "nullable": true
+                },
+                {
+                  "name": "rental_end_at",
+                  "type": "DATETIME(3)",
+                  "nullable": true
+                },
+                {
+                  "name": "actual_return_at",
+                  "type": "DATETIME(3)",
+                  "nullable": true
+                },
+                {
+                  "name": "contract_status_cd",
+                  "type": "VARCHAR(20)",
+                  "nullable": false
+                },
+                {
+                  "name": "created_at",
+                  "type": "DATETIME(3)",
+                  "nullable": false
+                }
+              ],
+              "primaryKey": [
+                "contract_id"
+              ],
+              "uniqueKeys": [
+                [
+                  "contract_no"
+                ]
+              ],
+              "foreignKeys": [
+                {
+                  "columns": [
+                    "member_id"
+                  ],
+                  "target": "member",
+                  "targetColumns": [
+                    "member_id"
+                  ]
+                },
+                {
+                  "columns": [
+                    "item_id"
+                  ],
+                  "target": "rental_item",
+                  "targetColumns": [
+                    "item_id"
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "condition_record",
+              "label": "상태 기록",
+              "columns": [
+                {
+                  "name": "condition_id",
+                  "type": "BIGINT UNSIGNED",
+                  "nullable": false
+                },
+                {
+                  "name": "contract_id",
+                  "type": "BIGINT UNSIGNED",
+                  "nullable": false
+                },
+                {
+                  "name": "record_stage_cd",
+                  "type": "VARCHAR(10)",
+                  "nullable": false
+                },
+                {
+                  "name": "record_revision_no",
+                  "type": "INT",
+                  "nullable": false
+                },
+                {
+                  "name": "recorded_at",
+                  "type": "DATETIME(3)",
+                  "nullable": false
+                },
+                {
+                  "name": "record_note",
+                  "type": "VARCHAR(1000)",
+                  "nullable": true
+                },
+                {
+                  "name": "confirmed_yn",
+                  "type": "CHAR(1)",
+                  "nullable": false
+                },
+                {
+                  "name": "created_at",
+                  "type": "DATETIME(3)",
+                  "nullable": false
+                }
+              ],
+              "primaryKey": [
+                "condition_id"
+              ],
+              "uniqueKeys": [
+                [
+                  "contract_id",
+                  "record_stage_cd",
+                  "record_revision_no"
+                ]
+              ],
+              "foreignKeys": [
+                {
+                  "columns": [
+                    "contract_id"
+                  ],
+                  "target": "rental_contract",
+                  "targetColumns": [
+                    "contract_id"
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "condition_photo",
+              "label": "상태 사진",
+              "columns": [
+                {
+                  "name": "photo_id",
+                  "type": "BIGINT UNSIGNED",
+                  "nullable": false
+                },
+                {
+                  "name": "condition_id",
+                  "type": "BIGINT UNSIGNED",
+                  "nullable": false
+                },
+                {
+                  "name": "photo_seq",
+                  "type": "INT",
+                  "nullable": false
+                },
+                {
+                  "name": "storage_key",
+                  "type": "VARCHAR(500)",
+                  "nullable": false
+                },
+                {
+                  "name": "original_file_name",
+                  "type": "VARCHAR(255)",
+                  "nullable": false
+                },
+                {
+                  "name": "mime_type",
+                  "type": "VARCHAR(100)",
+                  "nullable": false
+                },
+                {
+                  "name": "file_size",
+                  "type": "BIGINT UNSIGNED",
+                  "nullable": false
+                },
+                {
+                  "name": "file_hash",
+                  "type": "CHAR(64)",
+                  "nullable": false
+                },
+                {
+                  "name": "capture_angle_cd",
+                  "type": "VARCHAR(30)",
+                  "nullable": false
+                },
+                {
+                  "name": "captured_at",
+                  "type": "DATETIME(3)",
+                  "nullable": true
+                },
+                {
+                  "name": "created_at",
+                  "type": "DATETIME(3)",
+                  "nullable": false
+                }
+              ],
+              "primaryKey": [
+                "photo_id"
+              ],
+              "uniqueKeys": [
+                [
+                  "condition_id",
+                  "photo_seq"
+                ]
+              ],
+              "foreignKeys": [
+                {
+                  "columns": [
+                    "condition_id"
+                  ],
+                  "target": "condition_record",
+                  "targetColumns": [
+                    "condition_id"
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "damage_observation",
+              "label": "손상 관찰",
+              "columns": [
+                {
+                  "name": "damage_id",
+                  "type": "BIGINT UNSIGNED",
+                  "nullable": false
+                },
+                {
+                  "name": "condition_id",
+                  "type": "BIGINT UNSIGNED",
+                  "nullable": false
+                },
+                {
+                  "name": "damage_location_cd",
+                  "type": "VARCHAR(40)",
+                  "nullable": false
+                },
+                {
+                  "name": "damage_type_cd",
+                  "type": "VARCHAR(40)",
+                  "nullable": false
+                },
+                {
+                  "name": "damage_description",
+                  "type": "VARCHAR(1000)",
+                  "nullable": true
+                },
+                {
+                  "name": "severity_cd",
+                  "type": "VARCHAR(20)",
+                  "nullable": false
+                },
+                {
+                  "name": "created_at",
+                  "type": "DATETIME(3)",
+                  "nullable": false
+                }
+              ],
+              "primaryKey": [
+                "damage_id"
+              ],
+              "uniqueKeys": [],
+              "foreignKeys": [
+                {
+                  "columns": [
+                    "condition_id"
+                  ],
+                  "target": "condition_record",
+                  "targetColumns": [
+                    "condition_id"
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "damage_photo",
+              "label": "손상·사진 연결",
+              "columns": [
+                {
+                  "name": "damage_photo_id",
+                  "type": "BIGINT UNSIGNED",
+                  "nullable": false
+                },
+                {
+                  "name": "damage_id",
+                  "type": "BIGINT UNSIGNED",
+                  "nullable": false
+                },
+                {
+                  "name": "photo_id",
+                  "type": "BIGINT UNSIGNED",
+                  "nullable": false
+                },
+                {
+                  "name": "bbox_x_ratio",
+                  "type": "DECIMAL(5,4)",
+                  "nullable": true
+                },
+                {
+                  "name": "bbox_y_ratio",
+                  "type": "DECIMAL(5,4)",
+                  "nullable": true
+                },
+                {
+                  "name": "bbox_width_ratio",
+                  "type": "DECIMAL(5,4)",
+                  "nullable": true
+                },
+                {
+                  "name": "bbox_height_ratio",
+                  "type": "DECIMAL(5,4)",
+                  "nullable": true
+                },
+                {
+                  "name": "created_at",
+                  "type": "DATETIME(3)",
+                  "nullable": false
+                }
+              ],
+              "primaryKey": [
+                "damage_photo_id"
+              ],
+              "uniqueKeys": [
+                [
+                  "damage_id",
+                  "photo_id"
+                ]
+              ],
+              "foreignKeys": [
+                {
+                  "columns": [
+                    "damage_id"
+                  ],
+                  "target": "damage_observation",
+                  "targetColumns": [
+                    "damage_id"
+                  ]
+                },
+                {
+                  "columns": [
+                    "photo_id"
+                  ],
+                  "target": "condition_photo",
+                  "targetColumns": [
+                    "photo_id"
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "image_analysis_result",
+              "label": "분석 후보 저장",
+              "columns": [
+                {
+                  "name": "analysis_result_id",
+                  "type": "BIGINT UNSIGNED",
+                  "nullable": false
+                },
+                {
+                  "name": "photo_id",
+                  "type": "BIGINT UNSIGNED",
+                  "nullable": false
+                },
+                {
+                  "name": "analysis_run_id",
+                  "type": "CHAR(36)",
+                  "nullable": false
+                },
+                {
+                  "name": "detection_seq",
+                  "type": "INT",
+                  "nullable": false
+                },
+                {
+                  "name": "model_name",
+                  "type": "VARCHAR(100)",
+                  "nullable": false
+                },
+                {
+                  "name": "model_version",
+                  "type": "VARCHAR(50)",
+                  "nullable": false
+                },
+                {
+                  "name": "predicted_damage_type_cd",
+                  "type": "VARCHAR(40)",
+                  "nullable": false
+                },
+                {
+                  "name": "confidence_score",
+                  "type": "DECIMAL(5,4)",
+                  "nullable": false
+                },
+                {
+                  "name": "bbox_x_ratio",
+                  "type": "DECIMAL(5,4)",
+                  "nullable": false
+                },
+                {
+                  "name": "bbox_y_ratio",
+                  "type": "DECIMAL(5,4)",
+                  "nullable": false
+                },
+                {
+                  "name": "bbox_width_ratio",
+                  "type": "DECIMAL(5,4)",
+                  "nullable": false
+                },
+                {
+                  "name": "bbox_height_ratio",
+                  "type": "DECIMAL(5,4)",
+                  "nullable": false
+                },
+                {
+                  "name": "analyzed_at",
+                  "type": "DATETIME(3)",
+                  "nullable": false
+                }
+              ],
+              "primaryKey": [
+                "analysis_result_id"
+              ],
+              "uniqueKeys": [
+                [
+                  "photo_id",
+                  "analysis_run_id",
+                  "detection_seq"
+                ]
+              ],
+              "foreignKeys": [
+                {
+                  "columns": [
+                    "photo_id"
+                  ],
+                  "target": "condition_photo",
+                  "targetColumns": [
+                    "photo_id"
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "return_inspection",
+              "label": "반납 검수",
+              "columns": [
+                {
+                  "name": "inspection_id",
+                  "type": "BIGINT UNSIGNED",
+                  "nullable": false
+                },
+                {
+                  "name": "contract_id",
+                  "type": "BIGINT UNSIGNED",
+                  "nullable": false
+                },
+                {
+                  "name": "intake_condition_id",
+                  "type": "BIGINT UNSIGNED",
+                  "nullable": false
+                },
+                {
+                  "name": "return_condition_id",
+                  "type": "BIGINT UNSIGNED",
+                  "nullable": false
+                },
+                {
+                  "name": "inspector_member_id",
+                  "type": "BIGINT UNSIGNED",
+                  "nullable": false
+                },
+                {
+                  "name": "inspection_status_cd",
+                  "type": "VARCHAR(20)",
+                  "nullable": false
+                },
+                {
+                  "name": "overall_result_cd",
+                  "type": "VARCHAR(20)",
+                  "nullable": true
+                },
+                {
+                  "name": "inspected_at",
+                  "type": "DATETIME(3)",
+                  "nullable": true
+                },
+                {
+                  "name": "inspection_note",
+                  "type": "VARCHAR(1000)",
+                  "nullable": true
+                },
+                {
+                  "name": "created_at",
+                  "type": "DATETIME(3)",
+                  "nullable": false
+                }
+              ],
+              "primaryKey": [
+                "inspection_id"
+              ],
+              "uniqueKeys": [
+                [
+                  "contract_id"
+                ]
+              ],
+              "foreignKeys": [
+                {
+                  "columns": [
+                    "contract_id"
+                  ],
+                  "target": "rental_contract",
+                  "targetColumns": [
+                    "contract_id"
+                  ]
+                },
+                {
+                  "columns": [
+                    "intake_condition_id"
+                  ],
+                  "target": "condition_record",
+                  "targetColumns": [
+                    "condition_id"
+                  ]
+                },
+                {
+                  "columns": [
+                    "return_condition_id"
+                  ],
+                  "target": "condition_record",
+                  "targetColumns": [
+                    "condition_id"
+                  ]
+                },
+                {
+                  "columns": [
+                    "inspector_member_id"
+                  ],
+                  "target": "member",
+                  "targetColumns": [
+                    "member_id"
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "damage_assessment",
+              "label": "손상 판정",
+              "columns": [
+                {
+                  "name": "assessment_id",
+                  "type": "BIGINT UNSIGNED",
+                  "nullable": false
+                },
+                {
+                  "name": "inspection_id",
+                  "type": "BIGINT UNSIGNED",
+                  "nullable": false
+                },
+                {
+                  "name": "return_damage_id",
+                  "type": "BIGINT UNSIGNED",
+                  "nullable": false
+                },
+                {
+                  "name": "intake_damage_id",
+                  "type": "BIGINT UNSIGNED",
+                  "nullable": true
+                },
+                {
+                  "name": "assessment_result_cd",
+                  "type": "VARCHAR(20)",
+                  "nullable": false
+                },
+                {
+                  "name": "assessment_reason",
+                  "type": "VARCHAR(1000)",
+                  "nullable": true
+                },
+                {
+                  "name": "created_at",
+                  "type": "DATETIME(3)",
+                  "nullable": false
+                }
+              ],
+              "primaryKey": [
+                "assessment_id"
+              ],
+              "uniqueKeys": [
+                [
+                  "inspection_id",
+                  "return_damage_id"
+                ]
+              ],
+              "foreignKeys": [
+                {
+                  "columns": [
+                    "inspection_id"
+                  ],
+                  "target": "return_inspection",
+                  "targetColumns": [
+                    "inspection_id"
+                  ]
+                },
+                {
+                  "columns": [
+                    "return_damage_id"
+                  ],
+                  "target": "damage_observation",
+                  "targetColumns": [
+                    "damage_id"
+                  ]
+                },
+                {
+                  "columns": [
+                    "intake_damage_id"
+                  ],
+                  "target": "damage_observation",
+                  "targetColumns": [
+                    "damage_id"
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "member_credential",
+              "label": "회원 인증",
+              "columns": [
+                {
+                  "name": "member_id",
+                  "type": "BIGINT UNSIGNED",
+                  "nullable": false
+                },
+                {
+                  "name": "password_hash",
+                  "type": "VARCHAR(100)",
+                  "nullable": true
+                },
+                {
+                  "name": "status",
+                  "type": "VARCHAR(20)",
+                  "nullable": false
+                }
+              ],
+              "primaryKey": [
+                "member_id"
+              ],
+              "uniqueKeys": [],
+              "foreignKeys": [
+                {
+                  "columns": [
+                    "member_id"
+                  ],
+                  "target": "member",
+                  "targetColumns": [
+                    "member_id"
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "legacy_import_mutex",
+              "label": "이전 직렬화",
+              "columns": [
+                {
+                  "name": "id",
+                  "type": "INT",
+                  "nullable": false
+                }
+              ],
+              "primaryKey": [
+                "id"
+              ],
+              "uniqueKeys": [],
+              "foreignKeys": []
+            },
+            {
+              "name": "legacy_import_run",
+              "label": "이전 실행",
+              "columns": [
+                {
+                  "name": "id",
+                  "type": "BIGINT UNSIGNED",
+                  "nullable": false
+                },
+                {
+                  "name": "plan_token",
+                  "type": "CHAR(64)",
+                  "nullable": false
+                },
+                {
+                  "name": "source_digest",
+                  "type": "CHAR(64)",
+                  "nullable": false
+                },
+                {
+                  "name": "manifest_json",
+                  "type": "LONGTEXT",
+                  "nullable": false
+                },
+                {
+                  "name": "result_json",
+                  "type": "LONGTEXT",
+                  "nullable": false
+                },
+                {
+                  "name": "imported_by",
+                  "type": "BIGINT UNSIGNED",
+                  "nullable": false
+                },
+                {
+                  "name": "imported_at",
+                  "type": "DATETIME(3)",
+                  "nullable": false
+                }
+              ],
+              "primaryKey": [
+                "id"
+              ],
+              "uniqueKeys": [
+                [
+                  "plan_token"
+                ]
+              ],
+              "foreignKeys": [
+                {
+                  "columns": [
+                    "imported_by"
+                  ],
+                  "target": "member",
+                  "targetColumns": [
+                    "member_id"
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "legacy_entity_map",
+              "label": "이전 ID 대응표",
+              "columns": [
+                {
+                  "name": "source_table",
+                  "type": "VARCHAR(40)",
+                  "nullable": false
+                },
+                {
+                  "name": "source_id",
+                  "type": "BIGINT",
+                  "nullable": false
+                },
+                {
+                  "name": "target_table",
+                  "type": "VARCHAR(40)",
+                  "nullable": false
+                },
+                {
+                  "name": "target_id",
+                  "type": "BIGINT UNSIGNED",
+                  "nullable": false
+                },
+                {
+                  "name": "source_digest",
+                  "type": "CHAR(64)",
+                  "nullable": false
+                },
+                {
+                  "name": "import_run_id",
+                  "type": "BIGINT UNSIGNED",
+                  "nullable": false
+                }
+              ],
+              "primaryKey": [
+                "source_table",
+                "source_id"
+              ],
+              "uniqueKeys": [
+                [
+                  "target_table",
+                  "target_id"
+                ]
+              ],
+              "foreignKeys": [
+                {
+                  "columns": [
+                    "import_run_id"
+                  ],
+                  "target": "legacy_import_run",
+                  "targetColumns": [
+                    "id"
+                  ]
+                }
+              ]
+            }
+          ],
+          "views": [
+            {
+              "id": "rental",
+              "label": "대여·상태 기록",
+              "lanes": [
+                [
+                  "business",
+                  "member"
+                ],
+                [
+                  "rental_item",
+                  "rental_contract"
+                ],
+                [
+                  "condition_record"
+                ]
+              ],
+              "focus": "condition_record"
+            },
+            {
+              "id": "inspection",
+              "label": "반납·검수",
+              "lanes": [
+                [
+                  "rental_contract",
+                  "condition_record"
+                ],
+                [
+                  "return_inspection",
+                  "damage_observation"
+                ],
+                [
+                  "damage_assessment"
+                ]
+              ],
+              "focus": "return_inspection"
+            },
+            {
+              "id": "photos",
+              "label": "사진·손상",
+              "lanes": [
+                [
+                  "condition_record"
+                ],
+                [
+                  "condition_photo",
+                  "damage_observation"
+                ],
+                [
+                  "damage_photo",
+                  "image_analysis_result"
+                ]
+              ],
+              "focus": "damage_photo"
+            },
+            {
+              "id": "codes",
+              "label": "공통 코드·인증",
+              "lanes": [
+                [
+                  "common_code_group",
+                  "member"
+                ],
+                [
+                  "common_code",
+                  "member_credential"
+                ]
+              ],
+              "focus": "common_code"
+            },
+            {
+              "id": "import",
+              "label": "이력 이전",
+              "lanes": [
+                [
+                  "member",
+                  "legacy_import_mutex"
+                ],
+                [
+                  "legacy_import_run"
+                ],
+                [
+                  "legacy_entity_map"
+                ]
+              ],
+              "focus": "legacy_entity_map"
+            },
+            {
+              "id": "all",
+              "label": "업무·확장 전체",
+              "lanes": [
+                [
+                  "business",
+                  "member",
+                  "common_code_group",
+                  "legacy_import_mutex"
+                ],
+                [
+                  "rental_item",
+                  "rental_contract",
+                  "common_code",
+                  "member_credential"
+                ],
+                [
+                  "condition_record",
+                  "return_inspection",
+                  "legacy_import_run"
+                ],
+                [
+                  "condition_photo",
+                  "damage_observation",
+                  "damage_assessment",
+                  "legacy_entity_map"
+                ],
+                [
+                  "damage_photo",
+                  "image_analysis_result"
+                ]
+              ],
+              "focus": "rental_contract"
+            }
+          ]
+        }
       }
     ],
     "capabilities": [

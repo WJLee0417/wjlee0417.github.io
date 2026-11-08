@@ -208,6 +208,44 @@ for(const c of fact.contributions.filter(c=>c.projectId==='P001')){
 const personalCopy=[JSON.stringify(d.profile),...dim.projects.flatMap(p=>[p.role,p.summary,p.outcomeSummary]),...fact.contributions.flatMap(c=>[c.title,c.problem,c.decision,c.action,c.output])];
 assert(!personalCopy.some(text=>text.includes('C++')),'C++ port must not be claimed as personal implementation without ownership confirmation');
 const secretPattern=/(?:sk-[a-zA-Z0-9]{16,}|password\s*[:=]|jdbc:mysql:\/\/[^" ]+:[0-9]+)/i;
+for(const project of dim.projects){
+  const visual=project.visualization;
+  assert(visual && ['erd','report-flow','routing'].includes(visual.kind),`project visual missing ${project.id}`);
+  if(!visual)continue;
+  assert(visual.title?.trim() && visual.summary?.trim(),`visual copy missing ${project.id}`);
+  assert(visual.sources?.length>0 && visual.sources.every(source=>/^[0-9a-f]{64}$/.test(source.sha256) && (/^https:\/\/github\.com\/WJLee0417\/[A-Za-z0-9_.-]+\/blob\/[0-9a-f]{40}\//.test(source.url) || source.url==='https://wjlee0417.github.io/experiments/drt/2026-11-07/results.json')),`visual source missing ${project.id}`);
+  if(visual.kind==='erd'){
+    const tables=new Map(visual.tables.map(table=>[table.name,table]));
+    assert(tables.size===visual.tables.length && tables.size===(project.id==='P001'?7:17),`unexpected ERD table scope ${project.id}`);
+    for(const table of visual.tables){
+      const columns=new Set(table.columns.map(column=>column.name));
+      assert(columns.size===table.columns.length && table.primaryKey.length>0,`ERD columns/PK invalid ${table.name}`);
+      assert(table.columns.every(column=>typeof column.nullable==='boolean' && /^[A-Z]+(?:\(\d+(?:,\d+)?\))?(?: UNSIGNED)?$/.test(column.type)),`ERD column type invalid ${table.name}`);
+      for(const key of [table.primaryKey,...table.uniqueKeys])assert(key.length>0 && key.every(name=>columns.has(name)),`ERD key references missing column ${table.name}`);
+      assert(table.primaryKey.every(name=>!table.columns.find(column=>column.name===name)?.nullable),`ERD nullable PK ${table.name}`);
+      for(const key of table.foreignKeys){
+        const target=tables.get(key.target);
+        assert(target && key.columns.length===key.targetColumns.length && key.columns.every(name=>columns.has(name)) && key.targetColumns.every(name=>target.columns.some(column=>column.name===name)),`ERD FK invalid ${table.name}`);
+        if(target)assert([target.primaryKey,...target.uniqueKeys].some(columns=>columns.length===key.targetColumns.length && columns.every(name=>key.targetColumns.includes(name))),`ERD FK target must be unique ${table.name}`);
+      }
+    }
+    const shown=new Set();
+    for(const view of visual.views){const names=view.lanes.flat();assert(names.length===new Set(names).size && names.includes(view.focus) && names.every(name=>tables.has(name)),`ERD view invalid ${project.id}/${view.id}`);names.forEach(name=>shown.add(name));}
+    assert(shown.size===tables.size,`unreachable ERD tables ${project.id}`);
+    if(project.id==='P001')assert(JSON.stringify(tables.get('점포')?.primaryKey)===JSON.stringify(['서비스_업종_코드','상권_코드']),'commercial composite PK lost');
+    if(project.id==='P004')assert(tables.get('member_credential')?.columns.find(column=>column.name==='password_hash')?.nullable===true,'V12 nullable credential missing');
+  }else if(visual.kind==='report-flow'){
+    const nodes=new Set(visual.nodes.map(node=>node.id));assert(nodes.size===visual.nodes.length,'duplicate flow node');
+    for(const scenario of visual.scenarios){
+      assert(scenario.path.every(id=>nodes.has(id)) && scenario.path[0]==='aggregate' && scenario.path.at(-1)==='response',`invalid flow route ${scenario.id}`);
+      assert(scenario.httpStatus===(scenario.cacheHit?200:201) && scenario.generated!==scenario.cacheHit,`invalid API flags ${scenario.id}`);
+      assert(scenario.providerCall===scenario.path.includes('provider'),`provider branch mismatch ${scenario.id}`);
+      assert(scenario.source==='FALLBACK'?scenario.path.includes('fallback'):!scenario.path.includes('fallback'),`fallback branch mismatch ${scenario.id}`);
+    }
+    assert(visual.scenarios.find(s=>s.id==='normalize')?.source==='LLM','field normalization must preserve LLM source');
+    assert(!visual.scenarios.find(s=>s.id==='force')?.path.includes('reuse'),'forceRefresh must skip reusable query');
+  }else assert(project.comparison && visual.sources[0].sha256===project.comparison.artifactSha256,'routing visual must use measured summary');
+}
 assert(!secretPattern.test(JSON.stringify(d)),'possible private credential/contact in browser data');
 if(errors.length){ console.error(`Validation failed (${errors.length}):\n- ${errors.join('\n- ')}`);process.exitCode=1; }
 else console.log(`OK: ${dim.projects.length} projects; ${dim.capabilities.length} capabilities; ${fact.contributions.length} contributions; ${fact.metricRecords.length} metrics; ${d.diagrams.length} diagrams; ${edges.size} capability-project edges; 11 tables`);

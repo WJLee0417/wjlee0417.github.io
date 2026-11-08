@@ -104,6 +104,21 @@ try {
     assert.ok(page.includes(project.kind));
     assert.ok(!workLogCopy.test(page),'project copy must address portfolio readers');
     if(project.periodLabel)assert.ok(page.includes(project.periodLabel));
+    if(project.visualization){
+      const model=project.visualization,visualPage=renderPage(`/projects/${project.slug}?section=visualization`);
+      assert.ok(page.includes(`href="/projects/${project.slug}?section=visualization"`));
+      assert.ok(visualPage.includes(`data-visual-kind="${model.kind}"`) && visualPage.includes(escape(model.title)));
+      for(const source of model.sources)assert.ok(visualPage.includes(source.url),`visual source link lost ${project.id}`);
+      if(model.kind==='erd'){
+        for(const name of model.views[0].lanes.flat())assert.ok(visualPage.includes(escape(name)),`default ERD table lost ${name}`);
+        assert.ok(visualPage.includes('전체 컬럼') && visualPage.includes('크게 보기'));
+        const focus=model.tables.find(table=>table.name===model.views[0].focus);
+        for(const column of focus.columns)assert.ok(visualPage.includes(escape(column.name)) && visualPage.includes(escape(column.type)),`ERD detail lost ${focus.name}/${column.name}`);
+      }else if(model.kind==='report-flow'){
+        for(const scenario of model.scenarios)assert.ok(visualPage.includes(escape(scenario.label)));
+        assert.ok(visualPage.includes('generationSource') && visualPage.includes('cacheHit'));
+      }else assert.ok(visualPage.includes('완료해 없음') && visualPage.includes('시간창'));
+    }
     if(project.implementationNotes?.length){
       const implementation=renderPage(`/projects/${project.slug}?section=implementation`);
       for(const note of project.implementationNotes){assert.ok(implementation.includes(escape(note.title)));for(const line of note.body.split('\n'))assert.ok(implementation.includes(`<li>${escape(line)}</li>`));}

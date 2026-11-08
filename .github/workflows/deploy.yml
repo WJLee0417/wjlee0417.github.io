@@ -45,6 +45,8 @@ jobs:
         run: npm ci
       - name: Validate portfolio data
         run: npm run validate:data
+      - name: Check schema extraction contracts
+        run: npm run check:visuals
       - name: Build site
         run: npm run build
       - name: Check web pages, slides and standalone export
