@@ -1,7 +1,7 @@
 /* Native web layout and restrained motion, without a presentation frame. */
 .web-shell { overflow-x: clip; }
 .web-header { isolation: isolate; }
-.web-brand > span { font-size: 8px; }
+.web-brand > span { font-size: 14px; }
 .web-header nav > a { position: relative; padding-block: 12px; }
 .web-header nav > a::after { content: ''; position: absolute; left: 0; bottom: 5px; width: 100%; height: 2px; background: var(--cobalt); transform: scaleX(0); transform-origin: left; transition: transform .25s ease; }
 .web-header nav > a:hover::after, .web-header nav > a[aria-current]::after { transform: scaleX(1); }
@@ -52,7 +52,7 @@
   .web-project-nav > p { width: 100%; }
   .web-project-nav > button { padding: 10px; }
   .web-project-page [id] { scroll-margin-top: 90px; }
-  .web-shell .deck-code-links a { font-size: 11px; }
+  .web-shell .deck-code-links a { font-size: 14px; }
 }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto !important; scroll-snap-type: none !important; }

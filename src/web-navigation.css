@@ -3,8 +3,8 @@
 .web-page { display: flex; flex-direction: column; flex: 1; min-height: 0; }
 .web-header-inner { display: grid; grid-template-columns: minmax(140px, 1fr) auto auto; gap: 38px; height: 86px; }
 .web-header nav { display: flex; position: static; flex-direction: row; gap: 25px; padding: 0; background: transparent; border: 0; box-shadow: none; }
-.web-header nav > a { min-height: 44px; display: flex; align-items: center; border-bottom: 0; font-size: 12px; }
-.web-header-contact { display: flex; flex-direction: column; gap: 1px; font-size: 11px; line-height: 1.5; }
+.web-header nav > a { min-height: 44px; display: flex; align-items: center; border-bottom: 0; font-size: 14px; }
+.web-header-contact { display: flex; flex-direction: column; gap: 1px; font-size: 14px; line-height: 1.5; }
 .web-header-contact a { min-height: 23px; display: inline-flex; align-items: center; }
 .web-header-contact a:hover { color: var(--cobalt); }
 .web-footer { flex: none; padding-block: 16px; }
@@ -23,9 +23,9 @@
 .web-project-choices { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
 .web-project-choice { display: grid; grid-template-columns: 28px minmax(0, 1fr) 22px; gap: 20px; align-items: center; min-height: 180px; padding: 28px; background: #fff; border: 1px solid transparent; }
 .web-choice-number { font-size: 20px; font-weight: 700; color: var(--cobalt); align-self: start; }
-.web-project-choice small { display: block; font-size: 9px; letter-spacing: .08em; color: var(--muted); margin-bottom: 12px; }
+.web-project-choice small { display: block; font-size: 14px; letter-spacing: .08em; color: var(--muted); margin-bottom: 12px; }
 .web-project-choice h2 { font-size: 23px; line-height: 1.4; font-weight: 700; }
-.web-project-choice p { font-size: 10px; line-height: 1.6; color: var(--muted); margin-top: 14px; }
+.web-project-choice p { font-size: 14px; line-height: 1.6; color: var(--muted); margin-top: 14px; }
 .web-choice-arrow { font-size: 23px; color: var(--cobalt); }
 .web-background-page { flex: 1; }
 .web-background-page .web-about { min-height: 0; padding-block: 42px; background: transparent; }
@@ -33,7 +33,7 @@
 .web-project-masthead h1 { font-size: clamp(28px, 3vw, 40px); line-height: 1.3; margin-top: 12px; }
 .web-project-masthead .web-project-english { margin: 10px 0 0; }
 .web-project-tabs { display: flex; position: relative; gap: 8px; overflow-x: auto; margin: 24px -4px; padding: 4px 4px 12px; scrollbar-width: thin; }
-.web-project-tabs a { display: inline-flex; align-items: center; flex: none; min-height: 44px; padding: 10px 15px; border: 1px solid var(--line); font-size: 12px; line-height: 1.5; white-space: nowrap; }
+.web-project-tabs a { display: inline-flex; align-items: center; flex: none; min-height: 44px; padding: 10px 15px; border: 1px solid var(--line); font-size: 14px; line-height: 1.5; white-space: nowrap; }
 .web-project-tabs a:hover { border-color: var(--cobalt); color: var(--cobalt); }
 .web-project-tabs a[aria-current] { background: var(--cobalt); border-color: var(--cobalt); color: #fff; }
 .web-content-panel { animation: web-page-enter .35s ease both; }
@@ -55,35 +55,35 @@
 @media (max-width: 767px) {
   .web-header-inner { height: auto; min-height: 104px; grid-template-columns: minmax(0, 1fr) auto; gap: 0 15px; padding-block: 10px 8px; }
   .web-header nav { gap: 18px; align-items: center; }
-  .web-header nav > a { padding-block: 8px; font-size: 11px; }
-  .web-header-contact { grid-column: 1 / -1; flex-direction: row; justify-content: space-between; gap: 10px; font-size: 10px; }
+  .web-header nav > a { padding-block: 8px; font-size: 14px; }
+  .web-header-contact { grid-column: 1 / -1; flex-direction: row; justify-content: space-between; gap: 10px; font-size: 14px; }
   .web-header-contact a { min-height: 27px; }
   .web-entry { padding-block: 28px; }
   .web-entry-copy { border-left-width: 4px; padding-left: 20px; }
-  .web-entry-copy .web-hero-name { font-size: 11px; margin-top: 14px; }
+  .web-entry-copy .web-hero-name { font-size: 14px; margin-top: 14px; }
   .web-entry h1 { font-size: clamp(33px, 7.7vw, 50px); margin-top: 14px; line-height: 1.2; }
-  .web-entry .deck-bullets { font-size: 12px; line-height: 1.8; }
+  .web-entry .deck-bullets { font-size: 14px; line-height: 1.8; }
   .web-entry .web-rule { margin-block: 19px; }
   .web-entry-actions { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 8px; margin-top: 22px; }
-  .web-entry-actions .web-entry-button { padding: 12px 10px; gap: 8px; font-size: 11px; white-space: nowrap; }
+  .web-entry-actions .web-entry-button { padding: 12px 10px; gap: 8px; font-size: 14px; white-space: nowrap; }
   .web-hub { padding-block: 26px; }
   .web-project-choices { grid-template-columns: 1fr; gap: 10px; }
   .web-project-choice { grid-template-columns: 22px minmax(0, 1fr) 17px; min-height: 104px; padding: 16px; gap: 12px; }
   .web-choice-number { font-size: 15px; }
-  .web-project-choice small { font-size: 8px; margin-bottom: 7px; }
+  .web-project-choice small { font-size: 14px; margin-bottom: 7px; }
   .web-project-choice h2 { font-size: 16px; }
-  .web-project-choice p { font-size: 9px; margin-top: 8px; }
+  .web-project-choice p { font-size: 14px; margin-top: 8px; }
   .web-choice-arrow { font-size: 19px; }
   .web-background-page .web-about { padding-block: 26px; }
   .web-project-tabs { margin-block: 20px; }
-  .web-project-tabs a { font-size: 11px; padding-inline: 12px; }
+  .web-project-tabs a { font-size: 14px; padding-inline: 12px; }
   .web-content-panel .web-project-hero { gap: 24px; }
   .web-footer { padding-block: 13px; }
 }
 @media (max-height: 650px) and (max-width: 767px) {
   .web-entry { padding-block: 18px; }
   .web-entry h1 { font-size: 31px; }
-  .web-entry .deck-bullets { font-size: 11px; line-height: 1.65; }
+  .web-entry .deck-bullets { font-size: 14px; line-height: 1.65; }
   .web-entry .deck-bullets li + li { margin-top: 5px; }
   .web-entry .web-rule { margin-block: 14px; }
   .web-entry-actions { margin-top: 17px; }

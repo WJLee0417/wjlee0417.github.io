@@ -9,6 +9,7 @@ import './web-motion.css';
 import './web-navigation.css';
 import './project-visuals.css';
 import './background-skills.css';
+import './typography.css';
 
 document.documentElement.lang = data.meta.locale.slice(0, 2);
 createRoot(document.getElementById('root')!).render(<React.StrictMode><HashRouter><PortfolioRoutes/></HashRouter></React.StrictMode>);

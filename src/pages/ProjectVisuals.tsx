@@ -2,7 +2,7 @@ import { useEffect, useId, useRef, useState } from 'react';
 import { type ErdVisualization, type FlowVisualization, type Project, type SchemaTable } from '../data';
 import { Bullets } from './Deck';
 
-const NODE_WIDTH=370,ROW=25,HEAD=60,GAP=92;
+const NODE_WIDTH=460,ROW=50,HEAD=72,GAP=96;
 const tableName=(table:SchemaTable)=>table.displayName??table.name;
 const tableOption=(table:SchemaTable)=>[...new Set([tableName(table),table.label])].join(' · ');
 const columnName=(table:SchemaTable,name:string)=>table.columns.find(column=>column.name===name)?.displayName??name;
@@ -33,13 +33,13 @@ function ErdWorkspace({model, expanded=false, initial, onExpand}: {model: ErdVis
   const currentSelection=useRef(selected);currentSelection.current=selected;
   const layout=schemaLayout(model,view,all);
   const table=model.tables.find(table=>table.name===selected)!;
-  const fit=()=>{const width=viewport.current?.clientWidth ?? layout.width;setZoom(Math.min(1,width/layout.width));};
+  const resetZoom=()=>setZoom(1);
   useEffect(()=>{
     const element=viewport.current;if(!element)return;let previous=-1,frame=0;
     const resize=()=>{
       const width=element.clientWidth;if(!width || width===previous)return;previous=width;
-      const next=width<900?1:Math.max(.8,Math.min(1,width/layout.width));setZoom(next);
-      cancelAnimationFrame(frame);frame=requestAnimationFrame(()=>{const focus=layout.nodes.find(node=>node.table.name===currentSelection.current)!;element.scrollTo({left:width<900?Math.max(0,focus.x*next-20):0,top:width<900?Math.max(0,focus.y*next-20):0});});
+      setZoom(1);
+      cancelAnimationFrame(frame);frame=requestAnimationFrame(()=>{const focus=layout.nodes.find(node=>node.table.name===currentSelection.current)!;element.scrollTo({left:layout.width>width?Math.max(0,focus.x-20):0,top:Math.max(0,focus.y-20)});});
     };
     resize();const observer=new ResizeObserver(resize);observer.observe(element);
     return()=>{observer.disconnect();cancelAnimationFrame(frame);};
@@ -50,7 +50,7 @@ function ErdWorkspace({model, expanded=false, initial, onExpand}: {model: ErdVis
   return <div className="erd-workspace">
     <div className="visual-options" role="group" aria-label="ERD 영역">{model.views.map((item,index)=><button type="button" key={item.id} aria-pressed={view===index} onClick={()=>changeView(index)}>{item.label}</button>)}</div>
     <div className="erd-mobile-tools"><button type="button" aria-expanded={settings} aria-controls={`erd-settings-${marker}`} onClick={()=>setSettings(!settings)}>보기 설정 {settings?'−':'+'}</button>{onExpand && <button type="button" onClick={()=>onExpand({view,all,selected})}>크게 보기 ↗</button>}</div>
-    <div className="erd-toolbar" id={`erd-settings-${marker}`} data-open={settings}><div><span><b>PK</b> 기본키</span><span><b>FK</b> 외래키</span><span>0..N 여러 행</span></div><div><button type="button" onClick={()=>setZoom(Math.max(.35,zoom-.15))} aria-label="ERD 축소">−</button><output aria-label="ERD 배율">{Math.round(zoom*100)}%</output><button type="button" onClick={()=>setZoom(Math.min(2,zoom+.15))} aria-label="ERD 확대">+</button><button type="button" onClick={fit}>화면 맞춤</button><button type="button" aria-pressed={all} onClick={()=>setAll(!all)}>{all?'키 중심':'전체 컬럼'}</button>{onExpand && <button className="erd-desktop-expand" type="button" onClick={()=>onExpand({view,all,selected})}>크게 보기 ↗</button>}</div></div>
+    <div className="erd-toolbar" id={`erd-settings-${marker}`} data-open={settings}><div><span><b>PK</b> 기본키</span><span><b>FK</b> 외래키</span><span>0..N 여러 행</span></div><div><button type="button" disabled={zoom<=1} onClick={()=>setZoom(Math.max(1,zoom-.15))} aria-label="ERD 축소">−</button><output aria-label="ERD 배율">{Math.round(zoom*100)}%</output><button type="button" onClick={()=>setZoom(Math.min(2,zoom+.15))} aria-label="ERD 확대">+</button><button type="button" onClick={resetZoom}>기본 배율</button><button type="button" aria-pressed={all} onClick={()=>setAll(!all)}>{all?'키 중심':'전체 컬럼'}</button>{onExpand && <button className="erd-desktop-expand" type="button" onClick={()=>onExpand({view,all,selected})}>크게 보기 ↗</button>}</div></div>
     <label className="erd-table-picker">테이블 선택 <select value={selected} onChange={event=>{setSelected(event.target.value);const node=nodeMap.get(event.target.value)!;viewport.current?.scrollTo({left:Math.max(0,node.x*zoom-20),top:Math.max(0,node.y*zoom-20),behavior:'instant'});}}>{layout.nodes.map(node=><option key={node.table.name} value={node.table.name}>{tableOption(node.table)}</option>)}</select></label>
     <p className="visual-hint">테이블을 선택하면 전체 컬럼·키·연결 관계 표시</p>
     <div className="erd-viewport" ref={viewport} tabIndex={0} role="region" aria-label="확대·가로 이동 가능한 ERD">
@@ -71,10 +71,10 @@ function ErdWorkspace({model, expanded=false, initial, onExpand}: {model: ErdVis
         }))}
         {layout.nodes.map(node=><g key={node.table.name} transform={`translate(${node.x},${node.y})`} className={`erd-entity ${selected===node.table.name?'is-selected':''}`} role="button" tabIndex={0} aria-pressed={selected===node.table.name} aria-label={`${tableOption(node.table)} 테이블 선택`} onClick={()=>setSelected(node.table.name)} onKeyDown={event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();setSelected(node.table.name);}}}>
           <rect width={NODE_WIDTH} height={node.height} className="erd-entity-body"/><rect width={NODE_WIDTH} height={HEAD-8} className="erd-entity-head"/>
-          <text x={14} y={22} className="erd-table-name">{tableName(node.table)}</text><text x={14} y={40} className="erd-table-label erd-head-label">{node.table.label===tableName(node.table)?`${node.table.columns.length} columns`:node.table.label}</text>
+          <text x={14} y={25} className="erd-table-name">{tableName(node.table)}</text><text x={14} y={49} className="erd-table-label erd-head-label">{node.table.label===tableName(node.table)?`${node.table.columns.length} columns`:node.table.label}</text>
           {node.columns.map((column,index)=>{
             const pk=node.table.primaryKey.includes(column.name),fk=node.table.foreignKeys.some(key=>key.columns.includes(column.name));
-            return <g key={column.name} transform={`translate(0,${HEAD+index*ROW})`}><text x={12} y={13} className="erd-key">{pk&&fk?'PK·FK':pk?'PK':fk?'FK':''}</text><text x={57} y={13} className="erd-column">{column.displayName??column.name}</text><text x={NODE_WIDTH-12} y={13} textAnchor="end" className="erd-type">{column.type}</text></g>;
+            return <g key={column.name} transform={`translate(0,${HEAD+index*ROW})`}><text x={12} y={17} className="erd-key">{pk&&fk?'PK·FK':pk?'PK':fk?'FK':''}</text><text x={74} y={17} className="erd-column">{column.displayName??column.name}</text><text x={74} y={38} className="erd-type">{column.type}</text></g>;
           })}
           <text x={14} y={node.height-10} className="erd-table-label">{all?'전체 컬럼':`${node.columns.length} / ${node.table.columns.length} 컬럼 · 선택하여 상세 보기`}</text>
         </g>)}
@@ -118,7 +118,7 @@ function RoutingComparison({project}: {project: Project}) {
   return <><div className="visual-options" role="group" aria-label="경로 최적화 입력 선택">{ids.map((id,index)=><button type="button" key={id} aria-pressed={selected===index} onClick={()=>setSelected(index)}>소규모 입력 {index+1}</button>)}</div>
     <div className="routing-scope">추가 검증 2026.11 · 입력별 5개 시드 · 승객 7명 · 차량 2대 · 용량 5 · 허용 도보거리 30</div>
     <div className="routing-chart" role="img" aria-label={rows.map(row=>`${row.phase}: 배정 ${row.servedPassengers}/${row.totalPassengers}명, 미배정 ${row.unassignedPassengers}명, 비용 ${row.cost??'완료해 없음'}`).join(' / ')}>{rows.map(row=><div className="routing-chart-row" key={`${row.variant}-${row.stage}`}><div><h3>{row.phase}</h3><p>미배정 {row.unassignedPassengers}명</p></div><div className="passenger-chart">{Array.from({length:row.totalPassengers},(_,index)=><span className={index<row.servedPassengers?'is-served':''} key={index} aria-hidden="true"><svg viewBox="0 0 20 32"><circle cx="10" cy="6" r="4"/><path d="M4 14 Q10 10 16 14 L16 23 L13 23 L13 31 L7 31 L7 23 L4 23Z"/></svg></span>)}<strong>{row.servedPassengers}/{row.totalPassengers}<small>명 배정</small></strong></div><div className="routing-cost"><small>비용</small><strong>{row.cost??'—'}</strong><p>{row.cost===null?'완료해 없음':'입력 비용 단위'}</p></div></div>)}</div>
-    <div className="routing-interpretation"><Bullets text={comparison.interpretation}/></div><figure className="routing-time-window"><h3>시간창 판정 예시 · 소규모 입력 1</h3><img src={`${import.meta.env.BASE_URL}${comparison.figurePath}`} alt={comparison.figureAlt}/><figcaption>도착 시각을 시간창과 비교한 뒤 하차 처리 시간을 다음 운행에 반영</figcaption></figure>
+    <div className="routing-interpretation"><Bullets text={comparison.interpretation}/></div><figure className="routing-time-window"><h3>시간창 판정 예시 · 소규모 입력 1</h3><div className="diagram-image-scroll" tabIndex={0} role="region" aria-label="시간창 비교 도식 가로 이동"><img src={`${import.meta.env.BASE_URL}${comparison.figurePath}`} alt={comparison.figureAlt}/></div><figcaption>도착 시각을 시간창과 비교한 뒤 하차 처리 시간을 다음 운행에 반영</figcaption></figure>
   </>;
 }
 

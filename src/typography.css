@@ -1,0 +1,57 @@
+/* Site-wide reading sizes: 16px body, 14px minimum supporting text. */
+.web-shell { font-size: 16px; --muted: #625e55; }
+.web-shell .deck-bullets { font-size: 16px; line-height: 1.85; }
+.web-shell .deck-result, .web-shell .deck-work-details .deck-bullets,
+.web-shell .deck-work-details .deck-problem .deck-bullets { font-size: 16px; }
+.web-shell .diagram-topline, .web-shell .diagram-node small,
+.web-shell .diagram-fork small, .web-shell .deck-stage-list > div > span,
+.web-shell .deck-state-options button, .web-shell .deck-state-output > small,
+.web-shell .mapping-pair small, .web-shell .relation-entities span,
+.web-shell .relation-lines > div, .web-shell .relation-lines code,
+.web-shell .deck-diagram figcaption, .web-shell .deck-stage-list > div,
+.web-shell .diagram-count span { font-size: 14px; }
+.web-shell .deck-work-details > div { grid-template-columns: 40px minmax(0, 1fr); gap: 12px; }
+.web-shell .deck-work-details b { font-size: 14px; line-height: 1.8; padding-top: 0; }
+.web-shell .diagram-node { overflow-wrap: anywhere; }
+.web-shell .diagram-fork strong { font-size: 16px; }
+.web-project-facts > div { grid-template-columns: 85px minmax(0, 1fr); }
+.web-project-facts dd, .background-timeline p, .background-certificates li { font-size: 16px; }
+.web-shell .deck-code-links a, .project-links a, .visual-source-links { font-size: 14px; line-height: 1.8; }
+.web-entry .deck-bullets { font-size: 16px; }
+.web-entry-actions .web-entry-button { font-size: 16px; }
+.web-entry-copy .web-hero-name { font-size: 16px; }
+.web-header-contact { gap: 4px; }
+.web-brand { white-space: nowrap; }
+.skill-card h2 { margin-top: 0; }
+.skill-technologies { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.skill-technologies .skill-level { line-height: 1.6; padding: 3px 8px; }
+.skill-selector { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.skill-selector button { overflow-wrap: anywhere; }
+.erd-table-name { font-size: 18px; }
+.erd-column { font-size: 16px; }
+.erd-edge text, .erd-key, .erd-type, .erd-table-label { font-size: 14px; }
+.report-flow-svg { min-width: 1130px; }
+.flow-node .flow-node-detail { font-size: 14px; }
+.diagram-image-scroll { max-width: 100%; overflow: auto; overscroll-behavior-x: contain; }
+.web-experiment figure img, .routing-time-window img { min-width: 960px; }
+.web-footer > .web-wrap { flex-wrap: wrap; gap: 12px 20px; }
+@media (max-width: 1000px) {
+  .web-header-inner { height: auto; min-height: 100px; gap: 16px 22px; padding-block: 14px; }
+  .web-header-contact { grid-column: 1 / -1; flex-direction: row; flex-wrap: wrap; gap: 8px 24px; }
+}
+@media (max-width: 767px) {
+  .web-header-inner { grid-template-columns: minmax(0, 1fr) auto; min-height: 104px; gap: 8px 12px; }
+  .web-header nav { gap: 12px; }
+  .web-header-contact { justify-content: flex-start; gap: 6px 20px; }
+  .web-header-contact a { min-height: 30px; max-width: 100%; overflow-wrap: anywhere; }
+  .web-entry-actions { grid-template-columns: 1fr; gap: 12px; }
+  .web-entry-actions .web-entry-button { white-space: normal; justify-content: space-between; }
+  .web-project-choice { grid-template-columns: 24px minmax(0,1fr) 18px; }
+  .web-project-choice h2 { font-size: 20px; }
+  .web-project-choice small { letter-spacing: .025em; }
+  .web-project-tabs a { white-space: normal; max-width: min(290px, 80vw); }
+  .erd-inspector-heading h3, .erd-key-summary { overflow-wrap: anywhere; }
+  .erd-table-picker { flex-wrap: wrap; }
+  .erd-table-picker select { width: 100%; flex-basis: 100%; }
+  .flow-outcome dl { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}

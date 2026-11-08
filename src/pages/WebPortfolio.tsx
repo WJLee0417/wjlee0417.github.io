@@ -42,14 +42,14 @@ function ExperimentComparison({project}: {project: Project}) {
     <Bullets text={result.change}/>
     <div className="comparison-scroll" role="region" aria-label="시간창 검사 변경 전후 배정 결과" tabIndex={0}><table><caption>소규모 2입력 · 입력별 5개 시드 · 추가 검증 2026.11<br/>비용: 도착 기준 검사의 초기해 / 5,000회 탐색 후</caption><thead><tr><th>검증 입력</th><th>미배정 승객</th><th>최종 배정</th><th>초기 / 탐색 후 비용</th></tr></thead><tbody>{cases.map(({before,initial,after})=><tr key={after.caseId}><th scope="row">{after.label}</th><td>{before.unassignedPassengers}→{after.unassignedPassengers}명</td><td>{after.servedPassengers}/{after.totalPassengers}명</td><td>{initial.cost?.toLocaleString('ko-KR')} / {after.cost?.toLocaleString('ko-KR')}</td></tr>)}</tbody></table></div>
     <Bullets text={result.interpretation}/>
-    <details className="comparison-details"><summary>검증 조건과 도식</summary><Bullets text={result.setup}/><figure><img src={asset(result.figurePath)} alt={result.figureAlt} loading="lazy"/><figcaption>도착 시각을 시간창과 비교하고, 서비스 시간은 이후 운행 시간에 반영</figcaption></figure><p className="comparison-scope">{result.scope.split('\n').join(' · ')}</p><a className="comparison-download" href={asset(result.artifactPath)} target="_blank" rel="noreferrer">시드별 수치·검증 조건 ↗</a></details>
+    <details className="comparison-details"><summary>검증 조건과 도식</summary><Bullets text={result.setup}/><figure><div className="diagram-image-scroll" tabIndex={0} role="region" aria-label="시간창 비교 도식 가로 이동"><img src={asset(result.figurePath)} alt={result.figureAlt} loading="lazy"/></div><figcaption>도착 시각을 시간창과 비교하고, 서비스 시간은 이후 운행 시간에 반영</figcaption></figure><p className="comparison-scope">{result.scope.split('\n').join(' · ')}</p><a className="comparison-download" href={asset(result.artifactPath)} target="_blank" rel="noreferrer">시드별 수치·검증 조건 ↗</a></details>
   </section>;
 }
 
 function SiteHeader() {
   const location=useLocation();
   return <header className="web-header"><div className="web-wrap web-header-inner">
-    <Link className="web-brand" to="/">LEE WONJUN<span>PORTFOLIO</span></Link>
+    <Link className="web-brand" to="/">LEE WONJUN</Link>
     <nav aria-label="주 메뉴"><Link to="/background" aria-current={location.pathname==='/background'?'page':undefined}>배경·기술</Link><Link to="/projects" aria-current={location.pathname.startsWith('/projects')?'page':undefined}>프로젝트</Link></nav>
     <div className="web-header-contact" id="contact" role="group" aria-label="연락처"><a href={`mailto:${data.profile.contact.email}`}>{data.profile.contact.email}</a>{data.profile.contact.githubUrl && <a href={data.profile.contact.githubUrl} target="_blank" rel="noreferrer" aria-label="GitHub 프로필 · WJLee0417">GitHub · WJLee0417 ↗</a>}</div>
   </div></header>;
@@ -65,7 +65,7 @@ export function WebLayout() {
     if(!new URLSearchParams(location.search).has('section'))window.scrollTo({top:0,behavior:'instant'});
     if(location.hash==='#contact')document.querySelector<HTMLAnchorElement>('.web-header-contact a')?.focus({preventScroll:true});
   },[location.pathname,location.search,location.hash,location.key]);
-  return <div className="web-shell" ref={root}><SiteHeader/><div className="web-page" key={location.pathname}><Outlet/></div><footer className="web-footer"><div className="web-wrap"><span>© {data.meta.lastUpdated.slice(0,4)} {data.profile.nameEn}</span><span>{data.profile.eyebrow}</span><Link to="/">Home ↗</Link></div></footer></div>;
+  return <div className="web-shell" ref={root}><SiteHeader/><div className="web-page" key={location.pathname}><Outlet/></div><footer className="web-footer"><div className="web-wrap"><span>© {data.meta.lastUpdated.slice(0,4)} {data.profile.nameEn}</span><Link to="/">Home ↗</Link></div></footer></div>;
 }
 
 export function WebHome() {
@@ -105,13 +105,13 @@ export function WebBackground() {
             const target=event.key==='ArrowRight'?index+1:event.key==='ArrowLeft'?index-1:event.key==='Home'?0:event.key==='End'?areas.length-1:null;
             if(target!==null){event.preventDefault();chooseArea(target);}
           }}>{area.label}</button>)}</div>
-          <div className="skill-cards">{areas.map((area,index)=><article className="skill-card" id={`skill-panel-${area.id}`} data-active={selected===area.id} aria-labelledby={`skill-title-${area.id}`} key={area.id}>
-            <div className="skill-card-heading"><span className="skill-number" aria-hidden="true">{slideNumber(index)}</span><h2 id={`skill-title-${area.id}`}>{area.title}</h2></div>
+          <div className="skill-cards">{areas.map(area=><article className="skill-card" id={`skill-panel-${area.id}`} data-active={selected===area.id} aria-labelledby={`skill-title-${area.id}`} key={area.id}>
+            <div className="skill-card-heading"><h2 id={`skill-title-${area.id}`}>{area.title}</h2></div>
             <ul className="skill-technologies" aria-label={`${area.label} 기술 스택`}>{area.technologyIds.map(id=>{
               const tech=data.dimensions.technologies.find(tech=>tech.id===id)!;
               const assessment=proficiency.assessments.find(item=>item.technologyId===id)!;
               const level=proficiency.levels.find(level=>level.id===assessment.levelId)!;
-              return <li key={id}><strong>{tech.label}</strong><span>{tech.category}</span><span className="skill-level" data-level={level.id}>{level.label}</span></li>;
+              return <li key={id}><strong>{tech.label}</strong><span className="skill-level" data-level={level.id}>{level.label}</span></li>;
             })}</ul>
           </article>)}</div>
         </div>

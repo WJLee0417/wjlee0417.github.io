@@ -1,19 +1,19 @@
 .background-layout { display: grid; grid-template-columns: 250px minmax(0, 1fr); gap: 54px; align-items: start; }
 .background-history { padding-top: 7px; }
-.background-history h2 { margin: 0 0 26px; color: var(--muted); font-size: 11px; letter-spacing: .08em; font-weight: 600; }
+.background-history h2 { margin: 0 0 26px; color: var(--muted); font-size: 14px; letter-spacing: .08em; font-weight: 600; }
 .background-timeline { margin: 0 0 38px 5px; padding: 0; list-style: none; border-left: 1px solid var(--line); }
 .background-timeline li { position: relative; padding: 0 0 33px 23px; }
 .background-timeline li:last-child { padding-bottom: 0; }
 .background-timeline li::before { content: ''; position: absolute; top: 4px; left: -4px; width: 7px; height: 7px; border-radius: 50%; background: var(--cobalt); outline: 5px solid var(--paper); }
-.background-timeline span { color: var(--cobalt); font-size: 9px; letter-spacing: .12em; }
+.background-timeline span { color: var(--cobalt); font-size: 14px; letter-spacing: .12em; }
 .background-timeline h3 { color: var(--ink); font-size: 16px; line-height: 1.6; margin: 10px 0 7px; word-break: keep-all; overflow-wrap: anywhere; }
-.background-timeline p { color: var(--muted); font-size: 13px; line-height: 1.8; margin: 0; word-break: keep-all; }
+.background-timeline p { color: var(--muted); font-size: 14px; line-height: 1.8; margin: 0; word-break: keep-all; }
 .background-certificates { padding-top: 23px; border-top: 1px solid var(--line); }
 .background-certificates h2 { margin-bottom: 15px; }
 .background-certificates ul { display: flex; flex-wrap: wrap; list-style: none; padding: 0; margin: 0; gap: 7px; }
-.background-certificates li { font-size: 13px; padding: 7px 12px; border: 1px solid var(--line); }
+.background-certificates li { font-size: 14px; padding: 7px 12px; border: 1px solid var(--line); }
 .skill-selector { display: none; }
-.skill-level-guide { margin-bottom: 16px; font-size: 11px; color: var(--muted); }
+.skill-level-guide { margin-bottom: 16px; font-size: 14px; color: var(--muted); }
 .skill-level-guide summary { width: fit-content; cursor: pointer; line-height: 1.8; }
 .skill-level-guide summary:focus-visible { outline: 2px solid var(--cobalt); outline-offset: 4px; }
 .skill-level-guide[open] { padding-bottom: 16px; border-bottom: 1px solid var(--line); }
@@ -23,13 +23,13 @@
 .skill-level-guide dd { line-height: 1.7; }
 .skill-cards { display: grid; gap: 16px; }
 .skill-card { display: grid; grid-template-columns: 180px minmax(0, 1fr); gap: 28px; padding: 26px; border: 1px solid var(--line); background: #fff; }
-.skill-number { color: var(--cobalt); font-size: 11px; font-weight: 600; }
+.skill-number { color: var(--cobalt); font-size: 14px; font-weight: 600; }
 .skill-card h2 { font-size: 19px; line-height: 1.4; margin: 9px 0 16px; letter-spacing: -.035em; }
 .skill-technologies { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px 14px; list-style: none; padding: 0; margin: 0; }
 .skill-technologies li { border-left: 2px solid var(--sand); padding: 3px 0 3px 12px; min-width: 0; }
 .skill-technologies strong { display: block; font-size: 18px; font-weight: 600; line-height: 1.4; word-break: normal; overflow-wrap: anywhere; letter-spacing: -.025em; }
-.skill-technologies span { display: block; margin-top: 6px; font-size: 10px; line-height: 1.5; color: var(--muted); }
-.skill-technologies .skill-level { display: inline-block; padding: 3px 7px; margin-top: 10px; color: #57554e; background: var(--paper); font-size: 10px; }
+.skill-technologies span { display: block; margin-top: 6px; font-size: 14px; line-height: 1.5; color: var(--muted); }
+.skill-technologies .skill-level { display: inline-block; padding: 3px 7px; margin-top: 10px; color: #57554e; background: var(--paper); font-size: 14px; }
 .skill-technologies .skill-level[data-level=design] { color: #1734c8; background: #eef0fd; }
 .skill-technologies .skill-level[data-level=implementation] { color: #343844; background: #eff0f3; }
 .skill-selector button:focus-visible { outline: 2px solid var(--cobalt); outline-offset: 4px; }
@@ -42,7 +42,7 @@
   .background-layout { display: flex; flex-direction: column; gap: 35px; }
   .background-skills { order: -1; width: 100%; min-width: 0; }
   .skill-selector { display: grid; grid-template-columns: 1fr 1fr 1.25fr; gap: 6px; margin-bottom: 15px; }
-  .skill-selector button { min-width: 0; min-height: 42px; padding: 10px 4px; border: 1px solid var(--line); background: transparent; font: inherit; font-size: 11px; cursor: pointer; transition: background .2s, color .2s; }
+  .skill-selector button { min-width: 0; min-height: 42px; padding: 10px 4px; border: 1px solid var(--line); background: transparent; font: inherit; font-size: 14px; cursor: pointer; transition: background .2s, color .2s; }
   .skill-selector button[aria-pressed=true] { background: var(--cobalt); border-color: var(--cobalt); color: #fff; }
   .skill-card { display: none; padding: 23px 20px; }
   .skill-card[data-active=true] { display: grid; animation: skill-enter .28s ease both; }
