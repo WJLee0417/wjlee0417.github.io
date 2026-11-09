@@ -255,9 +255,9 @@
         "teamSize": 4,
         "contributionPercent": 25,
         "role": "업종 코드 통합·MySQL 설계·SQL·Python 연동",
-        "summary": "서울시·공정위 업종 분류를 공통 코드로 연결\n상권별 매출 JOIN·Python–MySQL 연동 구현\n원천·차원·지표로 분리한 49개 테이블 분석 모델",
-        "problemSummary": "기관별 업종 분류·식별 단위 차이\n상권·업종별 조회와 기간·버전별 분석 기준 분리 필요",
-        "outcomeSummary": "초기 조회 DB: 업종 매핑·7개 테이블 DDL·SQL 조회\n확장 분석 모델: SRC 21 · DIM 10 · FACT 18\n기준기간·관측기간·상권 버전·공시 버전 구분",
+        "summary": "서울시 상권 지표와 공정위 프랜차이즈 정보를 연결하는 조회 DB\n업종 코드 매핑·브랜드별 상권 매출 JOIN·Python 연동 구현\n원천·기준정보·집계 지표를 분리한 분석 모델 설계\n기준·관측기간과 상권·공시 버전을 구분해 분석 기준 정의",
+        "problemSummary": "기관별 업종 코드·데이터 식별 기준 차이\n상권·업종 지표의 기간·버전과 프랜차이즈 공시 기준 구분 필요",
+        "outcomeSummary": "초기 조회 DB: 업종 매핑·7개 테이블 DDL·상권 매출 JOIN\n확장 분석 모델: 원천·차원·지표의 역할 분리\n기준·관측기간과 상권·공시 버전별 식별 기준 정의",
         "cardLabel": "업종 코드 통합 · 조회 DB · 분석 모델 설계",
         "cardLabelKind": "DESIGN",
         "featuredContributionIds": [
@@ -6596,11 +6596,11 @@
         "kind": "팀 프로젝트 · 대여 이력 관리 서비스",
         "teamSize": null,
         "contributionPercent": 17,
-        "role": "대여 업무 흐름·계약별 이력 모델 설계, 상태 기록·검수 정책 구현",
-        "summary": "상품·계약 분리와 단계별 대여 API\n확정 상태 기록 보존·차수 관리·검수 기준 고정\n기존 이력 매핑·이전과 반응형 웹 구현",
-        "problemSummary": "반복 대여 시 계약별 상태 기록 혼재\n상태 정정 이후에도 검수 기준 보존 필요",
-        "outcomeSummary": "계약별 인수·반납 기록과 손상 판정 연결\n확정 기록의 새 차수 생성·검수 기준 고정\n원본→대상 ID 매핑과 사전 점검 후 이력 이전",
-        "cardLabel": "기록 차수 · 검수 기준 고정 · 이력 이전",
+        "role": "계약 중심 데이터 모델·상태 기록·반납 검수 구현",
+        "summary": "대여 계약별 인수·반납 상태와 손상 판정을 관리하는 서비스\n상품·계약을 분리해 반복 대여 이력을 계약 단위로 관리\n확정 기록 보존·새 차수 생성·검수 기준 고정 구현\n인수·반납 기록의 사진·손상 관찰을 연결해 반납 검수",
+        "problemSummary": "같은 상품의 반복 대여에서 계약별 상태 이력 구분 필요\n상태 기록을 정정해도 반납 검수의 비교 기준 유지 필요",
+        "outcomeSummary": "상품·계약 분리로 반복 대여를 계약별로 관리\n인수·반납 기록의 확정 차수 보존과 새 차수 생성\n확정 기록 두 개로 비교 기준 고정·손상 판정 연결",
+        "cardLabel": "계약별 이력 · 기록 차수 · 반납 검수",
         "cardLabelKind": "IMPLEMENTATION",
         "featuredContributionIds": [
           "FC022",
@@ -9731,7 +9731,7 @@
         {
           "id": "overview",
           "title": "작업 개요",
-          "body": "업종 코드 통합·상권 조회 DB 구축·원천/차원/지표 분석 모델"
+          "body": "기관별 업종 코드 통합·상권 조회 DB 구축·기간과 버전을 구분한 분석 모델"
         },
         {
           "id": "data-preparation",
@@ -9836,7 +9836,7 @@
         {
           "id": "overview",
           "title": "작업 개요",
-          "body": "계약별 상태 이력·기록 차수 보존·반납 검수와 이력 이전"
+          "body": "반복 대여의 계약별 상태 기록·확정 차수 보존·비교 기준을 고정한 반납 검수"
         },
         {
           "id": "business-process",
@@ -9891,16 +9891,16 @@
       "id": "D002",
       "projectId": "P001",
       "sectionAnchor": "database-modeling",
-      "title": "SOURCE · DIMENSION · FACT",
+      "title": "상권·브랜드 분석을 위한 계층 분리",
       "type": "MODEL_LAYERS",
       "sourceClassification": "USER_PROVIDED_MODEL",
       "disclosure": "제공된 DA# 분석 모델의 테이블 역할을 요약한 도식",
-      "description": "원천 값 보존, 분석 기준정보, 집계 지표를 나눈 모델 구조",
-      "caption": "원천·차원·지표로 역할을 나눈 49개 테이블 분석 모델",
+      "description": "기관별 원천 값과 분석 기준, 집계 지표를 나눈 모델 구조",
+      "caption": "원문 보관·분석 기준·집계 지표를 구분한 49개 테이블 모델",
       "stages": [
-        "SRC · 21개 — 배치·문서·원문 값",
-        "DIM · 10개 — 상권·업종·기간·브랜드",
-        "FACT · 18개 — 매출·점포·인구·비용"
+        "SRC · 21개 — 수집 문서·원문 값 보관",
+        "DIM · 10개 — 상권·업종·기간·브랜드 식별",
+        "FACT · 18개 — 매출·점포·인구·재무·비용 지표"
       ]
     },
     {
@@ -10093,52 +10093,18 @@
       "id": "D011",
       "projectId": "P004",
       "sectionAnchor": "data-model",
-      "title": "Contract ERD Explorer",
-      "type": "CONCEPTUAL_ERD",
+      "title": "CONTRACT · RECORD · INSPECTION",
+      "type": "RENTAL_OVERVIEW",
       "sourceClassification": "SOURCE_STRUCTURE",
-      "disclosure": "제공 ERD 기반 V11 스키마의 주요 관계 요약",
-      "entities": [
-        "RENTAL_ITEM",
-        "RENTAL_CONTRACT",
-        "CONDITION_RECORD",
-        "CONDITION_PHOTO",
-        "DAMAGE_OBSERVATION",
-        "RETURN_INSPECTION"
-      ],
-      "description": "상품↔계약 1:N, 계약↔상태기록, 상태기록↔사진·손상, 계약↔검수",
-      "relationships": [
-        [
-          "RENTAL_ITEM",
-          "RENTAL_CONTRACT",
-          "상품별 계약"
-        ],
-        [
-          "RENTAL_CONTRACT",
-          "CONDITION_RECORD",
-          "인수·반납 / 차수"
-        ],
-        [
-          "CONDITION_RECORD",
-          "CONDITION_PHOTO",
-          "차수별 사진"
-        ],
-        [
-          "CONDITION_RECORD",
-          "DAMAGE_OBSERVATION",
-          "손상 관찰"
-        ],
-        [
-          "RENTAL_CONTRACT",
-          "RETURN_INSPECTION",
-          "계약별 검수"
-        ],
-        [
-          "RETURN_INSPECTION",
-          "CONDITION_RECORD",
-          "인수·반납 기준 고정"
-        ]
-      ],
-      "caption": "상품·계약 분리와 기록 차수·검수 기준의 관계"
+      "disclosure": "제공 ERD와 구현 스키마·업무 로직에 기반한 개요 도식",
+      "description": "계약 중심 상태 기록과 고정된 인수·반납 기록을 참조하는 검수·손상 판정 흐름",
+      "caption": "상품·계약 분리 → 인수·반납 기록 보존 → 검수 기준 고정 → 손상 판정",
+      "stages": [
+        "대여 계약 — 상품·회원·계약별 이용 이력",
+        "상태 기록 — 인수·반납 차수·사진·손상 관찰",
+        "반납 검수 — 선택한 확정 기록으로 비교 기준 고정",
+        "손상 판정 — 인수·반납 손상과 판정 결과 연결"
+      ]
     },
     {
       "id": "D012",
@@ -10505,7 +10471,7 @@
       {
         "id": "commercial",
         "type": "overview",
-        "title": "업종 코드 통합에서 분석 모델까지",
+        "title": "업종·기간 기준을 연결한 상권 분석 DB",
         "chapter": "COMMERCIAL DISTRICT DB",
         "eyebrow": "02 / DATA INTEGRATION",
         "projectId": "P001",
@@ -10603,7 +10569,7 @@
       {
         "id": "rental",
         "type": "overview",
-        "title": "반복 대여를 계약별 이력으로",
+        "title": "계약별 상태 기록으로 반납을 검수",
         "chapter": "RENTALTRACK",
         "eyebrow": "04 / RENTAL WORKFLOW",
         "projectId": "P004",
