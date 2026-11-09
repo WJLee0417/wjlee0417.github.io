@@ -121,6 +121,9 @@ try {
         for(const name of model.views[0].lanes.flat()){const table=model.tables.find(table=>table.name===name);assert.ok(visualPage.includes(`data-erd-table="${escape(name)}"`) && visualPage.includes(`<strong>${escape(table.displayName??name)}</strong>`),`default ERD table label lost ${name}`);}
         assert.ok(visualPage.includes('data-key="FK"') || visualPage.includes('data-key="PK/FK"'),'overview must show foreign keys');
         assert.ok(visualPage.includes('data-key="attribute"') && visualPage.includes('data-columns="all"'),'overview must show every column by default');
+        const viewNames=model.views[0].lanes.flat(),visibleRelations=model.tables.filter(t=>viewNames.includes(t.name)).flatMap(t=>t.foreignKeys.filter(k=>viewNames.includes(k.target)));
+        assert.equal((visualPage.match(/data-fk-relation-name=/g)??[]).length,visibleRelations.reduce((n,key)=>n+key.columns.length,0),'every displayed FK must show its relationship name');
+        assert.equal((visualPage.match(/data-relation-key=/g)??[]).length,visibleRelations.length,'relationship directory must not omit an entry');
         assert.ok(!visualPage.includes('주요 컬럼') && !visualPage.includes('일반 컬럼 3개'),'column truncation controls must not return');
         for(const name of model.views[0].lanes.flat()){
           const table=model.tables.find(table=>table.name===name);

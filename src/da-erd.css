@@ -15,10 +15,6 @@
 .da-overview-lines { position: absolute; inset: 0; z-index: -1; pointer-events: none; }
 .da-overview-lines path { fill: none; stroke: #929ca8; stroke-width: 1.4; stroke-linejoin: round; }
 .da-overview-lines g { pointer-events: stroke; }
-.da-overview-lines g:hover > path:not(.da-edge-halo) { stroke: #2457b5; stroke-width: 2.6; }
-.da-overview-lines .is-connected path { stroke: #2457b5; stroke-width: 2.2; }
-.da-overview-lines .da-edge-halo, .da-overview-lines .is-connected .da-edge-halo { stroke: #fafbfc; stroke-width: 7; }
-.erd-edge > .da-edge-halo, .erd-edge.is-connected > .da-edge-halo { stroke: #fafbfc; stroke-width: 7; }
 .da-overview-grid { display: grid; grid-template-columns: repeat(var(--erd-lanes), minmax(0, 1fr)); gap: 112px; align-items: start; }
 .da-overview-lane { display: flex; flex-direction: column; gap: 48px; min-width: 0; }
 .da-entity { display: block; position: relative; width: 100%; min-width: 0; padding: 0; text-align: left; border: 1px solid #7f8b9a; border-radius: 0; background: white; color: #17212c; box-shadow: 2px 2px 0 #c9cfd777; cursor: pointer; font-size: 14px; line-height: 1.5; }
@@ -50,7 +46,6 @@
   .da-overview-lane { gap: 40px; }
 }
 @media (max-width: 767px) {
-  .da-overview-lines .da-edge-halo, .da-overview-lines .is-connected .da-edge-halo { stroke-width: 4; }
   .erd-display-modes { gap: 8px; }
   .erd-display-modes > span { flex-basis: 100%; margin-inline: 0; line-height: 1.7; }
   .erd-display-modes .erd-overview-expand { margin-left: 0; }
@@ -71,3 +66,47 @@
 .da-overview-scroll .da-overview { min-width: 1200px; margin-top: 0; padding: 32px; }
 .da-overview-scroll .da-overview-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 112px; }
 .da-overview-scroll .da-overview-lane { display: flex; gap: 48px; }
+.da-overview-grid, .da-overview-lane { pointer-events: none; }
+.da-entity { pointer-events: auto; }
+
+/* A relation keeps its number and color in the key, FK row and connector. */
+.erd-relation-directory { margin-block: 20px; padding: 18px; background: #f7f8fa; border: 1px solid #c1cad5; }
+.erd-relation-directory > header { display: flex; align-items: center; flex-wrap: wrap; gap: 12px 20px; margin-bottom: 16px; }
+.erd-relation-directory h3 { margin: 0; font-size: 16px; }
+.erd-relation-directory h3 > span { margin-left: 8px; color: var(--muted); }
+.erd-relation-directory header p { margin: 0; font-size: 14px; }
+.erd-relation-directory header > button { padding: 8px 12px; min-height: 40px; margin-left: auto; border: 1px solid #adb8c8; background: white; font-size: 14px; }
+.erd-relation-key { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 8px; }
+.erd-relation-key > button { display: flex; align-items: flex-start; gap: 10px; padding: 10px; min-width: 0; text-align: left; background: white; border: 1px solid #d8dee6; color: #273344; }
+.erd-relation-key b { min-width: 30px; padding: 2px 4px; text-align: center; font-size: 14px; color: var(--relation-color); border: 1px solid currentColor; }
+.erd-relation-key strong { display: block; font-size: 14px; color: var(--relation-color); }
+.erd-relation-key > button > span > span { display: block; font-size: 14px; line-height: 1.6; margin-top: 4px; overflow-wrap: anywhere; }
+.erd-relation-key > button:hover, .erd-relation-key > button[aria-pressed=true] { border-color: var(--relation-color); outline: 1px solid var(--relation-color); background: #f2f5fa; }
+.erd-active-relation { margin: 14px 0 0; padding: 12px; color: var(--relation-color); border-left: 3px solid currentColor; background: white; font-size: 14px; }
+.erd-active-relation > b, .erd-active-relation > code { display: block; overflow-wrap: anywhere; font-size: 14px; }
+.erd-active-relation > code { margin-top: 6px; color: #273344; line-height: 1.7; }
+.da-column { grid-template-columns: 42px minmax(0,1fr) auto; }
+.da-reference-ids { display: flex; flex-wrap: wrap; align-self: start; gap: 4px; }
+.da-reference-ids em { min-width: 24px; text-align: center; font-style: normal; font-size: 14px; border: 1px solid currentColor; line-height: 1.4; background: white; }
+.da-field-label > small { display: block; font-size: 14px; line-height: 1.6; margin-top: 3px; }
+.da-column[data-relation-active=true] { background: #e3edff; outline: 2px solid #6384b5; outline-offset: 2px; }
+.da-overview-lines .erd-edge .erd-connection-path, .erd-edge .erd-connection-path,
+.da-overview-lines .erd-edge .erd-connection-end, .erd-edge .erd-connection-end { stroke: var(--relation-color); stroke-width: 1.8; fill: none; }
+.erd-edge { cursor: pointer; transition: opacity 120ms ease; }
+.erd-edge:focus { outline: none; }
+.erd-edge:focus-visible .erd-connection-path { stroke-dasharray: 6 3; }
+.erd-edge.is-dimmed { opacity: .16; }
+.da-overview-lines .erd-edge.is-active .erd-connection-path, .erd-edge.is-active .erd-connection-path,
+.da-overview-lines .erd-edge.is-active .erd-connection-end, .erd-edge.is-active .erd-connection-end { stroke-width: 3; }
+.da-overview-lines .erd-edge .erd-edge-hit, .erd-edge .erd-edge-hit { fill: none; stroke: transparent; stroke-width: 14; pointer-events: stroke; }
+.da-overview-lines .erd-crossing .erd-crossing-gap, .erd-crossing .erd-crossing-gap { stroke: #fafbfc; stroke-width: 6; fill: none; }
+.da-overview-lines .erd-crossing .erd-crossing-over, .erd-crossing .erd-crossing-over { stroke: var(--relation-color); stroke-width: 1.8; fill: none; }
+.erd-crossing { pointer-events: none; }
+.erd-relationship-label text { fill: var(--relation-color,#34465c); }
+@media (max-width: 767px) {
+  .erd-relation-directory { padding: 12px; }
+  .erd-relation-key { grid-template-columns: repeat(2,minmax(0,1fr)); }
+}
+@media (max-width: 480px) {
+  .erd-relation-key { grid-template-columns: minmax(0,1fr); }
+}

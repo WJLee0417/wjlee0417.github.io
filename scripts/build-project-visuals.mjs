@@ -3,6 +3,7 @@ import {execFileSync} from 'node:child_process';
 import {createHash} from 'node:crypto';
 import assert from 'node:assert/strict';
 import {parseSchema} from './schema-parser.mjs';
+import {rentalRelationshipNames,rentalModelSha256} from './rental-relationship-names.mjs';
 const file='portfolio_codex_bundle/portfolio-data.json',data=JSON.parse(readFileSync(file,'utf8'));
 const evidence=id=>data.dimensions.evidence.find(e=>e.id===id);
 const project=id=>data.dimensions.projects.find(p=>p.id===id);
@@ -17,6 +18,15 @@ const ct=damx.tables,rt=parseSchema(r.sql+'\n'+r12.sql);
 assert.equal(ct.length,49);assert.equal(rt.length,17);
 const labels={common_code_group:'공통 코드 그룹',common_code:'공통 코드',member:'회원',business:'사업자',rental_item:'대여 상품',rental_contract:'대여 계약',condition_record:'상태 기록',condition_photo:'상태 사진',damage_observation:'손상 관찰',damage_photo:'손상·사진 연결',image_analysis_result:'분석 후보 저장',return_inspection:'반납 검수',damage_assessment:'손상 판정',member_credential:'회원 인증',legacy_import_mutex:'이전 직렬화',legacy_import_run:'이전 실행',legacy_entity_map:'이전 ID 대응표'};
 rt.forEach(table=>table.label=labels[table.name]);
+const observed=JSON.parse(source('sources.local/RentalTrack',rental.revision,'docs/design/schema-observed.json').sql);
+assert.equal(observed.sha256,rentalModelSha256);
+for(const table of rt)for(const key of table.foreignKeys){
+ const item=rentalRelationshipNames[`${table.name}.${key.columns.join('+')}`];
+ assert.ok(item,`Missing relationship name: ${table.name}.${key.columns}`);
+ const [name,origin,offset]=item;
+ if(origin==='DAMX')assert.ok(observed.relationships.some(r=>r.parent.toLowerCase()===key.target&&r.child.toLowerCase()===table.name&&r.label===name&&r.offset===offset),'Relationship name differs from original model');
+ key.relationshipName=name;key.relationshipNameOrigin=origin;
+}
 const sourceTables=ct.filter(t=>t.name.startsWith('SRC_')).map(t=>t.name);
 const spread=(names,count=3)=>{const lanes=Array.from({length:count},()=>[]),heights=Array(count).fill(0);for(const name of names){const lane=heights.indexOf(Math.min(...heights));lanes[lane].push(name);heights[lane]+=ct.find(t=>t.name===name).columns.length+5;}return lanes;};
 const analysisTables=ct.filter(t=>!t.name.startsWith('SRC_')).map(t=>t.name);
@@ -31,13 +41,13 @@ project('P001').visualization={kind:'erd',title:'상권·프랜차이즈 확장 
  {id:'all',label:'전체 49개 테이블',lanes:spread([...analysisTables,...sourceTables]),focus:'DIM_AREA'},
 ]};
 project('P004').visualization={kind:'erd',title:'계약을 중심으로 연결한 대여 이력',summary:'상품과 계약을 분리한 반복 대여 모델\n계약·단계·차수의 복합 UNIQUE\n인수·반납 기록을 참조하는 검수와 손상 판정',sources:[{url:evidence('E029').url,sha256:r.sha256},{url:`${rental.repositoryUrl}/blob/${rental.revision}/${r12path}`,sha256:r12.sha256}],tables:rt,views:[
- {id:'model',label:'전체 업무 모델',lanes:[['common_code_group','common_code','member'],['business','rental_item','rental_contract'],['condition_record','condition_photo'],['return_inspection','damage_observation','damage_assessment'],['image_analysis_result','damage_photo']],focus:'rental_contract'},
+ {id:'model',label:'전체 업무 모델',lanes:[['business','rental_item','member','common_code_group','common_code'],['rental_contract','condition_record','condition_photo','image_analysis_result'],['return_inspection','damage_observation','damage_assessment','damage_photo']],focus:'rental_contract'},
  {id:'rental',label:'대여·상태 기록',lanes:[['business','member'],['rental_item','rental_contract'],['condition_record']],focus:'condition_record'},
  {id:'inspection',label:'반납·검수',lanes:[['rental_contract','condition_record'],['return_inspection','damage_observation'],['damage_assessment']],focus:'return_inspection'},
  {id:'photos',label:'사진·손상',lanes:[['condition_record'],['condition_photo','damage_observation'],['damage_photo','image_analysis_result']],focus:'damage_photo'},
  {id:'codes',label:'공통 코드·인증',lanes:[['common_code_group','member'],['common_code','member_credential']],focus:'common_code'},
  {id:'import',label:'이력 이전',lanes:[['member','legacy_import_mutex'],['legacy_import_run'],['legacy_entity_map']],focus:'legacy_entity_map'},
- {id:'all',label:'업무·확장 전체',lanes:[['business','member','common_code_group','legacy_import_mutex'],['rental_item','rental_contract','common_code','member_credential'],['condition_record','return_inspection','legacy_import_run'],['condition_photo','damage_observation','damage_assessment','legacy_entity_map'],['damage_photo','image_analysis_result']],focus:'rental_contract'},
+ {id:'all',label:'업무·확장 전체',lanes:[['business','rental_item','member','member_credential','common_code_group','common_code','legacy_import_mutex'],['rental_contract','condition_record','condition_photo','image_analysis_result','legacy_import_run'],['return_inspection','damage_observation','damage_assessment','damage_photo','legacy_entity_map']],focus:'rental_contract'},
 ]};
 const aiSources=['E016','E019','E020'].map(id=>{const item=evidence(id),info=item.artifact.source;const actual=source('sources.local/SSAFIT_Playlist',info.revision,info.path);assert.equal(actual.sha256,info.sourceSha256);return {url:item.url,sha256:actual.sha256};});
 project('P003').visualization={kind:'report-flow',title:'같은 입력의 재사용과 생성 실패 처리',summary:'서버 집계 → Snapshot·해시 → 재사용 판단\n필드 보완과 전체 Fallback을 분리한 생성 흐름',sources:aiSources,nodes:[

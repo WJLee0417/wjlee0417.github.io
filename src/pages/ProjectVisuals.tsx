@@ -3,7 +3,8 @@ import { type ErdVisualization, type FlowVisualization, type Project, type Schem
 import { Bullets } from './Deck';
 import { DaErdOverview } from './DaErdOverview';
 import { routeErdConnections, type ErdConnection } from '../erd-routing';
-import {placeErdLabels,ErdRelationshipLabels} from '../erd-labels';
+import {placeErdLabels} from '../erd-labels';
+import {ErdEdges,ErdRelationDirectory,useErdRelationFocus} from './ErdRelations';
 
 const NODE_WIDTH=460,ROW=50,HEAD=72,GAP=96;
 const tableName=(table:SchemaTable)=>table.displayName??table.name;
@@ -31,6 +32,7 @@ function schemaLayout(model: ErdVisualization, view: number, all: boolean) {
 type ErdSelection={view: number; all: boolean; selected: string; overview:boolean};
 function ErdWorkspace({model, expanded=false, initial, onExpand}: {model: ErdVisualization; expanded?: boolean; initial?: ErdSelection; onExpand?:(selection:ErdSelection)=>void}) {
   const [view,setView]=useState(initial?.view??0),[all,setAll]=useState(initial?.all??true),[zoom,setZoom]=useState(1),[selected,setSelected]=useState(initial?.selected??model.views[0].focus);
+  const focus=useErdRelationFocus(model,view,setSelected);
   const [settings,setSettings]=useState(false);
   const [overview,setOverview]=useState(initial?.overview??true);
   const viewport=useRef<HTMLDivElement>(null),marker=useId().replaceAll(':','');
@@ -42,16 +44,17 @@ function ErdWorkspace({model, expanded=false, initial, onExpand}: {model: ErdVis
     const edges:ErdConnection[]=nodes.nodes.flatMap(node=>node.table.foreignKeys.flatMap((key,index)=>{
       if(!boxes.has(key.target))return [];
       const unique=key.cardinality==='unspecified'?null:[node.table.primaryKey,...node.table.uniqueKeys].some(columns=>columns.length===key.columns.length&&columns.every(column=>key.columns.includes(column)));
-      const parent=nodes.nodes.find(parent=>parent.table.name===key.target)!;
+      const parent=nodes.nodes.find(parent=>parent.table.name===key.target)!,ref=focus.byKey.get(`${node.table.name}-${index}`)!;
       return key.columns.map((column,pair)=>{
         const targetColumn=key.targetColumns[pair];
-        return {id:`${node.table.name}-${index}-${pair}`,parent:key.target,child:node.table.name,unique,relationshipName:key.relationshipName,childColumn:column,parentColumn:targetColumn,childAnchor:{y:node.y+HEAD+node.columns.findIndex(c=>c.name===column)*ROW+15,height:30},parentAnchor:{y:parent.y+HEAD+parent.columns.findIndex(c=>c.name===targetColumn)*ROW+15,height:30},label:`${key.relationshipName?key.relationshipName+' · ':''}${tableName(node.table)}.${columnName(node.table,column)} → ${tableName(parent.table)}.${columnName(parent.table,targetColumn)}`};
+        return {id:`${node.table.name}-${index}-${pair}`,parent:key.target,child:node.table.name,unique,relationshipName:`${ref.number} · ${ref.name}`,childColumn:column,parentColumn:targetColumn,childAnchor:{y:node.y+HEAD+node.columns.findIndex(c=>c.name===column)*ROW+15,height:30},parentAnchor:{y:parent.y+HEAD+parent.columns.findIndex(c=>c.name===targetColumn)*ROW+15,height:30},label:`${key.relationshipName?key.relationshipName+' · ':''}${tableName(node.table)}.${columnName(node.table,column)} → ${tableName(parent.table)}.${columnName(parent.table,targetColumn)}`};
       });
     }));
     return routeErdConnections(boxes,edges,nodes.width,nodes.height);
   },[model,view,all,overview]);
   const detailedLabels=useMemo(()=>placeErdLabels(detailedEdges,new Map(layout.nodes.map(node=>[node.table.name,{x:node.x,y:node.y,width:NODE_WIDTH,height:node.height}])),layout.width,layout.height),[detailedEdges,model,view,all]);
   const table=model.tables.find(table=>table.name===selected)!;
+  const activeRelation=focus.relations.find(r=>r.id===focus.active);
   const resetZoom=()=>setZoom(1);
   useEffect(()=>{
     const element=viewport.current;if(!element)return;let previous=-1,frame=0;
@@ -72,18 +75,19 @@ function ErdWorkspace({model, expanded=false, initial, onExpand}: {model: ErdVis
     {!overview&&<><div className="erd-mobile-tools"><button type="button" aria-expanded={settings} aria-controls={`erd-settings-${marker}`} onClick={()=>setSettings(!settings)}>보기 설정 {settings?'−':'+'}</button></div>
     <div className="erd-toolbar" id={`erd-settings-${marker}`} data-open={settings}><div><span><b>PK</b> 기본키</span><span><b>FK</b> 외래키</span>{!model.sourceModel&&<span>0..N 여러 행</span>}</div><div><button type="button" disabled={zoom<=1} onClick={()=>setZoom(Math.max(1,zoom-.15))} aria-label="ERD 축소">−</button><output aria-label="ERD 배율">{Math.round(zoom*100)}%</output><button type="button" onClick={()=>setZoom(Math.min(2,zoom+.15))} aria-label="ERD 확대">+</button><button type="button" onClick={resetZoom}>기본 배율</button><button type="button" aria-pressed={all} onClick={()=>setAll(!all)}>{all?'키 중심':'전체 컬럼'}</button></div></div></>}
     <label className="erd-table-picker">테이블 선택 <select value={selected} onChange={event=>{setSelected(event.target.value);const node=nodeMap.get(event.target.value)!;viewport.current?.scrollTo({left:Math.max(0,node.x*zoom-20),top:Math.max(0,node.y*zoom-20),behavior:'instant'});}}>{layout.nodes.map(node=><option key={node.table.name} value={node.table.name}>{tableOption(node.table)}</option>)}</select></label>
-    {overview?<DaErdOverview model={model} view={view} selected={selected} onSelect={setSelected}/>:<><p className="visual-hint">테이블을 선택하면 전체 컬럼·키·연결 관계 표시</p>
+    {overview?<DaErdOverview model={model} view={view} selected={selected} onSelect={setSelected}/>:<><ErdRelationDirectory focus={focus} onReveal={r=>{const n=nodeMap.get(r.child.name)!;viewport.current?.scrollTo({left:Math.max(0,n.x*zoom-20),top:Math.max(0,(n.y+HEAD+n.columns.findIndex(c=>c.name===r.columns[0])*ROW)*zoom-60),behavior:'instant'});}}/><p className="visual-hint">테이블을 선택하면 전체 컬럼·키·연결 관계 표시</p>
     <div className="erd-viewport" ref={viewport} tabIndex={0} role="region" aria-label="확대·가로 이동 가능한 ERD">
       <svg className="erd-svg" width={layout.width*zoom} height={layout.height*zoom} viewBox={`0 0 ${layout.width} ${layout.height}`} aria-label={model.title}>
         <defs><marker id={marker} markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0 L7 3.5 L0 7" fill="none" stroke="currentColor"/></marker></defs>
-        {[...detailedEdges].sort((a,b)=>Number(a.child===selected||a.parent===selected)-Number(b.child===selected||b.parent===selected)).map(edge=><g key={edge.id} className={`erd-edge ${edge.child===selected||edge.parent===selected?'is-connected':''}`} aria-label={edge.label} data-source-table={edge.child} data-source-column={edge.childColumn} data-target-table={edge.parent} data-target-column={edge.parentColumn}><title>{edge.label}</title><path className="da-edge-halo" d={edge.path}/><path className="erd-connection-path" d={edge.path}/><path d={edge.ending}/></g>)}
-        <ErdRelationshipLabels labels={detailedLabels}/>
-        {layout.nodes.map(node=><g key={node.table.name} data-erd-table={node.table.name} transform={`translate(${node.x},${node.y})`} className={`erd-entity ${selected===node.table.name?'is-selected':''}`} role="button" tabIndex={0} aria-pressed={selected===node.table.name} aria-label={`${tableOption(node.table)} 테이블 선택`} onClick={()=>setSelected(node.table.name)} onKeyDown={event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();setSelected(node.table.name);}}}>
+        <ErdEdges edges={detailedEdges} labels={detailedLabels} focus={focus} selected={selected}/>
+        {layout.nodes.map(node=><g key={node.table.name} data-erd-table={node.table.name} transform={`translate(${node.x},${node.y})`} className={`erd-entity ${selected===node.table.name?'is-selected':''}`} role="button" tabIndex={0} aria-pressed={selected===node.table.name} aria-label={`${tableOption(node.table)} 테이블 선택`} onClick={()=>{focus.clear();setSelected(node.table.name);}} onKeyDown={event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();setSelected(node.table.name);}}}>
           <rect width={NODE_WIDTH} height={node.height} className="erd-entity-body"/><rect width={NODE_WIDTH} height={HEAD-8} className="erd-entity-head"/>
           <text x={14} y={25} className="erd-table-name">{tableName(node.table)}</text><text x={14} y={49} className="erd-table-label erd-head-label">{node.table.label===tableName(node.table)?`${node.table.columns.length} columns`:node.table.label}</text>
           {node.columns.map((column,index)=>{
             const pk=node.table.primaryKey.includes(column.name),fk=node.table.foreignKeys.some(key=>key.columns.includes(column.name));
-            return <g key={column.name} data-erd-column={column.name} transform={`translate(0,${HEAD+index*ROW})`}><text x={12} y={17} className="erd-key">{pk&&fk?'PK·FK':pk?'PK':fk?'FK':''}</text><text x={74} y={17} className="erd-column">{column.displayName??column.name}</text><text x={74} y={38} className="erd-type">{column.type}</text></g>;
+            const highlighted=Boolean(activeRelation&&(activeRelation.child.name===node.table.name&&activeRelation.columns.includes(column.name)||activeRelation.parent.name===node.table.name&&activeRelation.targetColumns.includes(column.name)));
+            const refs=focus.relations.filter(r=>r.child.name===node.table.name&&r.columns.includes(column.name));
+            return <g data-relation-active={highlighted||undefined} key={column.name} data-erd-column={column.name} transform={`translate(0,${HEAD+index*ROW})`}>{highlighted&&<rect width={NODE_WIDTH} height={ROW} fill="#e3edff"/>}{refs.length>0&&<text x={NODE_WIDTH-16} y={17} textAnchor="end" className="erd-key">{refs.map(r=>r.number).join('/')}</text>}<text x={12} y={17} className="erd-key">{pk&&fk?'PK·FK':pk?'PK':fk?'FK':''}</text><text x={74} y={17} className="erd-column">{column.displayName??column.name}</text><text x={74} y={38} className="erd-type">{column.type}</text></g>;
           })}
           <text x={14} y={node.height-10} className="erd-table-label">{all?'전체 컬럼':`${node.columns.length} / ${node.table.columns.length} 컬럼 · 선택하여 상세 보기`}</text>
         </g>)}

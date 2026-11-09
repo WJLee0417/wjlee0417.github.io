@@ -59,6 +59,7 @@ export function routeErdConnections(boxes:Map<string,ErdBox>,connections:ErdConn
   const point=(index:number)=>({x:(index%columns)*step,y:ys[Math.floor(index/columns)]});
   const segment=(a:number,b:number)=>Math.min(a,b)*total+Math.max(a,b);
   const blocked=new Uint8Array(total),usage=new Map<number,number>(),pointsUsed=new Uint16Array(total),reserved=new Map<number,string>();
+  const nearHorizontal=new Uint8Array(total),nearVertical=new Uint8Array(total);
   const obstacles=[...boxes.values()];
   for(let y=0;y<rows;y++)for(let x=0;x<columns;x++){
     if(obstacles.some(b=>x*step>=b.x-5&&x*step<=b.x+b.width+5&&ys[y]>=b.y-5&&ys[y]<=b.y+b.height+5))blocked[y*columns+x]=1;
@@ -85,7 +86,7 @@ export function routeErdConnections(boxes:Map<string,ErdBox>,connections:ErdConn
         const next=ny*columns+nx;if(blocked[next]&&next!==target)continue;
         if(usage.has(segment(index,next)))continue;
         const owner=reserved.get(segment(index,next));if(owner&&owner!==connection.id)continue;
-        const weight=(dx?step:Math.abs(ys[ny]-ys[y]))+(previousAxis&&previousAxis!==axis?9:0)+pointsUsed[next]*30;
+        const weight=(dx?step:Math.abs(ys[ny]-ys[y]))+(previousAxis&&previousAxis!==axis?9:0)+pointsUsed[next]*30+(dense?0:axis===1?nearHorizontal[next]:nearVertical[next])*8;
         const cost=current.cost+weight,state=next*3+axis;
         if(cost>=costs[state])continue;costs[state]=cost;parents[state]=current.state;heap.push({state,cost,priority:cost+heuristic(next)});
       }
@@ -94,6 +95,15 @@ export function routeErdConnections(boxes:Map<string,ErdBox>,connections:ErdConn
     const route:number[]=[];for(let state=found;state>=0;state=parents[state])route.push(Math.floor(state/3));route.reverse();
     let reusedSegments=0;
     route.forEach((index,i)=>{pointsUsed[index]++;if(i){const key=segment(route[i-1],index);if(usage.has(key))reusedSegments++;usage.set(key,(usage.get(key)??0)+1);}});
+    // Prefer visibly separate parallel tracks; keep shared-key fan-in possible.
+    for(let i=1;!dense&&i<route.length;i++){
+      const a=route[i-1],b=route[i],vertical=a%columns===b%columns;
+      for(const index of [a,b]){
+        const x=index%columns,y=Math.floor(index/columns);
+        if(vertical){for(let dx=-Math.ceil(10/step);dx<=Math.ceil(10/step);dx++){if(x+dx<0||x+dx>=columns)continue;const target=y*columns+x+dx;nearVertical[target]=Math.min(255,nearVertical[target]+Math.max(0,11-Math.abs(dx)*step));}}
+        else {for(let dy=-1;y+dy>=0&&ys[y]-ys[y+dy]<11;dy--){const target=(y+dy)*columns+x;nearHorizontal[target]=Math.min(255,nearHorizontal[target]+11-(ys[y]-ys[y+dy]));}for(let dy=0;y+dy<rows&&ys[y+dy]-ys[y]<11;dy++){const target=(y+dy)*columns+x;nearHorizontal[target]=Math.min(255,nearHorizontal[target]+11-(ys[y+dy]-ys[y]));}}
+      }
+    }
     const lead=(port:Port)=>{
       const x=port.exit!.x+(port.side==='left'?2.5:-2.5);
       return [{x,y:port.point!.y},{x,y:port.exit!.y}];

@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import { createHash } from 'node:crypto';
+import {rentalRelationshipNames} from '../scripts/rental-relationship-names.mjs';
 const path = new URL('./portfolio-data.json', import.meta.url);
 const d = JSON.parse(fs.readFileSync(path, 'utf8'));
 const evidenceLock = JSON.parse(fs.readFileSync(new URL('./evidence-artifacts.lock.json', import.meta.url), 'utf8'));
@@ -272,7 +273,12 @@ for(const project of dim.projects){
       assert(JSON.stringify(tables.get('FACT_AREA_SALES')?.primaryKey)===JSON.stringify(['period_key','area_key','industry_key']),'DAMX sales grain lost');
       assert(tables.get('FACT_AREA_STORE')?.foreignKeys.some(k=>k.columns[0]==='observation_period_key'&&k.target==='DIM_PERIOD'),'observation period relationship lost');
     }
-    if(project.id==='P004')assert(tables.get('member_credential')?.columns.find(column=>column.name==='password_hash')?.nullable===true,'V12 nullable credential missing');
+    if(project.id==='P004'){
+      assert(tables.get('member_credential')?.columns.find(column=>column.name==='password_hash')?.nullable===true,'V12 nullable credential missing');
+      const keys=visual.tables.flatMap(table=>table.foreignKeys.map(key=>({table:table.name,...key})));
+      assert(keys.length===20&&keys.every(key=>key.relationshipName?.trim()),'RentalTrack relationship names missing');
+      for(const key of keys){const expected=rentalRelationshipNames[`${key.table}.${key.columns.join('+')}`];assert(expected&&key.relationshipName===expected[0]&&key.relationshipNameOrigin===expected[1],`RentalTrack relationship role mismatch ${key.table}.${key.columns}`);}
+    }
   }else if(visual.kind==='report-flow'){
     const nodes=new Set(visual.nodes.map(node=>node.id));assert(nodes.size===visual.nodes.length,'duplicate flow node');
     for(const scenario of visual.scenarios){

@@ -31,7 +31,7 @@ export interface VisualSource { url: string; sha256: string; label?: string }
 export interface SchemaColumn { name: string; displayName?: string; label?:string; type: string; nullable: boolean|null }
 export interface SchemaTable {
   name: string; displayName?: string; label: string; columns: SchemaColumn[]; primaryKey: string[]; uniqueKeys: string[][];
-  foreignKeys: Array<{columns: string[]; target: string; targetColumns: string[];relationshipName?:string;cardinality?:'unspecified'}>;
+  foreignKeys: Array<{columns: string[]; target: string; targetColumns: string[];relationshipName?:string;relationshipNameOrigin?:'DAMX'|'SQL_ROLE';cardinality?:'unspecified'}>;
 }
 export interface SchemaView { id: string; label: string; lanes: string[][]; focus: string }
 export interface ErdVisualization {
