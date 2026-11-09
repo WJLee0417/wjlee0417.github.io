@@ -1,0 +1,5682 @@
+{
+  "source": {
+    "kind": "DAMX",
+    "fileName": "상권분석ERD.damx",
+    "sha256": "0fd22beb5239b071b39035deb3adb1485cc4261a07283927d3bca75f4d3de1b0"
+  },
+  "counts": {
+    "SRC": {
+      "tables": 21,
+      "columns": 367
+    },
+    "DIM": {
+      "tables": 10,
+      "columns": 98
+    },
+    "FACT": {
+      "tables": 18,
+      "columns": 156
+    }
+  },
+  "relationshipCount": 48,
+  "namedRelationshipCount": 46,
+  "extraction": {
+    "nullable": "not-decoded",
+    "cardinality": "not-decoded",
+    "additionalUniqueKeys": "not-decoded",
+    "columnCheck": "logical-and-physical-definitions-match",
+    "relationshipMapping": "explicit-table-endpoints; logical role alias or sole identical key name; not executed SQL constraints"
+  },
+  "tables": [
+    {
+      "name": "DIM_AREA",
+      "label": "상권",
+      "columns": [
+        {
+          "name": "area_key",
+          "label": "상권키",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 989061
+        },
+        {
+          "name": "area_code",
+          "label": "상권코드",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 989645
+        },
+        {
+          "name": "version_no",
+          "label": "설명버전번호",
+          "type": "INT",
+          "nullable": null,
+          "sourceOffset": 990217
+        },
+        {
+          "name": "area_name",
+          "label": "상권명",
+          "type": "VARCHAR(200)",
+          "nullable": null,
+          "sourceOffset": 990779
+        },
+        {
+          "name": "area_type_key",
+          "label": "상권구분키",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 991379
+        },
+        {
+          "name": "district_key",
+          "label": "자치구키",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 991991
+        },
+        {
+          "name": "dong_key",
+          "label": "행정동키",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 992593
+        },
+        {
+          "name": "x_coordinate",
+          "label": "엑스좌표",
+          "type": "DECIMAL(18,6)",
+          "nullable": null,
+          "sourceOffset": 993185
+        },
+        {
+          "name": "y_coordinate",
+          "label": "와이좌표",
+          "type": "DECIMAL(18,6)",
+          "nullable": null,
+          "sourceOffset": 993777
+        },
+        {
+          "name": "coordinate_system_code",
+          "label": "좌표계코드",
+          "type": "VARCHAR(30)",
+          "nullable": null,
+          "sourceOffset": 994391
+        },
+        {
+          "name": "area_size",
+          "label": "영역면적",
+          "type": "DECIMAL(24,6)",
+          "nullable": null,
+          "sourceOffset": 994993
+        },
+        {
+          "name": "source_area_version",
+          "label": "원천영역버전",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 995601
+        },
+        {
+          "name": "effective_start_date",
+          "label": "유효시작일",
+          "type": "DATE",
+          "nullable": null,
+          "sourceOffset": 996213
+        },
+        {
+          "name": "effective_end_date",
+          "label": "유효종료일",
+          "type": "DATE",
+          "nullable": null,
+          "sourceOffset": 996811
+        },
+        {
+          "name": "is_current",
+          "label": "현재버전여부",
+          "type": "CHAR(1)",
+          "nullable": null,
+          "sourceOffset": 997395
+        },
+        {
+          "name": "lineage_group_id",
+          "label": "원천계보그룹ID",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 997993
+        },
+        {
+          "name": "loaded_at",
+          "label": "적재일시",
+          "type": "DATETIME(3)",
+          "nullable": null,
+          "sourceOffset": 998581
+        }
+      ],
+      "primaryKey": [
+        "area_key"
+      ],
+      "uniqueKeys": [],
+      "foreignKeys": [
+        {
+          "columns": [
+            "dong_key"
+          ],
+          "target": "DIM_DONG",
+          "targetColumns": [
+            "dong_key"
+          ],
+          "relationshipName": "구분한다",
+          "cardinality": "unspecified",
+          "sourceId": "3c1edabd-ae26-4005-a30e-ddc9ec6a40a3",
+          "sourceOffset": 1050991,
+          "columnMapping": "logical-role-alias"
+        },
+        {
+          "columns": [
+            "district_key"
+          ],
+          "target": "DIM_DISTRICT",
+          "targetColumns": [
+            "district_key"
+          ],
+          "relationshipName": "구분한다",
+          "cardinality": "unspecified",
+          "sourceId": "6566d666-bed2-4b6d-8001-af17c6d17cfb",
+          "sourceOffset": 1057339,
+          "columnMapping": "identical-key-name"
+        },
+        {
+          "columns": [
+            "area_type_key"
+          ],
+          "target": "DIM_AREA_TYPE",
+          "targetColumns": [
+            "area_type_key"
+          ],
+          "relationshipName": "분류한다",
+          "cardinality": "unspecified",
+          "sourceId": "dea74e53-bae7-4946-964c-66bf072223b3",
+          "sourceOffset": 1072623,
+          "columnMapping": "logical-role-alias"
+        }
+      ],
+      "sourceOffset": 987139
+    },
+    {
+      "name": "DIM_AREA_TYPE",
+      "label": "상권구분",
+      "columns": [
+        {
+          "name": "area_type_key",
+          "label": "상권구분키",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 804037
+        },
+        {
+          "name": "area_type_code",
+          "label": "상권구분코드",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 804659
+        },
+        {
+          "name": "area_type_name",
+          "label": "상권구분명",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 805269
+        },
+        {
+          "name": "lineage_group_id",
+          "label": "원천계보그룹ID",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 805895
+        },
+        {
+          "name": "loaded_at",
+          "label": "적재일시",
+          "type": "DATETIME(3)",
+          "nullable": null,
+          "sourceOffset": 806493
+        }
+      ],
+      "primaryKey": [
+        "area_type_key"
+      ],
+      "uniqueKeys": [],
+      "foreignKeys": [],
+      "sourceOffset": 802979
+    },
+    {
+      "name": "DIM_DISCLOSURE_VERSION",
+      "label": "정보공개서버전",
+      "columns": [
+        {
+          "name": "disclosure_version_key",
+          "label": "정보공개서버전키",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 818757
+        },
+        {
+          "name": "disclosure_no",
+          "label": "정보공개서등록번호",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 819425
+        },
+        {
+          "name": "disclosure_version_code",
+          "label": "공표내용버전코드",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 820081
+        },
+        {
+          "name": "franchise_key",
+          "label": "프랜차이즈키",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 820741
+        },
+        {
+          "name": "publication_date",
+          "label": "공표일",
+          "type": "DATE",
+          "nullable": null,
+          "sourceOffset": 821363
+        },
+        {
+          "name": "condition_start_date",
+          "label": "조건적용시작일",
+          "type": "DATE",
+          "nullable": null,
+          "sourceOffset": 821993
+        },
+        {
+          "name": "condition_end_date",
+          "label": "조건적용종료일",
+          "type": "DATE",
+          "nullable": null,
+          "sourceOffset": 822627
+        },
+        {
+          "name": "initial_contract_period",
+          "label": "최초계약기간",
+          "type": "DECIMAL(12,4)",
+          "nullable": null,
+          "sourceOffset": 823275
+        },
+        {
+          "name": "initial_contract_unit_code",
+          "label": "최초계약기간단위코드",
+          "type": "VARCHAR(20)",
+          "nullable": null,
+          "sourceOffset": 823967
+        },
+        {
+          "name": "renewal_contract_period",
+          "label": "연장계약기간",
+          "type": "DECIMAL(12,4)",
+          "nullable": null,
+          "sourceOffset": 824641
+        },
+        {
+          "name": "renewal_contract_unit_code",
+          "label": "연장계약기간단위코드",
+          "type": "VARCHAR(20)",
+          "nullable": null,
+          "sourceOffset": 825333
+        },
+        {
+          "name": "content_hash",
+          "label": "정규화내용해시",
+          "type": "CHAR(64)",
+          "nullable": null,
+          "sourceOffset": 825981
+        },
+        {
+          "name": "lineage_group_id",
+          "label": "원천계보그룹ID",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 826613
+        },
+        {
+          "name": "loaded_at",
+          "label": "적재일시",
+          "type": "DATETIME(3)",
+          "nullable": null,
+          "sourceOffset": 827229
+        }
+      ],
+      "primaryKey": [
+        "disclosure_version_key"
+      ],
+      "uniqueKeys": [],
+      "foreignKeys": [
+        {
+          "columns": [
+            "franchise_key"
+          ],
+          "target": "DIM_FRANCHISE",
+          "targetColumns": [
+            "franchise_key"
+          ],
+          "relationshipName": "공시된다",
+          "cardinality": "unspecified",
+          "sourceId": "db457dc4-1f2a-4fcb-bd3b-322fc41aabe1",
+          "sourceOffset": 1071355,
+          "columnMapping": "logical-role-alias"
+        }
+      ],
+      "sourceOffset": 817393
+    },
+    {
+      "name": "DIM_DISTRICT",
+      "label": "자치구",
+      "columns": [
+        {
+          "name": "district_key",
+          "label": "자치구키",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 708801
+        },
+        {
+          "name": "district_code",
+          "label": "자치구코드",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 709413
+        },
+        {
+          "name": "district_name",
+          "label": "자치구명",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 710013
+        },
+        {
+          "name": "lineage_group_id",
+          "label": "원천계보그룹ID",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 710635
+        },
+        {
+          "name": "loaded_at",
+          "label": "적재일시",
+          "type": "DATETIME(3)",
+          "nullable": null,
+          "sourceOffset": 711231
+        }
+      ],
+      "primaryKey": [
+        "district_key"
+      ],
+      "uniqueKeys": [],
+      "foreignKeys": [],
+      "sourceOffset": 707751
+    },
+    {
+      "name": "DIM_DONG",
+      "label": "행정동",
+      "columns": [
+        {
+          "name": "dong_key",
+          "label": "행정동키",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 858133
+        },
+        {
+          "name": "dong_code",
+          "label": "행정동코드",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 858721
+        },
+        {
+          "name": "dong_name",
+          "label": "행정동명",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 859297
+        },
+        {
+          "name": "lineage_group_id",
+          "label": "원천계보그룹ID",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 859903
+        },
+        {
+          "name": "loaded_at",
+          "label": "적재일시",
+          "type": "DATETIME(3)",
+          "nullable": null,
+          "sourceOffset": 860491
+        }
+      ],
+      "primaryKey": [
+        "dong_key"
+      ],
+      "uniqueKeys": [],
+      "foreignKeys": [],
+      "sourceOffset": 857123
+    },
+    {
+      "name": "DIM_FRANCHISE",
+      "label": "프랜차이즈",
+      "columns": [
+        {
+          "name": "franchise_key",
+          "label": "프랜차이즈키",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 809665
+        },
+        {
+          "name": "brand_management_no",
+          "label": "브랜드관리번호",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 810301
+        },
+        {
+          "name": "version_no",
+          "label": "설명버전번호",
+          "type": "INT",
+          "nullable": null,
+          "sourceOffset": 810903
+        },
+        {
+          "name": "brand_name",
+          "label": "영업표지명",
+          "type": "VARCHAR(200)",
+          "nullable": null,
+          "sourceOffset": 811485
+        },
+        {
+          "name": "headquarter_key",
+          "label": "가맹본부키",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 812101
+        },
+        {
+          "name": "industry_key",
+          "label": "서비스업종키",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 812735
+        },
+        {
+          "name": "effective_start_date",
+          "label": "유효시작일",
+          "type": "DATE",
+          "nullable": null,
+          "sourceOffset": 813353
+        },
+        {
+          "name": "effective_end_date",
+          "label": "유효종료일",
+          "type": "DATE",
+          "nullable": null,
+          "sourceOffset": 813961
+        },
+        {
+          "name": "is_current",
+          "label": "현재버전여부",
+          "type": "CHAR(1)",
+          "nullable": null,
+          "sourceOffset": 814555
+        },
+        {
+          "name": "lineage_group_id",
+          "label": "원천계보그룹ID",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 815163
+        },
+        {
+          "name": "loaded_at",
+          "label": "적재일시",
+          "type": "DATETIME(3)",
+          "nullable": null,
+          "sourceOffset": 815761
+        }
+      ],
+      "primaryKey": [
+        "franchise_key"
+      ],
+      "uniqueKeys": [],
+      "foreignKeys": [
+        {
+          "columns": [
+            "industry_key"
+          ],
+          "target": "DIM_INDUSTRY",
+          "targetColumns": [
+            "industry_key"
+          ],
+          "relationshipName": "분류한다",
+          "cardinality": "unspecified",
+          "sourceId": "11c76851-87bd-47e0-8751-fe63eee5c138",
+          "sourceOffset": 1047807,
+          "columnMapping": "logical-role-alias"
+        },
+        {
+          "columns": [
+            "headquarter_key"
+          ],
+          "target": "DIM_HEADQUARTER",
+          "targetColumns": [
+            "headquarter_key"
+          ],
+          "relationshipName": "운영한다",
+          "cardinality": "unspecified",
+          "sourceId": "b692f1d7-fe34-410f-94ac-b123dd1d4149",
+          "sourceOffset": 1064991,
+          "columnMapping": "logical-role-alias"
+        }
+      ],
+      "sourceOffset": 808125
+    },
+    {
+      "name": "DIM_HEADQUARTER",
+      "label": "가맹본부",
+      "columns": [
+        {
+          "name": "headquarter_key",
+          "label": "가맹본부키",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 655145
+        },
+        {
+          "name": "headquarter_management_no",
+          "label": "가맹본부관리번호",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 655805
+        },
+        {
+          "name": "version_no",
+          "label": "설명버전번호",
+          "type": "INT",
+          "nullable": null,
+          "sourceOffset": 656423
+        },
+        {
+          "name": "company_name",
+          "label": "상호명",
+          "type": "VARCHAR(200)",
+          "nullable": null,
+          "sourceOffset": 657005
+        },
+        {
+          "name": "effective_start_date",
+          "label": "유효시작일",
+          "type": "DATE",
+          "nullable": null,
+          "sourceOffset": 657617
+        },
+        {
+          "name": "effective_end_date",
+          "label": "유효종료일",
+          "type": "DATE",
+          "nullable": null,
+          "sourceOffset": 658229
+        },
+        {
+          "name": "is_current",
+          "label": "현재버전여부",
+          "type": "CHAR(1)",
+          "nullable": null,
+          "sourceOffset": 658827
+        },
+        {
+          "name": "lineage_group_id",
+          "label": "원천계보그룹ID",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 659439
+        },
+        {
+          "name": "loaded_at",
+          "label": "적재일시",
+          "type": "DATETIME(3)",
+          "nullable": null,
+          "sourceOffset": 660041
+        }
+      ],
+      "primaryKey": [
+        "headquarter_key"
+      ],
+      "uniqueKeys": [],
+      "foreignKeys": [],
+      "sourceOffset": 653703
+    },
+    {
+      "name": "DIM_INDUSTRY",
+      "label": "서비스업종",
+      "columns": [
+        {
+          "name": "industry_key",
+          "label": "서비스업종키",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 617825
+        },
+        {
+          "name": "service_industry_code",
+          "label": "서비스업종코드",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 618461
+        },
+        {
+          "name": "service_industry_name",
+          "label": "서비스업종명",
+          "type": "VARCHAR(200)",
+          "nullable": null,
+          "sourceOffset": 619101
+        },
+        {
+          "name": "classification_version",
+          "label": "업종분류버전",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 619745
+        },
+        {
+          "name": "effective_start_date",
+          "label": "유효시작일",
+          "type": "DATE",
+          "nullable": null,
+          "sourceOffset": 620371
+        },
+        {
+          "name": "effective_end_date",
+          "label": "유효종료일",
+          "type": "DATE",
+          "nullable": null,
+          "sourceOffset": 620977
+        },
+        {
+          "name": "is_current",
+          "label": "현재버전여부",
+          "type": "CHAR(1)",
+          "nullable": null,
+          "sourceOffset": 621569
+        },
+        {
+          "name": "lineage_group_id",
+          "label": "원천계보그룹ID",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 622175
+        },
+        {
+          "name": "loaded_at",
+          "label": "적재일시",
+          "type": "DATETIME(3)",
+          "nullable": null,
+          "sourceOffset": 622771
+        }
+      ],
+      "primaryKey": [
+        "industry_key"
+      ],
+      "uniqueKeys": [],
+      "foreignKeys": [],
+      "sourceOffset": 616555
+    },
+    {
+      "name": "DIM_PERIOD",
+      "label": "기준기간",
+      "columns": [
+        {
+          "name": "period_key",
+          "label": "기준기간키",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 608353
+        },
+        {
+          "name": "period_type_code",
+          "label": "기간유형코드",
+          "type": "VARCHAR(20)",
+          "nullable": null,
+          "sourceOffset": 608967
+        },
+        {
+          "name": "calendar_code",
+          "label": "달력체계코드",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 609575
+        },
+        {
+          "name": "period_code",
+          "label": "기준기간코드",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 610175
+        },
+        {
+          "name": "period_name",
+          "label": "기준기간명",
+          "type": "VARCHAR(150)",
+          "nullable": null,
+          "sourceOffset": 610769
+        },
+        {
+          "name": "base_year",
+          "label": "기준연도",
+          "type": "SMALLINT",
+          "nullable": null,
+          "sourceOffset": 611351
+        },
+        {
+          "name": "quarter_no",
+          "label": "분기번호",
+          "type": "TINYINT",
+          "nullable": null,
+          "sourceOffset": 611925
+        },
+        {
+          "name": "period_start_date",
+          "label": "기간시작일",
+          "type": "DATE",
+          "nullable": null,
+          "sourceOffset": 612511
+        },
+        {
+          "name": "period_end_date",
+          "label": "기간종료일",
+          "type": "DATE",
+          "nullable": null,
+          "sourceOffset": 613101
+        },
+        {
+          "name": "period_precision_code",
+          "label": "기간정밀도코드",
+          "type": "VARCHAR(20)",
+          "nullable": null,
+          "sourceOffset": 613717
+        },
+        {
+          "name": "lineage_group_id",
+          "label": "원천계보그룹ID",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 614349
+        },
+        {
+          "name": "loaded_at",
+          "label": "적재일시",
+          "type": "DATETIME(3)",
+          "nullable": null,
+          "sourceOffset": 614941
+        }
+      ],
+      "primaryKey": [
+        "period_key"
+      ],
+      "uniqueKeys": [],
+      "foreignKeys": [],
+      "sourceOffset": 605761
+    },
+    {
+      "name": "DIM_REGION",
+      "label": "지역",
+      "columns": [
+        {
+          "name": "region_key",
+          "label": "지역키",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 646067
+        },
+        {
+          "name": "region_system_code",
+          "label": "지역체계코드",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 646685
+        },
+        {
+          "name": "region_code",
+          "label": "지역코드",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 647285
+        },
+        {
+          "name": "region_name",
+          "label": "지역명",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 647869
+        },
+        {
+          "name": "region_level_code",
+          "label": "지역집계수준코드",
+          "type": "VARCHAR(20)",
+          "nullable": null,
+          "sourceOffset": 648485
+        },
+        {
+          "name": "region_version",
+          "label": "지역정의버전",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 649099
+        },
+        {
+          "name": "effective_start_date",
+          "label": "유효시작일",
+          "type": "DATE",
+          "nullable": null,
+          "sourceOffset": 649705
+        },
+        {
+          "name": "effective_end_date",
+          "label": "유효종료일",
+          "type": "DATE",
+          "nullable": null,
+          "sourceOffset": 650307
+        },
+        {
+          "name": "is_current",
+          "label": "현재버전여부",
+          "type": "CHAR(1)",
+          "nullable": null,
+          "sourceOffset": 650895
+        },
+        {
+          "name": "lineage_group_id",
+          "label": "원천계보그룹ID",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 651497
+        },
+        {
+          "name": "loaded_at",
+          "label": "적재일시",
+          "type": "DATETIME(3)",
+          "nullable": null,
+          "sourceOffset": 652089
+        }
+      ],
+      "primaryKey": [
+        "region_key"
+      ],
+      "uniqueKeys": [],
+      "foreignKeys": [],
+      "sourceOffset": 644935
+    },
+    {
+      "name": "FACT_AD_PROMOTION",
+      "label": "광고판촉실적",
+      "columns": [
+        {
+          "name": "headquarter_key",
+          "label": "가맹본부키",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 546552
+        },
+        {
+          "name": "period_key",
+          "label": "광고판촉집계기간키",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 547224
+        },
+        {
+          "name": "advertising_amount",
+          "label": "광고비",
+          "type": "DECIMAL(24,2)",
+          "nullable": null,
+          "sourceOffset": 547846
+        },
+        {
+          "name": "promotion_amount",
+          "label": "판촉비",
+          "type": "DECIMAL(24,2)",
+          "nullable": null,
+          "sourceOffset": 548472
+        },
+        {
+          "name": "lineage_group_id",
+          "label": "원천계보그룹ID",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 549112
+        },
+        {
+          "name": "loaded_at",
+          "label": "적재일시",
+          "type": "DATETIME(3)",
+          "nullable": null,
+          "sourceOffset": 549718
+        }
+      ],
+      "primaryKey": [
+        "headquarter_key",
+        "period_key"
+      ],
+      "uniqueKeys": [],
+      "foreignKeys": [
+        {
+          "columns": [
+            "period_key"
+          ],
+          "target": "DIM_PERIOD",
+          "targetColumns": [
+            "period_key"
+          ],
+          "relationshipName": "기준이 된다",
+          "cardinality": "unspecified",
+          "sourceId": "789acea4-3ec4-43b1-8eb1-238528381c8a",
+          "sourceOffset": 1058611,
+          "columnMapping": "logical-role-alias"
+        },
+        {
+          "columns": [
+            "headquarter_key"
+          ],
+          "target": "DIM_HEADQUARTER",
+          "targetColumns": [
+            "headquarter_key"
+          ],
+          "relationshipName": "분석대상이 된다",
+          "cardinality": "unspecified",
+          "sourceId": "b921f704-03d3-46b1-bed6-5bd6f8ca59e3",
+          "sourceOffset": 1066255,
+          "columnMapping": "logical-role-alias"
+        }
+      ],
+      "sourceOffset": 545364
+    },
+    {
+      "name": "FACT_AREA_APARTMENT",
+      "label": "상권아파트현황",
+      "columns": [
+        {
+          "name": "period_key",
+          "label": "기준기간키",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 974873
+        },
+        {
+          "name": "area_key",
+          "label": "상권키",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 975489
+        },
+        {
+          "name": "observation_period_key",
+          "label": "실제관측기간키",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 976145
+        },
+        {
+          "name": "apartment_complex_count",
+          "label": "아파트단지수",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 976827
+        },
+        {
+          "name": "lineage_group_id",
+          "label": "원천계보그룹ID",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 977493
+        },
+        {
+          "name": "loaded_at",
+          "label": "적재일시",
+          "type": "DATETIME(3)",
+          "nullable": null,
+          "sourceOffset": 978103
+        }
+      ],
+      "primaryKey": [
+        "period_key",
+        "area_key"
+      ],
+      "uniqueKeys": [],
+      "foreignKeys": [
+        {
+          "columns": [
+            "observation_period_key"
+          ],
+          "target": "DIM_PERIOD",
+          "targetColumns": [
+            "period_key"
+          ],
+          "relationshipName": "관측기준이 된다",
+          "cardinality": "unspecified",
+          "sourceId": "219bbc3b-e71b-4eb3-89ef-fdef204648c5",
+          "sourceOffset": 1049711,
+          "columnMapping": "logical-role-alias"
+        },
+        {
+          "columns": [
+            "area_key"
+          ],
+          "target": "DIM_AREA",
+          "targetColumns": [
+            "area_key"
+          ],
+          "relationshipName": "분석대상이 된다",
+          "cardinality": "unspecified",
+          "sourceId": "62131d03-6fa6-4109-8fd1-8fa5c91abcc8",
+          "sourceOffset": 1056699,
+          "columnMapping": "identical-key-name"
+        },
+        {
+          "columns": [
+            "period_key"
+          ],
+          "target": "DIM_PERIOD",
+          "targetColumns": [
+            "period_key"
+          ],
+          "relationshipName": "기준이 된다",
+          "cardinality": "unspecified",
+          "sourceId": "f14c89eb-c64b-44be-a720-9bb61ccdc7be",
+          "sourceOffset": 1073895,
+          "columnMapping": "logical-role-alias"
+        }
+      ],
+      "sourceOffset": 973603
+    },
+    {
+      "name": "FACT_AREA_CONSUMPTION",
+      "label": "상권소비",
+      "columns": [
+        {
+          "name": "period_key",
+          "label": "기준기간키",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 906809
+        },
+        {
+          "name": "area_key",
+          "label": "상권키",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 907429
+        },
+        {
+          "name": "total_expenditure_amount",
+          "label": "지출총금액",
+          "type": "DECIMAL(24,2)",
+          "nullable": null,
+          "sourceOffset": 908075
+        },
+        {
+          "name": "lineage_group_id",
+          "label": "원천계보그룹ID",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 908739
+        },
+        {
+          "name": "loaded_at",
+          "label": "적재일시",
+          "type": "DATETIME(3)",
+          "nullable": null,
+          "sourceOffset": 909353
+        }
+      ],
+      "primaryKey": [
+        "period_key",
+        "area_key"
+      ],
+      "uniqueKeys": [],
+      "foreignKeys": [
+        {
+          "columns": [
+            "period_key"
+          ],
+          "target": "DIM_PERIOD",
+          "targetColumns": [
+            "period_key"
+          ],
+          "relationshipName": "기준이 된다",
+          "cardinality": "unspecified",
+          "sourceId": "14bded98-61fa-4a58-b302-96daa8cba2dd",
+          "sourceOffset": 1048439,
+          "columnMapping": "logical-role-alias"
+        },
+        {
+          "columns": [
+            "area_key"
+          ],
+          "target": "DIM_AREA",
+          "targetColumns": [
+            "area_key"
+          ],
+          "relationshipName": "분석대상이 된다",
+          "cardinality": "unspecified",
+          "sourceId": "be419580-9e25-4c1a-ac52-a46009cde90f",
+          "sourceOffset": 1066895,
+          "columnMapping": "logical-role-alias"
+        }
+      ],
+      "sourceOffset": 905607
+    },
+    {
+      "name": "FACT_AREA_FACILITY",
+      "label": "상권집객시설현황",
+      "columns": [
+        {
+          "name": "period_key",
+          "label": "기준기간키",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 685457
+        },
+        {
+          "name": "area_key",
+          "label": "상권키",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 686071
+        },
+        {
+          "name": "observation_period_key",
+          "label": "실제관측기간키",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 686725
+        },
+        {
+          "name": "attracting_facility_count",
+          "label": "집객시설수",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 687405
+        },
+        {
+          "name": "lineage_group_id",
+          "label": "원천계보그룹ID",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 688073
+        },
+        {
+          "name": "loaded_at",
+          "label": "적재일시",
+          "type": "DATETIME(3)",
+          "nullable": null,
+          "sourceOffset": 688681
+        }
+      ],
+      "primaryKey": [
+        "period_key",
+        "area_key"
+      ],
+      "uniqueKeys": [],
+      "foreignKeys": [
+        {
+          "columns": [
+            "period_key"
+          ],
+          "target": "DIM_PERIOD",
+          "targetColumns": [
+            "period_key"
+          ],
+          "relationshipName": "기준이 된다",
+          "cardinality": "unspecified",
+          "sourceId": "c382ccbb-cb8c-4864-93b0-2d1a2c7a618a",
+          "sourceOffset": 1068807,
+          "columnMapping": "logical-role-alias"
+        },
+        {
+          "columns": [
+            "area_key"
+          ],
+          "target": "DIM_AREA",
+          "targetColumns": [
+            "area_key"
+          ],
+          "relationshipName": "분석대상이 된다",
+          "cardinality": "unspecified",
+          "sourceId": "d0762eef-40b0-49ba-b74b-269fb4311a4f",
+          "sourceOffset": 1070715,
+          "columnMapping": "identical-key-name"
+        },
+        {
+          "columns": [
+            "observation_period_key"
+          ],
+          "target": "DIM_PERIOD",
+          "targetColumns": [
+            "period_key"
+          ],
+          "relationshipName": "관측기준이 된다",
+          "cardinality": "unspecified",
+          "sourceId": "e990233b-b27d-4956-b52f-5af3e7420da1",
+          "sourceOffset": 1073255,
+          "columnMapping": "logical-role-alias"
+        }
+      ],
+      "sourceOffset": 684197
+    },
+    {
+      "name": "FACT_AREA_FLOW_POP",
+      "label": "상권길단위인구",
+      "columns": [
+        {
+          "name": "period_key",
+          "label": "기준기간키",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 768341
+        },
+        {
+          "name": "area_key",
+          "label": "상권키",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 768955
+        },
+        {
+          "name": "observation_period_key",
+          "label": "실제관측기간키",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 769609
+        },
+        {
+          "name": "total_flow_population",
+          "label": "총길단위인구수",
+          "type": "DECIMAL(24,4)",
+          "nullable": null,
+          "sourceOffset": 770279
+        },
+        {
+          "name": "male_flow_population",
+          "label": "남성길단위인구수",
+          "type": "DECIMAL(24,4)",
+          "nullable": null,
+          "sourceOffset": 770941
+        },
+        {
+          "name": "female_flow_population",
+          "label": "여성길단위인구수",
+          "type": "DECIMAL(24,4)",
+          "nullable": null,
+          "sourceOffset": 771605
+        },
+        {
+          "name": "age_10_flow_population",
+          "label": "연령대10길단위인구수",
+          "type": "DECIMAL(24,4)",
+          "nullable": null,
+          "sourceOffset": 772285
+        },
+        {
+          "name": "age_20_flow_population",
+          "label": "연령대20길단위인구수",
+          "type": "DECIMAL(24,4)",
+          "nullable": null,
+          "sourceOffset": 772965
+        },
+        {
+          "name": "age_30_flow_population",
+          "label": "연령대30길단위인구수",
+          "type": "DECIMAL(24,4)",
+          "nullable": null,
+          "sourceOffset": 773645
+        },
+        {
+          "name": "age_40_flow_population",
+          "label": "연령대40길단위인구수",
+          "type": "DECIMAL(24,4)",
+          "nullable": null,
+          "sourceOffset": 774325
+        },
+        {
+          "name": "age_50_flow_population",
+          "label": "연령대50길단위인구수",
+          "type": "DECIMAL(24,4)",
+          "nullable": null,
+          "sourceOffset": 775005
+        },
+        {
+          "name": "age_60_flow_population",
+          "label": "연령대60이상길단위인구수",
+          "type": "DECIMAL(24,4)",
+          "nullable": null,
+          "sourceOffset": 775693
+        },
+        {
+          "name": "lineage_group_id",
+          "label": "원천계보그룹ID",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 776347
+        },
+        {
+          "name": "loaded_at",
+          "label": "적재일시",
+          "type": "DATETIME(3)",
+          "nullable": null,
+          "sourceOffset": 776955
+        }
+      ],
+      "primaryKey": [
+        "period_key",
+        "area_key"
+      ],
+      "uniqueKeys": [],
+      "foreignKeys": [
+        {
+          "columns": [
+            "area_key"
+          ],
+          "target": "DIM_AREA",
+          "targetColumns": [
+            "area_key"
+          ],
+          "relationshipName": "분석대상이 된다",
+          "cardinality": "unspecified",
+          "sourceId": "039a19bf-846e-4fad-b006-a35f67cace47",
+          "sourceOffset": 1046531,
+          "columnMapping": "logical-role-alias"
+        },
+        {
+          "columns": [
+            "period_key"
+          ],
+          "target": "DIM_PERIOD",
+          "targetColumns": [
+            "period_key"
+          ],
+          "relationshipName": "기준이 된다",
+          "cardinality": "unspecified",
+          "sourceId": "91040a6d-5e63-404b-bcfc-e248a711d741",
+          "sourceOffset": 1061803,
+          "columnMapping": "logical-role-alias"
+        },
+        {
+          "columns": [
+            "observation_period_key"
+          ],
+          "target": "DIM_PERIOD",
+          "targetColumns": [
+            "period_key"
+          ],
+          "relationshipName": "관측기준이 된다",
+          "cardinality": "unspecified",
+          "sourceId": "a078e831-a577-4abd-8d26-67ed9bc766b5",
+          "sourceOffset": 1063079,
+          "columnMapping": "logical-role-alias"
+        }
+      ],
+      "sourceOffset": 767055
+    },
+    {
+      "name": "FACT_AREA_INCOME",
+      "label": "상권소득",
+      "columns": [
+        {
+          "name": "period_key",
+          "label": "기준기간키",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 639991
+        },
+        {
+          "name": "area_key",
+          "label": "상권키",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 640601
+        },
+        {
+          "name": "monthly_average_income",
+          "label": "월평균소득금액",
+          "type": "DECIMAL(24,2)",
+          "nullable": null,
+          "sourceOffset": 641241
+        },
+        {
+          "name": "income_bracket_code",
+          "label": "소득구간코드",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 641889
+        },
+        {
+          "name": "lineage_group_id",
+          "label": "원천계보그룹ID",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 642529
+        },
+        {
+          "name": "loaded_at",
+          "label": "적재일시",
+          "type": "DATETIME(3)",
+          "nullable": null,
+          "sourceOffset": 643133
+        }
+      ],
+      "primaryKey": [
+        "period_key",
+        "area_key"
+      ],
+      "uniqueKeys": [],
+      "foreignKeys": [
+        {
+          "columns": [
+            "period_key"
+          ],
+          "target": "DIM_PERIOD",
+          "targetColumns": [
+            "period_key"
+          ],
+          "relationshipName": "기준이 된다",
+          "cardinality": "unspecified",
+          "sourceId": "119e5464-161a-4049-86b9-ab189354ef43",
+          "sourceOffset": 1047171,
+          "columnMapping": "logical-role-alias"
+        },
+        {
+          "columns": [
+            "area_key"
+          ],
+          "target": "DIM_AREA",
+          "targetColumns": [
+            "area_key"
+          ],
+          "relationshipName": "분석대상이 된다",
+          "cardinality": "unspecified",
+          "sourceId": "b132e84d-98d4-4bab-93a0-f0262b7c7adc",
+          "sourceOffset": 1064351,
+          "columnMapping": "logical-role-alias"
+        }
+      ],
+      "sourceOffset": 638823
+    },
+    {
+      "name": "FACT_AREA_RESIDENT_POP",
+      "label": "상권상주인구",
+      "columns": [
+        {
+          "name": "period_key",
+          "label": "기준기간키",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 702645
+        },
+        {
+          "name": "area_key",
+          "label": "상권키",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 703267
+        },
+        {
+          "name": "observation_period_key",
+          "label": "실제관측기간키",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 703929
+        },
+        {
+          "name": "total_resident_population",
+          "label": "총상주인구수",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 704621
+        },
+        {
+          "name": "lineage_group_id",
+          "label": "원천계보그룹ID",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 705297
+        },
+        {
+          "name": "loaded_at",
+          "label": "적재일시",
+          "type": "DATETIME(3)",
+          "nullable": null,
+          "sourceOffset": 705913
+        }
+      ],
+      "primaryKey": [
+        "period_key",
+        "area_key"
+      ],
+      "uniqueKeys": [],
+      "foreignKeys": [
+        {
+          "columns": [
+            "period_key"
+          ],
+          "target": "DIM_PERIOD",
+          "targetColumns": [
+            "period_key"
+          ],
+          "relationshipName": "기준이 된다",
+          "cardinality": "unspecified",
+          "sourceId": "190f96dc-4f48-4228-a350-1683b07a975e",
+          "sourceOffset": 1049075,
+          "columnMapping": "logical-role-alias"
+        },
+        {
+          "columns": [
+            "area_key"
+          ],
+          "target": "DIM_AREA",
+          "targetColumns": [
+            "area_key"
+          ],
+          "relationshipName": "분석대상이 된다",
+          "cardinality": "unspecified",
+          "sourceId": "723e0d0e-7b64-4b16-b237-24a7ca24aa06",
+          "sourceOffset": 1057971,
+          "columnMapping": "logical-role-alias"
+        }
+      ],
+      "sourceOffset": 701427
+    },
+    {
+      "name": "FACT_AREA_SALES",
+      "label": "상권업종추정매출",
+      "columns": [
+        {
+          "name": "period_key",
+          "label": "기준기간키",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 633751
+        },
+        {
+          "name": "area_key",
+          "label": "상권키",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 634359
+        },
+        {
+          "name": "industry_key",
+          "label": "서비스업종키",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 634983
+        },
+        {
+          "name": "estimated_sales_amount",
+          "label": "추정매출금액",
+          "type": "DECIMAL(24,2)",
+          "nullable": null,
+          "sourceOffset": 635625
+        },
+        {
+          "name": "lineage_group_id",
+          "label": "원천계보그룹ID",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 636273
+        },
+        {
+          "name": "loaded_at",
+          "label": "적재일시",
+          "type": "DATETIME(3)",
+          "nullable": null,
+          "sourceOffset": 636875
+        }
+      ],
+      "primaryKey": [
+        "period_key",
+        "area_key",
+        "industry_key"
+      ],
+      "uniqueKeys": [],
+      "foreignKeys": [
+        {
+          "columns": [
+            "period_key"
+          ],
+          "target": "DIM_PERIOD",
+          "targetColumns": [
+            "period_key"
+          ],
+          "relationshipName": "기준이 된다",
+          "cardinality": "unspecified",
+          "sourceId": "4dbb599a-73b8-48c2-ba6b-f14b331f6490",
+          "sourceOffset": 1054147,
+          "columnMapping": "logical-role-alias"
+        },
+        {
+          "columns": [
+            "area_key"
+          ],
+          "target": "DIM_AREA",
+          "targetColumns": [
+            "area_key"
+          ],
+          "relationshipName": "분석대상이 된다",
+          "cardinality": "unspecified",
+          "sourceId": "7a5c3450-54bd-4c55-9b8e-a0452b8f1012",
+          "sourceOffset": 1059247,
+          "columnMapping": "identical-key-name"
+        },
+        {
+          "columns": [
+            "industry_key"
+          ],
+          "target": "DIM_INDUSTRY",
+          "targetColumns": [
+            "industry_key"
+          ],
+          "relationshipName": "분류한다",
+          "cardinality": "unspecified",
+          "sourceId": "b7cacc10-be27-4690-bf5e-a42d970a83b6",
+          "sourceOffset": 1065623,
+          "columnMapping": "logical-role-alias"
+        }
+      ],
+      "sourceOffset": 632505
+    },
+    {
+      "name": "FACT_AREA_STORE",
+      "label": "상권업종점포현황",
+      "columns": [
+        {
+          "name": "period_key",
+          "label": "기준기간키",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 691833
+        },
+        {
+          "name": "area_key",
+          "label": "상권키",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 692441
+        },
+        {
+          "name": "industry_key",
+          "label": "서비스업종키",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 693065
+        },
+        {
+          "name": "observation_period_key",
+          "label": "실제관측기간키",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 693721
+        },
+        {
+          "name": "store_count",
+          "label": "점포수",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 694359
+        },
+        {
+          "name": "similar_industry_store_count",
+          "label": "유사업종점포수",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 695025
+        },
+        {
+          "name": "opening_rate",
+          "label": "개업률",
+          "type": "DECIMAL(12,6)",
+          "nullable": null,
+          "sourceOffset": 695667
+        },
+        {
+          "name": "opened_store_count",
+          "label": "개업점포수",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 696299
+        },
+        {
+          "name": "closure_rate",
+          "label": "폐업률",
+          "type": "DECIMAL(12,6)",
+          "nullable": null,
+          "sourceOffset": 696921
+        },
+        {
+          "name": "closed_store_count",
+          "label": "폐업점포수",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 697553
+        },
+        {
+          "name": "franchise_store_count",
+          "label": "프랜차이즈점포수",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 698223
+        },
+        {
+          "name": "lineage_group_id",
+          "label": "원천계보그룹ID",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 698877
+        },
+        {
+          "name": "loaded_at",
+          "label": "적재일시",
+          "type": "DATETIME(3)",
+          "nullable": null,
+          "sourceOffset": 699479
+        }
+      ],
+      "primaryKey": [
+        "period_key",
+        "area_key",
+        "industry_key"
+      ],
+      "uniqueKeys": [],
+      "foreignKeys": [
+        {
+          "columns": [
+            "area_key"
+          ],
+          "target": "DIM_AREA",
+          "targetColumns": [
+            "area_key"
+          ],
+          "relationshipName": "분석대상이 된다",
+          "cardinality": "unspecified",
+          "sourceId": "51c1f46b-fc41-48a2-bace-1865878d033b",
+          "sourceOffset": 1054783,
+          "columnMapping": "identical-key-name"
+        },
+        {
+          "columns": [
+            "observation_period_key"
+          ],
+          "target": "DIM_PERIOD",
+          "targetColumns": [
+            "period_key"
+          ],
+          "relationshipName": "관측기준이 된다",
+          "cardinality": "unspecified",
+          "sourceId": "7f7cc8d1-8799-4543-a741-047fdfae7b42",
+          "sourceOffset": 1060527,
+          "columnMapping": "logical-role-alias"
+        },
+        {
+          "columns": [
+            "period_key"
+          ],
+          "target": "DIM_PERIOD",
+          "targetColumns": [
+            "period_key"
+          ],
+          "relationshipName": "기준이 된다",
+          "cardinality": "unspecified",
+          "sourceId": "8f68101e-4ae0-498d-ae0f-4aab3ff9c908",
+          "sourceOffset": 1061167,
+          "columnMapping": "logical-role-alias"
+        },
+        {
+          "columns": [
+            "industry_key"
+          ],
+          "target": "DIM_INDUSTRY",
+          "targetColumns": [
+            "industry_key"
+          ],
+          "relationshipName": "분류한다",
+          "cardinality": "unspecified",
+          "sourceId": "b0e36992-8d38-413c-ad28-ec5bd9fd89e2",
+          "sourceOffset": 1063719,
+          "columnMapping": "logical-role-alias"
+        }
+      ],
+      "sourceOffset": 690495
+    },
+    {
+      "name": "FACT_AREA_WORK_POP",
+      "label": "상권직장인구",
+      "columns": [
+        {
+          "name": "period_key",
+          "label": "기준기간키",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 1026761
+        },
+        {
+          "name": "area_key",
+          "label": "상권키",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 1027375
+        },
+        {
+          "name": "observation_period_key",
+          "label": "실제관측기간키",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 1028029
+        },
+        {
+          "name": "total_work_population",
+          "label": "총직장인구수",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 1028705
+        },
+        {
+          "name": "male_work_population",
+          "label": "남성직장인구수",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 1029381
+        },
+        {
+          "name": "female_work_population",
+          "label": "여성직장인구수",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 1030059
+        },
+        {
+          "name": "age_10_work_population",
+          "label": "연령대10직장인구수",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 1030753
+        },
+        {
+          "name": "age_20_work_population",
+          "label": "연령대20직장인구수",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 1031447
+        },
+        {
+          "name": "age_30_work_population",
+          "label": "연령대30직장인구수",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 1032141
+        },
+        {
+          "name": "age_40_work_population",
+          "label": "연령대40직장인구수",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 1032835
+        },
+        {
+          "name": "age_50_work_population",
+          "label": "연령대50직장인구수",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 1033529
+        },
+        {
+          "name": "age_60_work_population",
+          "label": "연령대60이상직장인구수",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 1034231
+        },
+        {
+          "name": "male_age_10_work_population",
+          "label": "남성연령대10직장인구수",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 1034943
+        },
+        {
+          "name": "male_age_20_work_population",
+          "label": "남성연령대20직장인구수",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 1035665
+        },
+        {
+          "name": "male_age_30_work_population",
+          "label": "남성연령대30직장인구수",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 1036387
+        },
+        {
+          "name": "male_age_40_work_population",
+          "label": "남성연령대40직장인구수",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 1037109
+        },
+        {
+          "name": "male_age_50_work_population",
+          "label": "남성연령대50직장인구수",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 1037831
+        },
+        {
+          "name": "male_age_60_work_population",
+          "label": "남성연령대60이상직장인구수",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 1038561
+        },
+        {
+          "name": "female_age_10_work_population",
+          "label": "여성연령대10직장인구수",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 1039287
+        },
+        {
+          "name": "female_age_20_work_population",
+          "label": "여성연령대20직장인구수",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 1040017
+        },
+        {
+          "name": "female_age_30_work_population",
+          "label": "여성연령대30직장인구수",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 1040747
+        },
+        {
+          "name": "female_age_40_work_population",
+          "label": "여성연령대40직장인구수",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 1041477
+        },
+        {
+          "name": "female_age_50_work_population",
+          "label": "여성연령대50직장인구수",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 1042207
+        },
+        {
+          "name": "female_age_60_work_population",
+          "label": "여성연령대60이상직장인구수",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 1042945
+        },
+        {
+          "name": "lineage_group_id",
+          "label": "원천계보그룹ID",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 1043621
+        },
+        {
+          "name": "loaded_at",
+          "label": "적재일시",
+          "type": "DATETIME(3)",
+          "nullable": null,
+          "sourceOffset": 1044229
+        }
+      ],
+      "primaryKey": [
+        "period_key",
+        "area_key"
+      ],
+      "uniqueKeys": [],
+      "foreignKeys": [
+        {
+          "columns": [
+            "observation_period_key"
+          ],
+          "target": "DIM_PERIOD",
+          "targetColumns": [
+            "period_key"
+          ],
+          "relationshipName": "관측기준이 된다",
+          "cardinality": "unspecified",
+          "sourceId": "4c184524-5e72-41e2-b72c-6465444ac57a",
+          "sourceOffset": 1053507,
+          "columnMapping": "logical-role-alias"
+        },
+        {
+          "columns": [
+            "period_key"
+          ],
+          "target": "DIM_PERIOD",
+          "targetColumns": [
+            "period_key"
+          ],
+          "relationshipName": "기준이 된다",
+          "cardinality": "unspecified",
+          "sourceId": "558330e9-568b-4714-ae1d-b0ff7d60f31c",
+          "sourceOffset": 1055423,
+          "columnMapping": "logical-role-alias"
+        },
+        {
+          "columns": [
+            "area_key"
+          ],
+          "target": "DIM_AREA",
+          "targetColumns": [
+            "area_key"
+          ],
+          "relationshipName": "분석대상이 된다",
+          "cardinality": "unspecified",
+          "sourceId": "5778cbe4-251c-4ca2-91ac-85f9f1249f98",
+          "sourceOffset": 1056059,
+          "columnMapping": "logical-role-alias"
+        }
+      ],
+      "sourceOffset": 1025485
+    },
+    {
+      "name": "FACT_FRANCHISE_AVG_SALES",
+      "label": "프랜차이즈평균매출",
+      "columns": [
+        {
+          "name": "franchise_key",
+          "label": "프랜차이즈키",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 981249
+        },
+        {
+          "name": "period_key",
+          "label": "매출집계연도키",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 981901
+        },
+        {
+          "name": "region_key",
+          "label": "지역키",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 982531
+        },
+        {
+          "name": "average_sales_amount",
+          "label": "평균매출액",
+          "type": "DECIMAL(24,2)",
+          "nullable": null,
+          "sourceOffset": 983179
+        },
+        {
+          "name": "sales_amount_per_area",
+          "label": "면적당평균매출액",
+          "type": "DECIMAL(24,6)",
+          "nullable": null,
+          "sourceOffset": 983853
+        },
+        {
+          "name": "lineage_group_id",
+          "label": "원천계보그룹ID",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 984517
+        },
+        {
+          "name": "loaded_at",
+          "label": "적재일시",
+          "type": "DATETIME(3)",
+          "nullable": null,
+          "sourceOffset": 985137
+        }
+      ],
+      "primaryKey": [
+        "franchise_key",
+        "period_key",
+        "region_key"
+      ],
+      "uniqueKeys": [],
+      "foreignKeys": [
+        {
+          "columns": [
+            "region_key"
+          ],
+          "target": "DIM_REGION",
+          "targetColumns": [
+            "region_key"
+          ],
+          "relationshipName": "구분한다",
+          "cardinality": "unspecified",
+          "sourceId": "02eb26d0-041b-4fd8-9eb1-929fa33100d2",
+          "sourceOffset": 1045899,
+          "columnMapping": "logical-role-alias"
+        },
+        {
+          "columns": [
+            "period_key"
+          ],
+          "target": "DIM_PERIOD",
+          "targetColumns": [
+            "period_key"
+          ],
+          "relationshipName": "기준이 된다",
+          "cardinality": "unspecified",
+          "sourceId": "4c0d782f-4681-4664-9abd-df9a969096bd",
+          "sourceOffset": 1052871,
+          "columnMapping": "logical-role-alias"
+        },
+        {
+          "columns": [
+            "franchise_key"
+          ],
+          "target": "DIM_FRANCHISE",
+          "targetColumns": [
+            "franchise_key"
+          ],
+          "relationshipName": "분석대상이 된다",
+          "cardinality": "unspecified",
+          "sourceId": "bf06a4e6-7622-4caf-acf1-3fe10dba67ab",
+          "sourceOffset": 1067535,
+          "columnMapping": "logical-role-alias"
+        }
+      ],
+      "sourceOffset": 979923
+    },
+    {
+      "name": "FACT_FRANCHISE_CHANGE",
+      "label": "프랜차이즈점포변동",
+      "columns": [
+        {
+          "name": "franchise_key",
+          "label": "프랜차이즈키",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 600001
+        },
+        {
+          "name": "period_key",
+          "label": "사업연도기간키",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 600647
+        },
+        {
+          "name": "new_store_count",
+          "label": "신규개점수",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 601289
+        },
+        {
+          "name": "contract_expired_count",
+          "label": "계약종료수",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 601955
+        },
+        {
+          "name": "contract_terminated_count",
+          "label": "계약해지수",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 602641
+        },
+        {
+          "name": "lineage_group_id",
+          "label": "원천계보그룹ID",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 603315
+        },
+        {
+          "name": "loaded_at",
+          "label": "적재일시",
+          "type": "DATETIME(3)",
+          "nullable": null,
+          "sourceOffset": 603929
+        }
+      ],
+      "primaryKey": [
+        "franchise_key",
+        "period_key"
+      ],
+      "uniqueKeys": [],
+      "foreignKeys": [
+        {
+          "columns": [
+            "period_key"
+          ],
+          "target": "DIM_PERIOD",
+          "targetColumns": [
+            "period_key"
+          ],
+          "relationshipName": "기준이 된다",
+          "cardinality": "unspecified",
+          "sourceId": "dba476c0-f05c-4ddf-bd3d-25f7fb9bf0c3",
+          "sourceOffset": 1071987,
+          "columnMapping": "logical-role-alias"
+        },
+        {
+          "columns": [
+            "franchise_key"
+          ],
+          "target": "DIM_FRANCHISE",
+          "targetColumns": [
+            "franchise_key"
+          ],
+          "relationshipName": "분석대상이 된다",
+          "cardinality": "unspecified",
+          "sourceId": "fcd39803-2e7a-4aea-8b6b-4591bef5b103",
+          "sourceOffset": 1075163,
+          "columnMapping": "logical-role-alias"
+        }
+      ],
+      "sourceOffset": 598767
+    },
+    {
+      "name": "FACT_FRANCHISE_INTERIOR",
+      "label": "인테리어비용조건",
+      "columns": [
+        {
+          "name": "disclosure_version_key",
+          "label": "정보공개서버전키",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 552831
+        },
+        {
+          "name": "specification_code",
+          "label": "기준점포규격코드",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 553509
+        },
+        {
+          "name": "franchise_key",
+          "label": "프랜차이즈키",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 554161
+        },
+        {
+          "name": "standard_store_area",
+          "label": "기준점포면적",
+          "type": "DECIMAL(24,6)",
+          "nullable": null,
+          "sourceOffset": 554815
+        },
+        {
+          "name": "interior_cost_per_area",
+          "label": "단위면적당인테리어비용",
+          "type": "DECIMAL(24,6)",
+          "nullable": null,
+          "sourceOffset": 555499
+        },
+        {
+          "name": "interior_total_cost",
+          "label": "인테리어비용",
+          "type": "DECIMAL(24,2)",
+          "nullable": null,
+          "sourceOffset": 556163
+        },
+        {
+          "name": "lineage_group_id",
+          "label": "원천계보그룹ID",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 556821
+        },
+        {
+          "name": "loaded_at",
+          "label": "적재일시",
+          "type": "DATETIME(3)",
+          "nullable": null,
+          "sourceOffset": 557439
+        }
+      ],
+      "primaryKey": [
+        "disclosure_version_key",
+        "specification_code"
+      ],
+      "uniqueKeys": [],
+      "foreignKeys": [
+        {
+          "columns": [
+            "franchise_key"
+          ],
+          "target": "DIM_FRANCHISE",
+          "targetColumns": [
+            "franchise_key"
+          ],
+          "relationshipName": "",
+          "cardinality": "unspecified",
+          "sourceId": "44540702-7784-4473-88da-082489b4aa78",
+          "sourceOffset": 1052247,
+          "columnMapping": "logical-role-alias"
+        },
+        {
+          "columns": [
+            "disclosure_version_key"
+          ],
+          "target": "DIM_DISCLOSURE_VERSION",
+          "targetColumns": [
+            "disclosure_version_key"
+          ],
+          "relationshipName": "제시한다",
+          "cardinality": "unspecified",
+          "sourceId": "f5efefa7-82b8-4d23-aa7c-729e0d4bd09b",
+          "sourceOffset": 1074531,
+          "columnMapping": "logical-role-alias"
+        }
+      ],
+      "sourceOffset": 551563
+    },
+    {
+      "name": "FACT_FRANCHISE_STARTUP_COST",
+      "label": "가맹점부담조건",
+      "columns": [
+        {
+          "name": "disclosure_version_key",
+          "label": "정보공개서버전키",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 625645
+        },
+        {
+          "name": "franchise_key",
+          "label": "프랜차이즈키",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 626323
+        },
+        {
+          "name": "joining_fee",
+          "label": "가입비",
+          "type": "DECIMAL(24,2)",
+          "nullable": null,
+          "sourceOffset": 626957
+        },
+        {
+          "name": "training_fee",
+          "label": "교육비",
+          "type": "DECIMAL(24,2)",
+          "nullable": null,
+          "sourceOffset": 627581
+        },
+        {
+          "name": "security_deposit",
+          "label": "보증금",
+          "type": "DECIMAL(24,2)",
+          "nullable": null,
+          "sourceOffset": 628215
+        },
+        {
+          "name": "other_cost",
+          "label": "기타비용",
+          "type": "DECIMAL(24,2)",
+          "nullable": null,
+          "sourceOffset": 628849
+        },
+        {
+          "name": "escrow_franchise_fee",
+          "label": "예치가맹금",
+          "type": "DECIMAL(24,2)",
+          "nullable": null,
+          "sourceOffset": 629495
+        },
+        {
+          "name": "lineage_group_id",
+          "label": "원천계보그룹ID",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 630163
+        },
+        {
+          "name": "loaded_at",
+          "label": "적재일시",
+          "type": "DATETIME(3)",
+          "nullable": null,
+          "sourceOffset": 630789
+        }
+      ],
+      "primaryKey": [
+        "disclosure_version_key"
+      ],
+      "uniqueKeys": [],
+      "foreignKeys": [
+        {
+          "columns": [
+            "disclosure_version_key"
+          ],
+          "target": "DIM_DISCLOSURE_VERSION",
+          "targetColumns": [
+            "disclosure_version_key"
+          ],
+          "relationshipName": "제시한다",
+          "cardinality": "unspecified",
+          "sourceId": "fd786498-3c05-4966-a58c-62a730138241",
+          "sourceOffset": 1075803,
+          "columnMapping": "logical-role-alias"
+        }
+      ],
+      "sourceOffset": 624397
+    },
+    {
+      "name": "FACT_FRANCHISE_STORE",
+      "label": "프랜차이즈점포현황",
+      "columns": [
+        {
+          "name": "franchise_key",
+          "label": "프랜차이즈키",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 967773
+        },
+        {
+          "name": "period_key",
+          "label": "연도말기준시점키",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 968421
+        },
+        {
+          "name": "region_key",
+          "label": "지역키",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 969043
+        },
+        {
+          "name": "franchise_store_count",
+          "label": "가맹점수",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 969691
+        },
+        {
+          "name": "direct_store_count",
+          "label": "직영점수",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 970355
+        },
+        {
+          "name": "lineage_group_id",
+          "label": "원천계보그룹ID",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 971013
+        },
+        {
+          "name": "loaded_at",
+          "label": "적재일시",
+          "type": "DATETIME(3)",
+          "nullable": null,
+          "sourceOffset": 971625
+        }
+      ],
+      "primaryKey": [
+        "franchise_key",
+        "period_key",
+        "region_key"
+      ],
+      "uniqueKeys": [],
+      "foreignKeys": [
+        {
+          "columns": [
+            "region_key"
+          ],
+          "target": "DIM_REGION",
+          "targetColumns": [
+            "region_key"
+          ],
+          "relationshipName": "구분한다",
+          "cardinality": "unspecified",
+          "sourceId": "c1c9d88d-166b-48c0-bc5d-5b02d6175b30",
+          "sourceOffset": 1068175,
+          "columnMapping": "logical-role-alias"
+        },
+        {
+          "columns": [
+            "period_key"
+          ],
+          "target": "DIM_PERIOD",
+          "targetColumns": [
+            "period_key"
+          ],
+          "relationshipName": "기준이 된다",
+          "cardinality": "unspecified",
+          "sourceId": "c4058d1c-fda1-4404-86bf-09214553df4d",
+          "sourceOffset": 1069443,
+          "columnMapping": "logical-role-alias"
+        }
+      ],
+      "sourceOffset": 966573
+    },
+    {
+      "name": "FACT_HQ_EMPLOYEE",
+      "label": "가맹본부임직원현황",
+      "columns": [
+        {
+          "name": "headquarter_key",
+          "label": "가맹본부키",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 841441
+        },
+        {
+          "name": "period_key",
+          "label": "인원기준시점키",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 842081
+        },
+        {
+          "name": "executive_count",
+          "label": "임원수",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 842705
+        },
+        {
+          "name": "employee_count",
+          "label": "직원수",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 843337
+        },
+        {
+          "name": "lineage_group_id",
+          "label": "원천계보그룹ID",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 843979
+        },
+        {
+          "name": "loaded_at",
+          "label": "적재일시",
+          "type": "DATETIME(3)",
+          "nullable": null,
+          "sourceOffset": 844583
+        }
+      ],
+      "primaryKey": [
+        "headquarter_key",
+        "period_key"
+      ],
+      "uniqueKeys": [],
+      "foreignKeys": [
+        {
+          "columns": [
+            "headquarter_key"
+          ],
+          "target": "DIM_HEADQUARTER",
+          "targetColumns": [
+            "headquarter_key"
+          ],
+          "relationshipName": "분석대상이 된다",
+          "cardinality": "unspecified",
+          "sourceId": "7dc149ee-13d1-4c4b-a27f-5c28dd5e1941",
+          "sourceOffset": 1059887,
+          "columnMapping": "logical-role-alias"
+        }
+      ],
+      "sourceOffset": 840371
+    },
+    {
+      "name": "FACT_HQ_FINANCE",
+      "label": "가맹본부재무",
+      "columns": [
+        {
+          "name": "headquarter_key",
+          "label": "가맹본부키",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 863291
+        },
+        {
+          "name": "period_key",
+          "label": "회계기간키",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 863921
+        },
+        {
+          "name": "accounting_scope_code",
+          "label": "회계범위코드",
+          "type": "VARCHAR(30)",
+          "nullable": null,
+          "sourceOffset": 864555
+        },
+        {
+          "name": "assets",
+          "label": "자산",
+          "type": "DECIMAL(24,2)",
+          "nullable": null,
+          "sourceOffset": 865155
+        },
+        {
+          "name": "liabilities",
+          "label": "부채",
+          "type": "DECIMAL(24,2)",
+          "nullable": null,
+          "sourceOffset": 865739
+        },
+        {
+          "name": "capital",
+          "label": "자본",
+          "type": "DECIMAL(24,2)",
+          "nullable": null,
+          "sourceOffset": 866325
+        },
+        {
+          "name": "revenue",
+          "label": "매출액",
+          "type": "DECIMAL(24,2)",
+          "nullable": null,
+          "sourceOffset": 866907
+        },
+        {
+          "name": "operating_income",
+          "label": "영업이익",
+          "type": "DECIMAL(24,2)",
+          "nullable": null,
+          "sourceOffset": 867511
+        },
+        {
+          "name": "net_income",
+          "label": "당기순이익",
+          "type": "DECIMAL(24,2)",
+          "nullable": null,
+          "sourceOffset": 868125
+        },
+        {
+          "name": "lineage_group_id",
+          "label": "원천계보그룹ID",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 868749
+        },
+        {
+          "name": "loaded_at",
+          "label": "적재일시",
+          "type": "DATETIME(3)",
+          "nullable": null,
+          "sourceOffset": 869351
+        }
+      ],
+      "primaryKey": [
+        "headquarter_key",
+        "period_key",
+        "accounting_scope_code"
+      ],
+      "uniqueKeys": [],
+      "foreignKeys": [
+        {
+          "columns": [
+            "headquarter_key"
+          ],
+          "target": "DIM_HEADQUARTER",
+          "targetColumns": [
+            "headquarter_key"
+          ],
+          "relationshipName": "분석대상이 된다",
+          "cardinality": "unspecified",
+          "sourceId": "33f08928-e86f-4a1f-b9a4-21c2421c744f",
+          "sourceOffset": 1050351,
+          "columnMapping": "logical-role-alias"
+        },
+        {
+          "columns": [
+            "period_key"
+          ],
+          "target": "DIM_PERIOD",
+          "targetColumns": [
+            "period_key"
+          ],
+          "relationshipName": "",
+          "cardinality": "unspecified",
+          "sourceId": "416f668e-ddd6-44ec-b51c-b4d4448020ab",
+          "sourceOffset": 1051623,
+          "columnMapping": "logical-role-alias"
+        }
+      ],
+      "sourceOffset": 862093
+    },
+    {
+      "name": "FACT_HQ_LEGAL",
+      "label": "가맹본부법위반현황",
+      "columns": [
+        {
+          "name": "headquarter_key",
+          "label": "가맹본부키",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 726069
+        },
+        {
+          "name": "period_key",
+          "label": "법위반집계기간키",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 726707
+        },
+        {
+          "name": "corrective_action_count",
+          "label": "시정조치횟수",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 727353
+        },
+        {
+          "name": "civil_case_count",
+          "label": "민사소송패소및민사상화해수",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 728039
+        },
+        {
+          "name": "criminal_sentence_count",
+          "label": "형의선고수",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 728693
+        },
+        {
+          "name": "lineage_group_id",
+          "label": "원천계보그룹ID",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 729347
+        },
+        {
+          "name": "loaded_at",
+          "label": "적재일시",
+          "type": "DATETIME(3)",
+          "nullable": null,
+          "sourceOffset": 729945
+        }
+      ],
+      "primaryKey": [
+        "headquarter_key",
+        "period_key"
+      ],
+      "uniqueKeys": [],
+      "foreignKeys": [
+        {
+          "columns": [
+            "headquarter_key"
+          ],
+          "target": "DIM_HEADQUARTER",
+          "targetColumns": [
+            "headquarter_key"
+          ],
+          "relationshipName": "분석대상이 된다",
+          "cardinality": "unspecified",
+          "sourceId": "91fcad39-4de0-4387-9f1e-f6e6570e01c8",
+          "sourceOffset": 1062439,
+          "columnMapping": "logical-role-alias"
+        },
+        {
+          "columns": [
+            "period_key"
+          ],
+          "target": "DIM_PERIOD",
+          "targetColumns": [
+            "period_key"
+          ],
+          "relationshipName": "기준이 된다",
+          "cardinality": "unspecified",
+          "sourceId": "c9c4937d-eadd-4ada-88ef-9960b3d6e289",
+          "sourceOffset": 1070079,
+          "columnMapping": "logical-role-alias"
+        }
+      ],
+      "sourceOffset": 724897
+    },
+    {
+      "name": "SRC_FTC_AD_PROMOTION",
+      "label": "광고판촉비원천",
+      "columns": [
+        {
+          "name": "source_row_id",
+          "label": "원천행ID",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 942171
+        },
+        {
+          "name": "collection_batch_id",
+          "label": "수집배치ID",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 942805
+        },
+        {
+          "name": "source_document_id",
+          "label": "원천문서ID",
+          "type": "VARCHAR(200)",
+          "nullable": null,
+          "sourceOffset": 943439
+        },
+        {
+          "name": "source_record_path",
+          "label": "원천행경로",
+          "type": "VARCHAR(500)",
+          "nullable": null,
+          "sourceOffset": 944071
+        },
+        {
+          "name": "source_url",
+          "label": "출처URL",
+          "type": "VARCHAR(2048)",
+          "nullable": null,
+          "sourceOffset": 944689
+        },
+        {
+          "name": "source_version",
+          "label": "원천버전",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 945297
+        },
+        {
+          "name": "reference_period_text",
+          "label": "원천기준기간",
+          "type": "VARCHAR(200)",
+          "nullable": null,
+          "sourceOffset": 945929
+        },
+        {
+          "name": "unit_metadata_text",
+          "label": "원천단위정보",
+          "type": "LONGTEXT",
+          "nullable": null,
+          "sourceOffset": 946565
+        },
+        {
+          "name": "raw_record_text",
+          "label": "원본행내용",
+          "type": "LONGTEXT",
+          "nullable": null,
+          "sourceOffset": 947183
+        },
+        {
+          "name": "collected_at",
+          "label": "수집일시",
+          "type": "DATETIME(3)",
+          "nullable": null,
+          "sourceOffset": 947789
+        },
+        {
+          "name": "disclosure_no",
+          "label": "정보공개서등록번호",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 948403
+        },
+        {
+          "name": "base_year",
+          "label": "기준연도",
+          "type": "VARCHAR(20)",
+          "nullable": null,
+          "sourceOffset": 949001
+        },
+        {
+          "name": "advertising_amount",
+          "label": "광고비",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 949609
+        },
+        {
+          "name": "promotion_amount",
+          "label": "판촉비",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 950233
+        }
+      ],
+      "primaryKey": [
+        "source_row_id"
+      ],
+      "uniqueKeys": [],
+      "foreignKeys": [],
+      "sourceOffset": 941167
+    },
+    {
+      "name": "SRC_FTC_AVG_SALES",
+      "label": "가맹점평균매출원천",
+      "columns": [
+        {
+          "name": "source_row_id",
+          "label": "원천행ID",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 895283
+        },
+        {
+          "name": "collection_batch_id",
+          "label": "수집배치ID",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 895911
+        },
+        {
+          "name": "source_document_id",
+          "label": "원천문서ID",
+          "type": "VARCHAR(200)",
+          "nullable": null,
+          "sourceOffset": 896539
+        },
+        {
+          "name": "source_record_path",
+          "label": "원천행경로",
+          "type": "VARCHAR(500)",
+          "nullable": null,
+          "sourceOffset": 897165
+        },
+        {
+          "name": "source_url",
+          "label": "출처URL",
+          "type": "VARCHAR(2048)",
+          "nullable": null,
+          "sourceOffset": 897777
+        },
+        {
+          "name": "source_version",
+          "label": "원천버전",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 898379
+        },
+        {
+          "name": "reference_period_text",
+          "label": "원천기준기간",
+          "type": "VARCHAR(200)",
+          "nullable": null,
+          "sourceOffset": 899005
+        },
+        {
+          "name": "unit_metadata_text",
+          "label": "원천단위정보",
+          "type": "LONGTEXT",
+          "nullable": null,
+          "sourceOffset": 899635
+        },
+        {
+          "name": "raw_record_text",
+          "label": "원본행내용",
+          "type": "LONGTEXT",
+          "nullable": null,
+          "sourceOffset": 900247
+        },
+        {
+          "name": "collected_at",
+          "label": "수집일시",
+          "type": "DATETIME(3)",
+          "nullable": null,
+          "sourceOffset": 900847
+        },
+        {
+          "name": "disclosure_no",
+          "label": "정보공개서등록번호",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 901455
+        },
+        {
+          "name": "base_year",
+          "label": "기준연도",
+          "type": "VARCHAR(20)",
+          "nullable": null,
+          "sourceOffset": 902047
+        },
+        {
+          "name": "source_region_name",
+          "label": "원천지역명",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 902653
+        },
+        {
+          "name": "average_sales_amount",
+          "label": "평균매출액",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 903283
+        },
+        {
+          "name": "sales_amount_per_area",
+          "label": "면적당평균매출액",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 903925
+        }
+      ],
+      "primaryKey": [
+        "source_row_id"
+      ],
+      "uniqueKeys": [],
+      "foreignKeys": [],
+      "sourceOffset": 894285
+    },
+    {
+      "name": "SRC_FTC_CONTRACT",
+      "label": "가맹계약기간원천",
+      "columns": [
+        {
+          "name": "source_row_id",
+          "label": "원천행ID",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 885183
+        },
+        {
+          "name": "collection_batch_id",
+          "label": "수집배치ID",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 885809
+        },
+        {
+          "name": "source_document_id",
+          "label": "원천문서ID",
+          "type": "VARCHAR(200)",
+          "nullable": null,
+          "sourceOffset": 886435
+        },
+        {
+          "name": "source_record_path",
+          "label": "원천행경로",
+          "type": "VARCHAR(500)",
+          "nullable": null,
+          "sourceOffset": 887059
+        },
+        {
+          "name": "source_url",
+          "label": "출처URL",
+          "type": "VARCHAR(2048)",
+          "nullable": null,
+          "sourceOffset": 887669
+        },
+        {
+          "name": "source_version",
+          "label": "원천버전",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 888269
+        },
+        {
+          "name": "reference_period_text",
+          "label": "원천기준기간",
+          "type": "VARCHAR(200)",
+          "nullable": null,
+          "sourceOffset": 888893
+        },
+        {
+          "name": "unit_metadata_text",
+          "label": "원천단위정보",
+          "type": "LONGTEXT",
+          "nullable": null,
+          "sourceOffset": 889521
+        },
+        {
+          "name": "raw_record_text",
+          "label": "원본행내용",
+          "type": "LONGTEXT",
+          "nullable": null,
+          "sourceOffset": 890131
+        },
+        {
+          "name": "collected_at",
+          "label": "수집일시",
+          "type": "DATETIME(3)",
+          "nullable": null,
+          "sourceOffset": 890729
+        },
+        {
+          "name": "disclosure_no",
+          "label": "정보공개서등록번호",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 891335
+        },
+        {
+          "name": "initial_contract_period",
+          "label": "최초계약기간",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 891959
+        },
+        {
+          "name": "renewal_contract_period",
+          "label": "연장계약기간",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 892605
+        }
+      ],
+      "primaryKey": [
+        "source_row_id"
+      ],
+      "uniqueKeys": [],
+      "foreignKeys": [],
+      "sourceOffset": 884195
+    },
+    {
+      "name": "SRC_FTC_DISCLOSURE",
+      "label": "정보공개서기본원천",
+      "columns": [
+        {
+          "name": "source_row_id",
+          "label": "원천행ID",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 756727
+        },
+        {
+          "name": "collection_batch_id",
+          "label": "수집배치ID",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 757357
+        },
+        {
+          "name": "source_document_id",
+          "label": "원천문서ID",
+          "type": "VARCHAR(200)",
+          "nullable": null,
+          "sourceOffset": 757987
+        },
+        {
+          "name": "source_record_path",
+          "label": "원천행경로",
+          "type": "VARCHAR(500)",
+          "nullable": null,
+          "sourceOffset": 758615
+        },
+        {
+          "name": "source_url",
+          "label": "출처URL",
+          "type": "VARCHAR(2048)",
+          "nullable": null,
+          "sourceOffset": 759229
+        },
+        {
+          "name": "source_version",
+          "label": "원천버전",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 759833
+        },
+        {
+          "name": "reference_period_text",
+          "label": "원천기준기간",
+          "type": "VARCHAR(200)",
+          "nullable": null,
+          "sourceOffset": 760461
+        },
+        {
+          "name": "unit_metadata_text",
+          "label": "원천단위정보",
+          "type": "LONGTEXT",
+          "nullable": null,
+          "sourceOffset": 761093
+        },
+        {
+          "name": "raw_record_text",
+          "label": "원본행내용",
+          "type": "LONGTEXT",
+          "nullable": null,
+          "sourceOffset": 761707
+        },
+        {
+          "name": "collected_at",
+          "label": "수집일시",
+          "type": "DATETIME(3)",
+          "nullable": null,
+          "sourceOffset": 762309
+        },
+        {
+          "name": "disclosure_no",
+          "label": "정보공개서등록번호",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 762919
+        },
+        {
+          "name": "company_name",
+          "label": "상호명",
+          "type": "VARCHAR(200)",
+          "nullable": null,
+          "sourceOffset": 763519
+        },
+        {
+          "name": "brand_name",
+          "label": "영업표지명",
+          "type": "VARCHAR(200)",
+          "nullable": null,
+          "sourceOffset": 764119
+        },
+        {
+          "name": "source_industry_code",
+          "label": "원천업종코드",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 764735
+        },
+        {
+          "name": "source_industry_name",
+          "label": "원천업종명",
+          "type": "VARCHAR(200)",
+          "nullable": null,
+          "sourceOffset": 765369
+        }
+      ],
+      "primaryKey": [
+        "source_row_id"
+      ],
+      "uniqueKeys": [],
+      "foreignKeys": [],
+      "sourceOffset": 755715
+    },
+    {
+      "name": "SRC_FTC_EMPLOYEE",
+      "label": "가맹본부임직원원천",
+      "columns": [
+        {
+          "name": "source_row_id",
+          "label": "원천행ID",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 662669
+        },
+        {
+          "name": "collection_batch_id",
+          "label": "수집배치ID",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 663295
+        },
+        {
+          "name": "source_document_id",
+          "label": "원천문서ID",
+          "type": "VARCHAR(200)",
+          "nullable": null,
+          "sourceOffset": 663921
+        },
+        {
+          "name": "source_record_path",
+          "label": "원천행경로",
+          "type": "VARCHAR(500)",
+          "nullable": null,
+          "sourceOffset": 664545
+        },
+        {
+          "name": "source_url",
+          "label": "출처URL",
+          "type": "VARCHAR(2048)",
+          "nullable": null,
+          "sourceOffset": 665155
+        },
+        {
+          "name": "source_version",
+          "label": "원천버전",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 665755
+        },
+        {
+          "name": "reference_period_text",
+          "label": "원천기준기간",
+          "type": "VARCHAR(200)",
+          "nullable": null,
+          "sourceOffset": 666379
+        },
+        {
+          "name": "unit_metadata_text",
+          "label": "원천단위정보",
+          "type": "LONGTEXT",
+          "nullable": null,
+          "sourceOffset": 667007
+        },
+        {
+          "name": "raw_record_text",
+          "label": "원본행내용",
+          "type": "LONGTEXT",
+          "nullable": null,
+          "sourceOffset": 667617
+        },
+        {
+          "name": "collected_at",
+          "label": "수집일시",
+          "type": "DATETIME(3)",
+          "nullable": null,
+          "sourceOffset": 668215
+        },
+        {
+          "name": "disclosure_no",
+          "label": "정보공개서등록번호",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 668821
+        },
+        {
+          "name": "base_year",
+          "label": "기준연도",
+          "type": "VARCHAR(20)",
+          "nullable": null,
+          "sourceOffset": 669411
+        },
+        {
+          "name": "executive_count",
+          "label": "임원수",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 670005
+        },
+        {
+          "name": "employee_count",
+          "label": "직원수",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 670611
+        }
+      ],
+      "primaryKey": [
+        "source_row_id"
+      ],
+      "uniqueKeys": [],
+      "foreignKeys": [],
+      "sourceOffset": 661685
+    },
+    {
+      "name": "SRC_FTC_FINANCE",
+      "label": "가맹본부재무원천",
+      "columns": [
+        {
+          "name": "source_row_id",
+          "label": "원천행ID",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 872311
+        },
+        {
+          "name": "collection_batch_id",
+          "label": "수집배치ID",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 872935
+        },
+        {
+          "name": "source_document_id",
+          "label": "원천문서ID",
+          "type": "VARCHAR(200)",
+          "nullable": null,
+          "sourceOffset": 873559
+        },
+        {
+          "name": "source_record_path",
+          "label": "원천행경로",
+          "type": "VARCHAR(500)",
+          "nullable": null,
+          "sourceOffset": 874181
+        },
+        {
+          "name": "source_url",
+          "label": "출처URL",
+          "type": "VARCHAR(2048)",
+          "nullable": null,
+          "sourceOffset": 874789
+        },
+        {
+          "name": "source_version",
+          "label": "원천버전",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 875387
+        },
+        {
+          "name": "reference_period_text",
+          "label": "원천기준기간",
+          "type": "VARCHAR(200)",
+          "nullable": null,
+          "sourceOffset": 876009
+        },
+        {
+          "name": "unit_metadata_text",
+          "label": "원천단위정보",
+          "type": "LONGTEXT",
+          "nullable": null,
+          "sourceOffset": 876635
+        },
+        {
+          "name": "raw_record_text",
+          "label": "원본행내용",
+          "type": "LONGTEXT",
+          "nullable": null,
+          "sourceOffset": 877243
+        },
+        {
+          "name": "collected_at",
+          "label": "수집일시",
+          "type": "DATETIME(3)",
+          "nullable": null,
+          "sourceOffset": 877839
+        },
+        {
+          "name": "disclosure_no",
+          "label": "정보공개서등록번호",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 878443
+        },
+        {
+          "name": "business_year",
+          "label": "사업연도",
+          "type": "VARCHAR(20)",
+          "nullable": null,
+          "sourceOffset": 879039
+        },
+        {
+          "name": "assets",
+          "label": "자산",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 879619
+        },
+        {
+          "name": "liabilities",
+          "label": "부채",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 880197
+        },
+        {
+          "name": "capital",
+          "label": "자본",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 880777
+        },
+        {
+          "name": "revenue",
+          "label": "매출액",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 881351
+        },
+        {
+          "name": "operating_income",
+          "label": "영업이익",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 881945
+        },
+        {
+          "name": "net_income",
+          "label": "당기순이익",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 882547
+        }
+      ],
+      "primaryKey": [
+        "source_row_id"
+      ],
+      "uniqueKeys": [],
+      "foreignKeys": [],
+      "sourceOffset": 871299
+    },
+    {
+      "name": "SRC_FTC_INTERIOR",
+      "label": "인테리어조건원천",
+      "columns": [
+        {
+          "name": "source_row_id",
+          "label": "원천행ID",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 847401
+        },
+        {
+          "name": "collection_batch_id",
+          "label": "수집배치ID",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 848027
+        },
+        {
+          "name": "source_document_id",
+          "label": "원천문서ID",
+          "type": "VARCHAR(200)",
+          "nullable": null,
+          "sourceOffset": 848653
+        },
+        {
+          "name": "source_record_path",
+          "label": "원천행경로",
+          "type": "VARCHAR(500)",
+          "nullable": null,
+          "sourceOffset": 849277
+        },
+        {
+          "name": "source_url",
+          "label": "출처URL",
+          "type": "VARCHAR(2048)",
+          "nullable": null,
+          "sourceOffset": 849887
+        },
+        {
+          "name": "source_version",
+          "label": "원천버전",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 850487
+        },
+        {
+          "name": "reference_period_text",
+          "label": "원천기준기간",
+          "type": "VARCHAR(200)",
+          "nullable": null,
+          "sourceOffset": 851111
+        },
+        {
+          "name": "unit_metadata_text",
+          "label": "원천단위정보",
+          "type": "LONGTEXT",
+          "nullable": null,
+          "sourceOffset": 851739
+        },
+        {
+          "name": "raw_record_text",
+          "label": "원본행내용",
+          "type": "LONGTEXT",
+          "nullable": null,
+          "sourceOffset": 852349
+        },
+        {
+          "name": "collected_at",
+          "label": "수집일시",
+          "type": "DATETIME(3)",
+          "nullable": null,
+          "sourceOffset": 852947
+        },
+        {
+          "name": "disclosure_no",
+          "label": "정보공개서등록번호",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 853553
+        },
+        {
+          "name": "standard_store_area",
+          "label": "기준점포면적",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 854169
+        },
+        {
+          "name": "interior_cost_per_area",
+          "label": "단위면적당인테리어비용",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 854815
+        },
+        {
+          "name": "interior_total_cost",
+          "label": "인테리어비용",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 855451
+        }
+      ],
+      "primaryKey": [
+        "source_row_id"
+      ],
+      "uniqueKeys": [],
+      "foreignKeys": [],
+      "sourceOffset": 846385
+    },
+    {
+      "name": "SRC_FTC_LEGAL",
+      "label": "법위반현황원천",
+      "columns": [
+        {
+          "name": "source_row_id",
+          "label": "원천행ID",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 572367
+        },
+        {
+          "name": "collection_batch_id",
+          "label": "수집배치ID",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 572987
+        },
+        {
+          "name": "source_document_id",
+          "label": "원천문서ID",
+          "type": "VARCHAR(200)",
+          "nullable": null,
+          "sourceOffset": 573607
+        },
+        {
+          "name": "source_record_path",
+          "label": "원천행경로",
+          "type": "VARCHAR(500)",
+          "nullable": null,
+          "sourceOffset": 574225
+        },
+        {
+          "name": "source_url",
+          "label": "출처URL",
+          "type": "VARCHAR(2048)",
+          "nullable": null,
+          "sourceOffset": 574829
+        },
+        {
+          "name": "source_version",
+          "label": "원천버전",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 575423
+        },
+        {
+          "name": "reference_period_text",
+          "label": "원천기준기간",
+          "type": "VARCHAR(200)",
+          "nullable": null,
+          "sourceOffset": 576041
+        },
+        {
+          "name": "unit_metadata_text",
+          "label": "원천단위정보",
+          "type": "LONGTEXT",
+          "nullable": null,
+          "sourceOffset": 576663
+        },
+        {
+          "name": "raw_record_text",
+          "label": "원본행내용",
+          "type": "LONGTEXT",
+          "nullable": null,
+          "sourceOffset": 577267
+        },
+        {
+          "name": "collected_at",
+          "label": "수집일시",
+          "type": "DATETIME(3)",
+          "nullable": null,
+          "sourceOffset": 577859
+        },
+        {
+          "name": "disclosure_no",
+          "label": "정보공개서등록번호",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 578459
+        },
+        {
+          "name": "corrective_action_count",
+          "label": "시정조치횟수",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 579077
+        },
+        {
+          "name": "civil_case_count",
+          "label": "민사소송패소및민사상화해수",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 579717
+        },
+        {
+          "name": "criminal_sentence_count",
+          "label": "형의선고수",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 580341
+        }
+      ],
+      "primaryKey": [
+        "source_row_id"
+      ],
+      "uniqueKeys": [],
+      "foreignKeys": [],
+      "sourceOffset": 571379
+    },
+    {
+      "name": "SRC_FTC_STARTUP_COST",
+      "label": "가맹점부담금원천",
+      "columns": [
+        {
+          "name": "source_row_id",
+          "label": "원천행ID",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 744739
+        },
+        {
+          "name": "collection_batch_id",
+          "label": "수집배치ID",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 745373
+        },
+        {
+          "name": "source_document_id",
+          "label": "원천문서ID",
+          "type": "VARCHAR(200)",
+          "nullable": null,
+          "sourceOffset": 746007
+        },
+        {
+          "name": "source_record_path",
+          "label": "원천행경로",
+          "type": "VARCHAR(500)",
+          "nullable": null,
+          "sourceOffset": 746639
+        },
+        {
+          "name": "source_url",
+          "label": "출처URL",
+          "type": "VARCHAR(2048)",
+          "nullable": null,
+          "sourceOffset": 747257
+        },
+        {
+          "name": "source_version",
+          "label": "원천버전",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 747865
+        },
+        {
+          "name": "reference_period_text",
+          "label": "원천기준기간",
+          "type": "VARCHAR(200)",
+          "nullable": null,
+          "sourceOffset": 748497
+        },
+        {
+          "name": "unit_metadata_text",
+          "label": "원천단위정보",
+          "type": "LONGTEXT",
+          "nullable": null,
+          "sourceOffset": 749133
+        },
+        {
+          "name": "raw_record_text",
+          "label": "원본행내용",
+          "type": "LONGTEXT",
+          "nullable": null,
+          "sourceOffset": 749751
+        },
+        {
+          "name": "collected_at",
+          "label": "수집일시",
+          "type": "DATETIME(3)",
+          "nullable": null,
+          "sourceOffset": 750357
+        },
+        {
+          "name": "disclosure_no",
+          "label": "정보공개서등록번호",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 750971
+        },
+        {
+          "name": "joining_fee",
+          "label": "가입비",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 751573
+        },
+        {
+          "name": "training_fee",
+          "label": "교육비",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 752175
+        },
+        {
+          "name": "security_deposit",
+          "label": "보증금",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 752787
+        },
+        {
+          "name": "other_cost",
+          "label": "기타비용",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 753397
+        },
+        {
+          "name": "escrow_franchise_fee",
+          "label": "예치가맹금",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 754017
+        }
+      ],
+      "primaryKey": [
+        "source_row_id"
+      ],
+      "uniqueKeys": [],
+      "foreignKeys": [],
+      "sourceOffset": 743693
+    },
+    {
+      "name": "SRC_FTC_STORE",
+      "label": "가맹직영점현황원천",
+      "columns": [
+        {
+          "name": "source_row_id",
+          "label": "원천행ID",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 792793
+        },
+        {
+          "name": "collection_batch_id",
+          "label": "수집배치ID",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 793413
+        },
+        {
+          "name": "source_document_id",
+          "label": "원천문서ID",
+          "type": "VARCHAR(200)",
+          "nullable": null,
+          "sourceOffset": 794033
+        },
+        {
+          "name": "source_record_path",
+          "label": "원천행경로",
+          "type": "VARCHAR(500)",
+          "nullable": null,
+          "sourceOffset": 794651
+        },
+        {
+          "name": "source_url",
+          "label": "출처URL",
+          "type": "VARCHAR(2048)",
+          "nullable": null,
+          "sourceOffset": 795255
+        },
+        {
+          "name": "source_version",
+          "label": "원천버전",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 795849
+        },
+        {
+          "name": "reference_period_text",
+          "label": "원천기준기간",
+          "type": "VARCHAR(200)",
+          "nullable": null,
+          "sourceOffset": 796467
+        },
+        {
+          "name": "unit_metadata_text",
+          "label": "원천단위정보",
+          "type": "LONGTEXT",
+          "nullable": null,
+          "sourceOffset": 797089
+        },
+        {
+          "name": "raw_record_text",
+          "label": "원본행내용",
+          "type": "LONGTEXT",
+          "nullable": null,
+          "sourceOffset": 797693
+        },
+        {
+          "name": "collected_at",
+          "label": "수집일시",
+          "type": "DATETIME(3)",
+          "nullable": null,
+          "sourceOffset": 798285
+        },
+        {
+          "name": "disclosure_no",
+          "label": "정보공개서등록번호",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 798885
+        },
+        {
+          "name": "business_year",
+          "label": "사업연도",
+          "type": "VARCHAR(20)",
+          "nullable": null,
+          "sourceOffset": 799477
+        },
+        {
+          "name": "source_region_name",
+          "label": "원천지역명",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 800083
+        },
+        {
+          "name": "franchise_store_count",
+          "label": "가맹점수",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 800705
+        },
+        {
+          "name": "direct_store_count",
+          "label": "직영점수",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 801327
+        }
+      ],
+      "primaryKey": [
+        "source_row_id"
+      ],
+      "uniqueKeys": [],
+      "foreignKeys": [],
+      "sourceOffset": 791833
+    },
+    {
+      "name": "SRC_FTC_STORE_CHANGE",
+      "label": "가맹점변동원천",
+      "columns": [
+        {
+          "name": "source_row_id",
+          "label": "원천행ID",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 829923
+        },
+        {
+          "name": "collection_batch_id",
+          "label": "수집배치ID",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 830557
+        },
+        {
+          "name": "source_document_id",
+          "label": "원천문서ID",
+          "type": "VARCHAR(200)",
+          "nullable": null,
+          "sourceOffset": 831191
+        },
+        {
+          "name": "source_record_path",
+          "label": "원천행경로",
+          "type": "VARCHAR(500)",
+          "nullable": null,
+          "sourceOffset": 831823
+        },
+        {
+          "name": "source_url",
+          "label": "출처URL",
+          "type": "VARCHAR(2048)",
+          "nullable": null,
+          "sourceOffset": 832441
+        },
+        {
+          "name": "source_version",
+          "label": "원천버전",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 833049
+        },
+        {
+          "name": "reference_period_text",
+          "label": "원천기준기간",
+          "type": "VARCHAR(200)",
+          "nullable": null,
+          "sourceOffset": 833681
+        },
+        {
+          "name": "unit_metadata_text",
+          "label": "원천단위정보",
+          "type": "LONGTEXT",
+          "nullable": null,
+          "sourceOffset": 834317
+        },
+        {
+          "name": "raw_record_text",
+          "label": "원본행내용",
+          "type": "LONGTEXT",
+          "nullable": null,
+          "sourceOffset": 834935
+        },
+        {
+          "name": "collected_at",
+          "label": "수집일시",
+          "type": "DATETIME(3)",
+          "nullable": null,
+          "sourceOffset": 835541
+        },
+        {
+          "name": "disclosure_no",
+          "label": "정보공개서등록번호",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 836155
+        },
+        {
+          "name": "business_year",
+          "label": "사업연도",
+          "type": "VARCHAR(20)",
+          "nullable": null,
+          "sourceOffset": 836761
+        },
+        {
+          "name": "new_store_count",
+          "label": "신규개점수",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 837375
+        },
+        {
+          "name": "contract_expired_count",
+          "label": "계약종료수",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 838009
+        },
+        {
+          "name": "contract_terminated_count",
+          "label": "계약해지수",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 838663
+        }
+      ],
+      "primaryKey": [
+        "source_row_id"
+      ],
+      "uniqueKeys": [],
+      "foreignKeys": [],
+      "sourceOffset": 828915
+    },
+    {
+      "name": "SRC_SEOUL_APARTMENT",
+      "label": "상권아파트원천",
+      "columns": [
+        {
+          "name": "source_row_id",
+          "label": "원천행ID",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 732741
+        },
+        {
+          "name": "collection_batch_id",
+          "label": "수집배치ID",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 733373
+        },
+        {
+          "name": "source_document_id",
+          "label": "원천문서ID",
+          "type": "VARCHAR(200)",
+          "nullable": null,
+          "sourceOffset": 734005
+        },
+        {
+          "name": "source_record_path",
+          "label": "원천행경로",
+          "type": "VARCHAR(500)",
+          "nullable": null,
+          "sourceOffset": 734635
+        },
+        {
+          "name": "source_url",
+          "label": "출처URL",
+          "type": "VARCHAR(2048)",
+          "nullable": null,
+          "sourceOffset": 735251
+        },
+        {
+          "name": "source_version",
+          "label": "원천버전",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 735857
+        },
+        {
+          "name": "reference_period_text",
+          "label": "원천기준기간",
+          "type": "VARCHAR(200)",
+          "nullable": null,
+          "sourceOffset": 736487
+        },
+        {
+          "name": "unit_metadata_text",
+          "label": "원천단위정보",
+          "type": "LONGTEXT",
+          "nullable": null,
+          "sourceOffset": 737121
+        },
+        {
+          "name": "raw_record_text",
+          "label": "원본행내용",
+          "type": "LONGTEXT",
+          "nullable": null,
+          "sourceOffset": 737737
+        },
+        {
+          "name": "collected_at",
+          "label": "수집일시",
+          "type": "DATETIME(3)",
+          "nullable": null,
+          "sourceOffset": 738341
+        },
+        {
+          "name": "base_year_quarter",
+          "label": "기준년분기",
+          "type": "VARCHAR(20)",
+          "nullable": null,
+          "sourceOffset": 738953
+        },
+        {
+          "name": "area_type_code",
+          "label": "상권구분코드",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 739571
+        },
+        {
+          "name": "area_type_name",
+          "label": "상권구분명",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 740183
+        },
+        {
+          "name": "area_code",
+          "label": "상권코드",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 740783
+        },
+        {
+          "name": "area_name",
+          "label": "상권명",
+          "type": "VARCHAR(200)",
+          "nullable": null,
+          "sourceOffset": 741371
+        },
+        {
+          "name": "apartment_complex_count",
+          "label": "아파트단지수",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 741995
+        }
+      ],
+      "primaryKey": [
+        "source_row_id"
+      ],
+      "uniqueKeys": [],
+      "foreignKeys": [],
+      "sourceOffset": 731729
+    },
+    {
+      "name": "SRC_SEOUL_AREA",
+      "label": "상권영역원천",
+      "columns": [
+        {
+          "name": "source_row_id",
+          "label": "원천행ID",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 952929
+        },
+        {
+          "name": "collection_batch_id",
+          "label": "수집배치ID",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 953551
+        },
+        {
+          "name": "source_document_id",
+          "label": "원천문서ID",
+          "type": "VARCHAR(200)",
+          "nullable": null,
+          "sourceOffset": 954173
+        },
+        {
+          "name": "source_record_path",
+          "label": "원천행경로",
+          "type": "VARCHAR(500)",
+          "nullable": null,
+          "sourceOffset": 954793
+        },
+        {
+          "name": "source_url",
+          "label": "출처URL",
+          "type": "VARCHAR(2048)",
+          "nullable": null,
+          "sourceOffset": 955399
+        },
+        {
+          "name": "source_version",
+          "label": "원천버전",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 955995
+        },
+        {
+          "name": "reference_period_text",
+          "label": "원천기준기간",
+          "type": "VARCHAR(200)",
+          "nullable": null,
+          "sourceOffset": 956615
+        },
+        {
+          "name": "unit_metadata_text",
+          "label": "원천단위정보",
+          "type": "LONGTEXT",
+          "nullable": null,
+          "sourceOffset": 957239
+        },
+        {
+          "name": "raw_record_text",
+          "label": "원본행내용",
+          "type": "LONGTEXT",
+          "nullable": null,
+          "sourceOffset": 957845
+        },
+        {
+          "name": "collected_at",
+          "label": "수집일시",
+          "type": "DATETIME(3)",
+          "nullable": null,
+          "sourceOffset": 958439
+        },
+        {
+          "name": "area_code",
+          "label": "상권코드",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 959023
+        },
+        {
+          "name": "area_name",
+          "label": "상권명",
+          "type": "VARCHAR(200)",
+          "nullable": null,
+          "sourceOffset": 959601
+        },
+        {
+          "name": "area_type_code",
+          "label": "상권구분코드",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 960195
+        },
+        {
+          "name": "area_type_name",
+          "label": "상권구분명",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 960797
+        },
+        {
+          "name": "x_coordinate",
+          "label": "엑스좌표",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 961395
+        },
+        {
+          "name": "y_coordinate",
+          "label": "와이좌표",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 961989
+        },
+        {
+          "name": "district_code",
+          "label": "자치구코드",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 962585
+        },
+        {
+          "name": "district_name",
+          "label": "자치구명",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 963181
+        },
+        {
+          "name": "dong_code",
+          "label": "행정동코드",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 963771
+        },
+        {
+          "name": "dong_name",
+          "label": "행정동명",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 964351
+        },
+        {
+          "name": "area_size",
+          "label": "영역면적",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 964933
+        }
+      ],
+      "primaryKey": [
+        "source_row_id"
+      ],
+      "uniqueKeys": [],
+      "foreignKeys": [],
+      "sourceOffset": 951923
+    },
+    {
+      "name": "SRC_SEOUL_CONSUMPTION",
+      "label": "상권소비원천",
+      "columns": [
+        {
+          "name": "source_row_id",
+          "label": "원천행ID",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 713871
+        },
+        {
+          "name": "collection_batch_id",
+          "label": "수집배치ID",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 714507
+        },
+        {
+          "name": "source_document_id",
+          "label": "원천문서ID",
+          "type": "VARCHAR(200)",
+          "nullable": null,
+          "sourceOffset": 715143
+        },
+        {
+          "name": "source_record_path",
+          "label": "원천행경로",
+          "type": "VARCHAR(500)",
+          "nullable": null,
+          "sourceOffset": 715777
+        },
+        {
+          "name": "source_url",
+          "label": "출처URL",
+          "type": "VARCHAR(2048)",
+          "nullable": null,
+          "sourceOffset": 716397
+        },
+        {
+          "name": "source_version",
+          "label": "원천버전",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 717007
+        },
+        {
+          "name": "reference_period_text",
+          "label": "원천기준기간",
+          "type": "VARCHAR(200)",
+          "nullable": null,
+          "sourceOffset": 717641
+        },
+        {
+          "name": "unit_metadata_text",
+          "label": "원천단위정보",
+          "type": "LONGTEXT",
+          "nullable": null,
+          "sourceOffset": 718279
+        },
+        {
+          "name": "raw_record_text",
+          "label": "원본행내용",
+          "type": "LONGTEXT",
+          "nullable": null,
+          "sourceOffset": 718899
+        },
+        {
+          "name": "collected_at",
+          "label": "수집일시",
+          "type": "DATETIME(3)",
+          "nullable": null,
+          "sourceOffset": 719507
+        },
+        {
+          "name": "base_year_quarter",
+          "label": "기준년분기",
+          "type": "VARCHAR(20)",
+          "nullable": null,
+          "sourceOffset": 720123
+        },
+        {
+          "name": "area_type_code",
+          "label": "상권구분코드",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 720745
+        },
+        {
+          "name": "area_type_name",
+          "label": "상권구분명",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 721361
+        },
+        {
+          "name": "area_code",
+          "label": "상권코드",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 721965
+        },
+        {
+          "name": "area_name",
+          "label": "상권명",
+          "type": "VARCHAR(200)",
+          "nullable": null,
+          "sourceOffset": 722557
+        },
+        {
+          "name": "total_expenditure_amount",
+          "label": "지출총금액",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 723185
+        }
+      ],
+      "primaryKey": [
+        "source_row_id"
+      ],
+      "uniqueKeys": [],
+      "foreignKeys": [],
+      "sourceOffset": 712857
+    },
+    {
+      "name": "SRC_SEOUL_FACILITY",
+      "label": "상권집객시설원천",
+      "columns": [
+        {
+          "name": "source_row_id",
+          "label": "원천행ID",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 673275
+        },
+        {
+          "name": "collection_batch_id",
+          "label": "수집배치ID",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 673905
+        },
+        {
+          "name": "source_document_id",
+          "label": "원천문서ID",
+          "type": "VARCHAR(200)",
+          "nullable": null,
+          "sourceOffset": 674535
+        },
+        {
+          "name": "source_record_path",
+          "label": "원천행경로",
+          "type": "VARCHAR(500)",
+          "nullable": null,
+          "sourceOffset": 675163
+        },
+        {
+          "name": "source_url",
+          "label": "출처URL",
+          "type": "VARCHAR(2048)",
+          "nullable": null,
+          "sourceOffset": 675777
+        },
+        {
+          "name": "source_version",
+          "label": "원천버전",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 676381
+        },
+        {
+          "name": "reference_period_text",
+          "label": "원천기준기간",
+          "type": "VARCHAR(200)",
+          "nullable": null,
+          "sourceOffset": 677009
+        },
+        {
+          "name": "unit_metadata_text",
+          "label": "원천단위정보",
+          "type": "LONGTEXT",
+          "nullable": null,
+          "sourceOffset": 677641
+        },
+        {
+          "name": "raw_record_text",
+          "label": "원본행내용",
+          "type": "LONGTEXT",
+          "nullable": null,
+          "sourceOffset": 678255
+        },
+        {
+          "name": "collected_at",
+          "label": "수집일시",
+          "type": "DATETIME(3)",
+          "nullable": null,
+          "sourceOffset": 678857
+        },
+        {
+          "name": "base_year_quarter",
+          "label": "기준년분기",
+          "type": "VARCHAR(20)",
+          "nullable": null,
+          "sourceOffset": 679467
+        },
+        {
+          "name": "area_type_code",
+          "label": "상권구분코드",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 680083
+        },
+        {
+          "name": "area_type_name",
+          "label": "상권구분명",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 680693
+        },
+        {
+          "name": "area_code",
+          "label": "상권코드",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 681291
+        },
+        {
+          "name": "area_name",
+          "label": "상권명",
+          "type": "VARCHAR(200)",
+          "nullable": null,
+          "sourceOffset": 681877
+        },
+        {
+          "name": "attracting_facility_count",
+          "label": "집객시설수",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 682501
+        }
+      ],
+      "primaryKey": [
+        "source_row_id"
+      ],
+      "uniqueKeys": [],
+      "foreignKeys": [],
+      "sourceOffset": 672273
+    },
+    {
+      "name": "SRC_SEOUL_FLOW_POP",
+      "label": "상권길단위인구원천",
+      "columns": [
+        {
+          "name": "source_row_id",
+          "label": "원천행ID",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 912195
+        },
+        {
+          "name": "collection_batch_id",
+          "label": "수집배치ID",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 912825
+        },
+        {
+          "name": "source_document_id",
+          "label": "원천문서ID",
+          "type": "VARCHAR(200)",
+          "nullable": null,
+          "sourceOffset": 913455
+        },
+        {
+          "name": "source_record_path",
+          "label": "원천행경로",
+          "type": "VARCHAR(500)",
+          "nullable": null,
+          "sourceOffset": 914083
+        },
+        {
+          "name": "source_url",
+          "label": "출처URL",
+          "type": "VARCHAR(2048)",
+          "nullable": null,
+          "sourceOffset": 914697
+        },
+        {
+          "name": "source_version",
+          "label": "원천버전",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 915301
+        },
+        {
+          "name": "reference_period_text",
+          "label": "원천기준기간",
+          "type": "VARCHAR(200)",
+          "nullable": null,
+          "sourceOffset": 915929
+        },
+        {
+          "name": "unit_metadata_text",
+          "label": "원천단위정보",
+          "type": "LONGTEXT",
+          "nullable": null,
+          "sourceOffset": 916561
+        },
+        {
+          "name": "raw_record_text",
+          "label": "원본행내용",
+          "type": "LONGTEXT",
+          "nullable": null,
+          "sourceOffset": 917175
+        },
+        {
+          "name": "collected_at",
+          "label": "수집일시",
+          "type": "DATETIME(3)",
+          "nullable": null,
+          "sourceOffset": 917777
+        },
+        {
+          "name": "base_year_quarter",
+          "label": "기준년분기",
+          "type": "VARCHAR(20)",
+          "nullable": null,
+          "sourceOffset": 918387
+        },
+        {
+          "name": "area_type_code",
+          "label": "상권구분코드",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 919003
+        },
+        {
+          "name": "area_type_name",
+          "label": "상권구분명",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 919613
+        },
+        {
+          "name": "area_code",
+          "label": "상권코드",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 920211
+        },
+        {
+          "name": "area_name",
+          "label": "상권명",
+          "type": "VARCHAR(200)",
+          "nullable": null,
+          "sourceOffset": 920797
+        },
+        {
+          "name": "total_flow_population",
+          "label": "총길단위인구수",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 921417
+        },
+        {
+          "name": "male_flow_population",
+          "label": "남성길단위인구수",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 922061
+        },
+        {
+          "name": "female_flow_population",
+          "label": "여성길단위인구수",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 922707
+        },
+        {
+          "name": "age_10_flow_population",
+          "label": "연령대10길단위인구수",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 923363
+        },
+        {
+          "name": "age_20_flow_population",
+          "label": "연령대20길단위인구수",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 924019
+        },
+        {
+          "name": "age_30_flow_population",
+          "label": "연령대30길단위인구수",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 924675
+        },
+        {
+          "name": "age_40_flow_population",
+          "label": "연령대40길단위인구수",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 925331
+        },
+        {
+          "name": "age_50_flow_population",
+          "label": "연령대50길단위인구수",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 925987
+        },
+        {
+          "name": "age_60_flow_population",
+          "label": "연령대60이상길단위인구수",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 926647
+        }
+      ],
+      "primaryKey": [
+        "source_row_id"
+      ],
+      "uniqueKeys": [],
+      "foreignKeys": [],
+      "sourceOffset": 911185
+    },
+    {
+      "name": "SRC_SEOUL_INCOME_ARCHIVE",
+      "label": "상권소득과거원천",
+      "columns": [
+        {
+          "name": "source_row_id",
+          "label": "원천행ID",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 929395
+        },
+        {
+          "name": "collection_batch_id",
+          "label": "수집배치ID",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 930037
+        },
+        {
+          "name": "source_document_id",
+          "label": "원천문서ID",
+          "type": "VARCHAR(200)",
+          "nullable": null,
+          "sourceOffset": 930679
+        },
+        {
+          "name": "source_record_path",
+          "label": "원천행경로",
+          "type": "VARCHAR(500)",
+          "nullable": null,
+          "sourceOffset": 931319
+        },
+        {
+          "name": "source_url",
+          "label": "출처URL",
+          "type": "VARCHAR(2048)",
+          "nullable": null,
+          "sourceOffset": 931945
+        },
+        {
+          "name": "source_version",
+          "label": "원천버전",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 932561
+        },
+        {
+          "name": "reference_period_text",
+          "label": "원천기준기간",
+          "type": "VARCHAR(200)",
+          "nullable": null,
+          "sourceOffset": 933201
+        },
+        {
+          "name": "unit_metadata_text",
+          "label": "원천단위정보",
+          "type": "LONGTEXT",
+          "nullable": null,
+          "sourceOffset": 933845
+        },
+        {
+          "name": "raw_record_text",
+          "label": "원본행내용",
+          "type": "LONGTEXT",
+          "nullable": null,
+          "sourceOffset": 934471
+        },
+        {
+          "name": "collected_at",
+          "label": "수집일시",
+          "type": "DATETIME(3)",
+          "nullable": null,
+          "sourceOffset": 935085
+        },
+        {
+          "name": "base_year_quarter",
+          "label": "기준년분기",
+          "type": "VARCHAR(20)",
+          "nullable": null,
+          "sourceOffset": 935707
+        },
+        {
+          "name": "area_type_code",
+          "label": "상권구분코드",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 936335
+        },
+        {
+          "name": "area_type_name",
+          "label": "상권구분명",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 936957
+        },
+        {
+          "name": "area_code",
+          "label": "상권코드",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 937567
+        },
+        {
+          "name": "area_name",
+          "label": "상권명",
+          "type": "VARCHAR(200)",
+          "nullable": null,
+          "sourceOffset": 938165
+        },
+        {
+          "name": "monthly_average_income",
+          "label": "월평균소득금액",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 938799
+        },
+        {
+          "name": "income_bracket_code",
+          "label": "소득구간코드",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 939449
+        }
+      ],
+      "primaryKey": [
+        "source_row_id"
+      ],
+      "uniqueKeys": [],
+      "foreignKeys": [],
+      "sourceOffset": 928337
+    },
+    {
+      "name": "SRC_SEOUL_RESIDENT_POP",
+      "label": "상권상주인구원천",
+      "columns": [
+        {
+          "name": "source_row_id",
+          "label": "원천행ID",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 560311
+        },
+        {
+          "name": "collection_batch_id",
+          "label": "수집배치ID",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 560949
+        },
+        {
+          "name": "source_document_id",
+          "label": "원천문서ID",
+          "type": "VARCHAR(200)",
+          "nullable": null,
+          "sourceOffset": 561587
+        },
+        {
+          "name": "source_record_path",
+          "label": "원천행경로",
+          "type": "VARCHAR(500)",
+          "nullable": null,
+          "sourceOffset": 562223
+        },
+        {
+          "name": "source_url",
+          "label": "출처URL",
+          "type": "VARCHAR(2048)",
+          "nullable": null,
+          "sourceOffset": 562845
+        },
+        {
+          "name": "source_version",
+          "label": "원천버전",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 563457
+        },
+        {
+          "name": "reference_period_text",
+          "label": "원천기준기간",
+          "type": "VARCHAR(200)",
+          "nullable": null,
+          "sourceOffset": 564093
+        },
+        {
+          "name": "unit_metadata_text",
+          "label": "원천단위정보",
+          "type": "LONGTEXT",
+          "nullable": null,
+          "sourceOffset": 564733
+        },
+        {
+          "name": "raw_record_text",
+          "label": "원본행내용",
+          "type": "LONGTEXT",
+          "nullable": null,
+          "sourceOffset": 565355
+        },
+        {
+          "name": "collected_at",
+          "label": "수집일시",
+          "type": "DATETIME(3)",
+          "nullable": null,
+          "sourceOffset": 565965
+        },
+        {
+          "name": "base_year_quarter",
+          "label": "기준년분기",
+          "type": "VARCHAR(20)",
+          "nullable": null,
+          "sourceOffset": 566583
+        },
+        {
+          "name": "area_type_code",
+          "label": "상권구분코드",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 567207
+        },
+        {
+          "name": "area_type_name",
+          "label": "상권구분명",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 567825
+        },
+        {
+          "name": "area_code",
+          "label": "상권코드",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 568431
+        },
+        {
+          "name": "area_name",
+          "label": "상권명",
+          "type": "VARCHAR(200)",
+          "nullable": null,
+          "sourceOffset": 569025
+        },
+        {
+          "name": "total_resident_population",
+          "label": "총상주인구수",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 569659
+        }
+      ],
+      "primaryKey": [
+        "source_row_id"
+      ],
+      "uniqueKeys": [],
+      "foreignKeys": [],
+      "sourceOffset": 559283
+    },
+    {
+      "name": "SRC_SEOUL_SALES",
+      "label": "상권업종추정매출원천",
+      "columns": [
+        {
+          "name": "source_row_id",
+          "label": "원천행ID",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 779759
+        },
+        {
+          "name": "collection_batch_id",
+          "label": "수집배치ID",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 780383
+        },
+        {
+          "name": "source_document_id",
+          "label": "원천문서ID",
+          "type": "VARCHAR(200)",
+          "nullable": null,
+          "sourceOffset": 781007
+        },
+        {
+          "name": "source_record_path",
+          "label": "원천행경로",
+          "type": "VARCHAR(500)",
+          "nullable": null,
+          "sourceOffset": 781629
+        },
+        {
+          "name": "source_url",
+          "label": "출처URL",
+          "type": "VARCHAR(2048)",
+          "nullable": null,
+          "sourceOffset": 782237
+        },
+        {
+          "name": "source_version",
+          "label": "원천버전",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 782835
+        },
+        {
+          "name": "reference_period_text",
+          "label": "원천기준기간",
+          "type": "VARCHAR(200)",
+          "nullable": null,
+          "sourceOffset": 783457
+        },
+        {
+          "name": "unit_metadata_text",
+          "label": "원천단위정보",
+          "type": "LONGTEXT",
+          "nullable": null,
+          "sourceOffset": 784083
+        },
+        {
+          "name": "raw_record_text",
+          "label": "원본행내용",
+          "type": "LONGTEXT",
+          "nullable": null,
+          "sourceOffset": 784691
+        },
+        {
+          "name": "collected_at",
+          "label": "수집일시",
+          "type": "DATETIME(3)",
+          "nullable": null,
+          "sourceOffset": 785287
+        },
+        {
+          "name": "base_year_quarter",
+          "label": "기준년분기",
+          "type": "VARCHAR(20)",
+          "nullable": null,
+          "sourceOffset": 785891
+        },
+        {
+          "name": "area_type_code",
+          "label": "상권구분코드",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 786501
+        },
+        {
+          "name": "area_type_name",
+          "label": "상권구분명",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 787105
+        },
+        {
+          "name": "area_code",
+          "label": "상권코드",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 787697
+        },
+        {
+          "name": "area_name",
+          "label": "상권명",
+          "type": "VARCHAR(200)",
+          "nullable": null,
+          "sourceOffset": 788277
+        },
+        {
+          "name": "service_industry_code",
+          "label": "서비스업종코드",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 788889
+        },
+        {
+          "name": "service_industry_name",
+          "label": "서비스업종명",
+          "type": "VARCHAR(200)",
+          "nullable": null,
+          "sourceOffset": 789523
+        },
+        {
+          "name": "estimated_sales_amount",
+          "label": "추정매출금액",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 790161
+        }
+      ],
+      "primaryKey": [
+        "source_row_id"
+      ],
+      "uniqueKeys": [],
+      "foreignKeys": [],
+      "sourceOffset": 778769
+    },
+    {
+      "name": "SRC_SEOUL_STORE",
+      "label": "상권업종점포원천",
+      "columns": [
+        {
+          "name": "source_row_id",
+          "label": "원천행ID",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 583005
+        },
+        {
+          "name": "collection_batch_id",
+          "label": "수집배치ID",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 583629
+        },
+        {
+          "name": "source_document_id",
+          "label": "원천문서ID",
+          "type": "VARCHAR(200)",
+          "nullable": null,
+          "sourceOffset": 584253
+        },
+        {
+          "name": "source_record_path",
+          "label": "원천행경로",
+          "type": "VARCHAR(500)",
+          "nullable": null,
+          "sourceOffset": 584875
+        },
+        {
+          "name": "source_url",
+          "label": "출처URL",
+          "type": "VARCHAR(2048)",
+          "nullable": null,
+          "sourceOffset": 585483
+        },
+        {
+          "name": "source_version",
+          "label": "원천버전",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 586081
+        },
+        {
+          "name": "reference_period_text",
+          "label": "원천기준기간",
+          "type": "VARCHAR(200)",
+          "nullable": null,
+          "sourceOffset": 586703
+        },
+        {
+          "name": "unit_metadata_text",
+          "label": "원천단위정보",
+          "type": "LONGTEXT",
+          "nullable": null,
+          "sourceOffset": 587329
+        },
+        {
+          "name": "raw_record_text",
+          "label": "원본행내용",
+          "type": "LONGTEXT",
+          "nullable": null,
+          "sourceOffset": 587937
+        },
+        {
+          "name": "collected_at",
+          "label": "수집일시",
+          "type": "DATETIME(3)",
+          "nullable": null,
+          "sourceOffset": 588533
+        },
+        {
+          "name": "base_year_quarter",
+          "label": "기준년분기",
+          "type": "VARCHAR(20)",
+          "nullable": null,
+          "sourceOffset": 589137
+        },
+        {
+          "name": "area_type_code",
+          "label": "상권구분코드",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 589747
+        },
+        {
+          "name": "area_type_name",
+          "label": "상권구분명",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 590351
+        },
+        {
+          "name": "area_code",
+          "label": "상권코드",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 590943
+        },
+        {
+          "name": "area_name",
+          "label": "상권명",
+          "type": "VARCHAR(200)",
+          "nullable": null,
+          "sourceOffset": 591523
+        },
+        {
+          "name": "service_industry_code",
+          "label": "서비스업종코드",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 592135
+        },
+        {
+          "name": "service_industry_name",
+          "label": "서비스업종명",
+          "type": "VARCHAR(200)",
+          "nullable": null,
+          "sourceOffset": 592769
+        },
+        {
+          "name": "store_count",
+          "label": "점포수",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 593379
+        },
+        {
+          "name": "similar_industry_store_count",
+          "label": "유사업종점포수",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 594011
+        },
+        {
+          "name": "opening_rate",
+          "label": "개업률",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 594637
+        },
+        {
+          "name": "opened_store_count",
+          "label": "개업점포수",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 595247
+        },
+        {
+          "name": "closure_rate",
+          "label": "폐업률",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 595853
+        },
+        {
+          "name": "closed_store_count",
+          "label": "폐업점포수",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 596463
+        },
+        {
+          "name": "franchise_store_count",
+          "label": "프랜차이즈점포수",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 597097
+        }
+      ],
+      "primaryKey": [
+        "source_row_id"
+      ],
+      "uniqueKeys": [],
+      "foreignKeys": [],
+      "sourceOffset": 582003
+    },
+    {
+      "name": "SRC_SEOUL_WORK_POP",
+      "label": "상권직장인구원천",
+      "columns": [
+        {
+          "name": "source_row_id",
+          "label": "원천행ID",
+          "type": "BIGINT UNSIGNED",
+          "nullable": null,
+          "sourceOffset": 1001169
+        },
+        {
+          "name": "collection_batch_id",
+          "label": "수집배치ID",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 1001799
+        },
+        {
+          "name": "source_document_id",
+          "label": "원천문서ID",
+          "type": "VARCHAR(200)",
+          "nullable": null,
+          "sourceOffset": 1002429
+        },
+        {
+          "name": "source_record_path",
+          "label": "원천행경로",
+          "type": "VARCHAR(500)",
+          "nullable": null,
+          "sourceOffset": 1003057
+        },
+        {
+          "name": "source_url",
+          "label": "출처URL",
+          "type": "VARCHAR(2048)",
+          "nullable": null,
+          "sourceOffset": 1003671
+        },
+        {
+          "name": "source_version",
+          "label": "원천버전",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 1004275
+        },
+        {
+          "name": "reference_period_text",
+          "label": "원천기준기간",
+          "type": "VARCHAR(200)",
+          "nullable": null,
+          "sourceOffset": 1004903
+        },
+        {
+          "name": "unit_metadata_text",
+          "label": "원천단위정보",
+          "type": "LONGTEXT",
+          "nullable": null,
+          "sourceOffset": 1005535
+        },
+        {
+          "name": "raw_record_text",
+          "label": "원본행내용",
+          "type": "LONGTEXT",
+          "nullable": null,
+          "sourceOffset": 1006149
+        },
+        {
+          "name": "collected_at",
+          "label": "수집일시",
+          "type": "DATETIME(3)",
+          "nullable": null,
+          "sourceOffset": 1006751
+        },
+        {
+          "name": "base_year_quarter",
+          "label": "기준년분기",
+          "type": "VARCHAR(20)",
+          "nullable": null,
+          "sourceOffset": 1007361
+        },
+        {
+          "name": "area_type_code",
+          "label": "상권구분코드",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 1007977
+        },
+        {
+          "name": "area_type_name",
+          "label": "상권구분명",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 1008587
+        },
+        {
+          "name": "area_code",
+          "label": "상권코드",
+          "type": "VARCHAR(50)",
+          "nullable": null,
+          "sourceOffset": 1009185
+        },
+        {
+          "name": "area_name",
+          "label": "상권명",
+          "type": "VARCHAR(200)",
+          "nullable": null,
+          "sourceOffset": 1009771
+        },
+        {
+          "name": "total_work_population",
+          "label": "총직장인구수",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 1010389
+        },
+        {
+          "name": "male_work_population",
+          "label": "남성직장인구수",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 1011031
+        },
+        {
+          "name": "female_work_population",
+          "label": "여성직장인구수",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 1011675
+        },
+        {
+          "name": "age_10_work_population",
+          "label": "연령대10직장인구수",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 1012329
+        },
+        {
+          "name": "age_20_work_population",
+          "label": "연령대20직장인구수",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 1012983
+        },
+        {
+          "name": "age_30_work_population",
+          "label": "연령대30직장인구수",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 1013637
+        },
+        {
+          "name": "age_40_work_population",
+          "label": "연령대40직장인구수",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 1014291
+        },
+        {
+          "name": "age_50_work_population",
+          "label": "연령대50직장인구수",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 1014945
+        },
+        {
+          "name": "age_60_work_population",
+          "label": "연령대60이상직장인구수",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 1015603
+        },
+        {
+          "name": "male_age_10_work_population",
+          "label": "남성연령대10직장인구수",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 1016271
+        },
+        {
+          "name": "male_age_20_work_population",
+          "label": "남성연령대20직장인구수",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 1016949
+        },
+        {
+          "name": "male_age_30_work_population",
+          "label": "남성연령대30직장인구수",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 1017627
+        },
+        {
+          "name": "male_age_40_work_population",
+          "label": "남성연령대40직장인구수",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 1018305
+        },
+        {
+          "name": "male_age_50_work_population",
+          "label": "남성연령대50직장인구수",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 1018983
+        },
+        {
+          "name": "male_age_60_work_population",
+          "label": "남성연령대60이상직장인구수",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 1019665
+        },
+        {
+          "name": "female_age_10_work_population",
+          "label": "여성연령대10직장인구수",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 1020347
+        },
+        {
+          "name": "female_age_20_work_population",
+          "label": "여성연령대20직장인구수",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 1021033
+        },
+        {
+          "name": "female_age_30_work_population",
+          "label": "여성연령대30직장인구수",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 1021719
+        },
+        {
+          "name": "female_age_40_work_population",
+          "label": "여성연령대40직장인구수",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 1022405
+        },
+        {
+          "name": "female_age_50_work_population",
+          "label": "여성연령대50직장인구수",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 1023091
+        },
+        {
+          "name": "female_age_60_work_population",
+          "label": "여성연령대60이상직장인구수",
+          "type": "VARCHAR(100)",
+          "nullable": null,
+          "sourceOffset": 1023781
+        }
+      ],
+      "primaryKey": [
+        "source_row_id"
+      ],
+      "uniqueKeys": [],
+      "foreignKeys": [],
+      "sourceOffset": 1000183
+    }
+  ]
+}

@@ -1,2 +1,4 @@
 # Keep the published numerical summary bytes identical on every OS.
 public/experiments/drt/** -text whitespace=cr-at-eol
+# Model provenance hashes also depend on byte-identical JSON across checkouts.
+public/models/** -text whitespace=cr-at-eol

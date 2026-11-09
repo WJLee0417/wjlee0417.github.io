@@ -237,19 +237,19 @@ for(const project of dim.projects){
   assert(visual && ['erd','report-flow','routing'].includes(visual.kind),`project visual missing ${project.id}`);
   if(!visual)continue;
   assert(visual.title?.trim() && visual.summary?.trim(),`visual copy missing ${project.id}`);
-  assert(visual.sources?.length>0 && visual.sources.every(source=>/^[0-9a-f]{64}$/.test(source.sha256) && (/^https:\/\/github\.com\/WJLee0417\/[A-Za-z0-9_.-]+\/blob\/[0-9a-f]{40}\//.test(source.url) || source.url==='https://wjlee0417.github.io/experiments/drt/2026-11-07/results.json')),`visual source missing ${project.id}`);
+  assert(visual.sources?.length>0 && visual.sources.every(source=>/^[0-9a-f]{64}$/.test(source.sha256) && (/^https:\/\/github\.com\/WJLee0417\/[A-Za-z0-9_.-]+\/blob\/[0-9a-f]{40}\//.test(source.url) || source.url==='https://wjlee0417.github.io/experiments/drt/2026-11-07/results.json' || project.id==='P001'&&source.url==='https://wjlee0417.github.io/models/commercial-district.damx.json')),`visual source missing ${project.id}`);
   if(visual.kind==='erd'){
     const tables=new Map(visual.tables.map(table=>[table.name,table]));
     assert(new Set(visual.tables.map(table=>table.displayName??table.name)).size===tables.size,`duplicate ERD table display name ${project.id}`);
-    assert(tables.size===visual.tables.length && tables.size===(project.id==='P001'?7:17),`unexpected ERD table scope ${project.id}`);
+    assert(tables.size===visual.tables.length && tables.size===(project.id==='P001'?49:17),`unexpected ERD table scope ${project.id}`);
     for(const table of visual.tables){
-      if(project.id==='P001')assert(/^[a-z][a-z0-9]*(?:_[a-z0-9]+)*$/.test(table.displayName??''),`English ERD table name missing ${table.name}`);
+      if(project.id==='P001')assert(/^(SRC|DIM|FACT)_[A-Z_]+$/.test(table.name),`Original DAMX table name missing ${table.name}`);
       const columns=new Set(table.columns.map(column=>column.name));
       const displayNames=table.columns.map(column=>column.displayName??column.name);
       assert(new Set(displayNames).size===displayNames.length,`duplicate ERD column display name ${table.name}`);
-      if(project.id==='P001')assert(table.columns.every(column=>/^[a-z][a-z0-9]*(?:_[a-z0-9]+)*$/.test(column.displayName??'')),`English ERD column name missing ${table.name}`);
+      if(project.id==='P001')assert(table.columns.every(column=>/^[a-z][a-z0-9]*(?:_[a-z0-9]+)*$/.test(column.name)),`Original DAMX column name missing ${table.name}`);
       assert(columns.size===table.columns.length && table.primaryKey.length>0,`ERD columns/PK invalid ${table.name}`);
-      assert(table.columns.every(column=>typeof column.nullable==='boolean' && /^[A-Z]+(?:\(\d+(?:,\d+)?\))?(?: UNSIGNED)?$/.test(column.type)),`ERD column type invalid ${table.name}`);
+      assert(table.columns.every(column=>(typeof column.nullable==='boolean'||visual.sourceModel?.kind==='DAMX'&&column.nullable===null) && /^[A-Z]+(?:\(\d+(?:,\d+)?\))?(?: UNSIGNED)?$/.test(column.type)),`ERD column type invalid ${table.name}`);
       for(const key of [table.primaryKey,...table.uniqueKeys])assert(key.length>0 && key.every(name=>columns.has(name)),`ERD key references missing column ${table.name}`);
       assert(table.primaryKey.every(name=>!table.columns.find(column=>column.name===name)?.nullable),`ERD nullable PK ${table.name}`);
       for(const key of table.foreignKeys){
@@ -261,7 +261,17 @@ for(const project of dim.projects){
     const shown=new Set();
     for(const view of visual.views){const names=view.lanes.flat();assert(names.length===new Set(names).size && names.includes(view.focus) && names.every(name=>tables.has(name)),`ERD view invalid ${project.id}/${view.id}`);names.forEach(name=>shown.add(name));}
     assert(shown.size===tables.size,`unreachable ERD tables ${project.id}`);
-    if(project.id==='P001')assert(JSON.stringify(tables.get('점포')?.primaryKey)===JSON.stringify(['서비스_업종_코드','상권_코드']),'commercial composite PK lost');
+    if(project.id==='P001'){
+      const modelBytes=fs.readFileSync(new URL('../public/models/commercial-district.damx.json',import.meta.url));
+      const originalModel=JSON.parse(modelBytes);
+      assert(createHash('sha256').update(modelBytes).digest('hex')===visual.sources[0].sha256,'DAMX public metadata hash mismatch');
+      assert(JSON.stringify(originalModel.tables)===JSON.stringify(visual.tables),'ERD differs from DAMX extraction snapshot');
+      assert(visual.sourceModel?.kind==='DAMX'&&visual.sourceModel.sha256==='0fd22beb5239b071b39035deb3adb1485cc4261a07283927d3bca75f4d3de1b0','commercial DAMX revision lost');
+      assert(visual.tables.reduce((n,t)=>n+t.columns.length,0)===621,'DAMX columns lost');
+      assert(visual.tables.reduce((n,t)=>n+t.foreignKeys.length,0)===48,'DAMX relationships lost');
+      assert(JSON.stringify(tables.get('FACT_AREA_SALES')?.primaryKey)===JSON.stringify(['period_key','area_key','industry_key']),'DAMX sales grain lost');
+      assert(tables.get('FACT_AREA_STORE')?.foreignKeys.some(k=>k.columns[0]==='observation_period_key'&&k.target==='DIM_PERIOD'),'observation period relationship lost');
+    }
     if(project.id==='P004')assert(tables.get('member_credential')?.columns.find(column=>column.name==='password_hash')?.nullable===true,'V12 nullable credential missing');
   }else if(visual.kind==='report-flow'){
     const nodes=new Set(visual.nodes.map(node=>node.id));assert(nodes.size===visual.nodes.length,'duplicate flow node');

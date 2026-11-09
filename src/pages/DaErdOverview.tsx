@@ -1,14 +1,15 @@
 import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import type { ErdVisualization, SchemaTable } from '../data';
 import { routeErdConnections, type ErdConnection, type RoutedConnection } from '../erd-routing';
+import {placeErdLabels, ErdRelationshipLabels, type ErdLabel} from '../erd-labels';
 
 const name=(table:SchemaTable)=>table.displayName??table.name;
 
 export function DaErdOverview({model,view,selected,onSelect}:{model:ErdVisualization;view:number;selected:string;onSelect:(name:string)=>void}){
   const root=useRef<HTMLDivElement>(null);
-  const [drawing,setDrawing]=useState<{width:number;height:number;edges:RoutedConnection[]}>({width:1,height:1,edges:[]});
+  const [drawing,setDrawing]=useState<{width:number;height:number;edges:RoutedConnection[];labels:ErdLabel[]}>({width:1,height:1,edges:[],labels:[]});
   const [focusedOnly,setFocusedOnly]=useState(false);
-  const lanes=model.views[view].lanes;
+  const lanes=model.views[view].lanes,large=lanes.flat().length>20;
   useEffect(()=>{
     const element=root.current;if(!element)return;
     let frame=0,alive=true;
@@ -27,15 +28,16 @@ export function DaErdOverview({model,view,selected,onSelect}:{model:ErdVisualiza
         const c=boxes.get(child.name);if(!c)continue;
         child.foreignKeys.forEach((key,index)=>{
           const p=boxes.get(key.target);if(!p)return;
-          const unique=[child.primaryKey,...child.uniqueKeys].some(columns=>columns.length===key.columns.length&&columns.every(column=>key.columns.includes(column)));
+          const unique=key.cardinality==='unspecified'?null:[child.primaryKey,...child.uniqueKeys].some(columns=>columns.length===key.columns.length&&columns.every(column=>key.columns.includes(column)));
           key.columns.forEach((column,pair)=>{
             const targetColumn=key.targetColumns[pair],parent=model.tables.find(table=>table.name===key.target)!;
-            edges.push({id:`${child.name}-${index}-${pair}`,parent:key.target,child:child.name,unique,parentColumn:targetColumn,childColumn:column,parentAnchor:anchors.get(JSON.stringify([key.target,targetColumn]))!,childAnchor:anchors.get(JSON.stringify([child.name,column]))!,label:`${name(child)}.${child.columns.find(c=>c.name===column)?.displayName??column} → ${name(parent)}.${parent.columns.find(c=>c.name===targetColumn)?.displayName??targetColumn}`});
+            edges.push({id:`${child.name}-${index}-${pair}`,parent:key.target,child:child.name,unique,relationshipName:key.relationshipName,parentColumn:targetColumn,childColumn:column,parentAnchor:anchors.get(JSON.stringify([key.target,targetColumn]))!,childAnchor:anchors.get(JSON.stringify([child.name,column]))!,label:`${key.relationshipName?key.relationshipName+' · ':''}${name(child)}.${child.columns.find(c=>c.name===column)?.displayName??column} → ${name(parent)}.${parent.columns.find(c=>c.name===targetColumn)?.displayName??targetColumn}`});
           });
         });
       }
       const routed=routeErdConnections(boxes,edges,element.clientWidth,element.clientHeight);
-      if(alive)setDrawing({width:element.clientWidth,height:element.clientHeight,edges:routed});
+      const labels=placeErdLabels(routed,boxes,element.clientWidth,element.clientHeight);
+      if(alive)setDrawing({width:element.clientWidth,height:element.clientHeight,edges:routed,labels});
     };
     const update=()=>{cancelAnimationFrame(frame);frame=requestAnimationFrame(measure);};
     const observer=new ResizeObserver(update);observer.observe(element);update();
@@ -43,8 +45,8 @@ export function DaErdOverview({model,view,selected,onSelect}:{model:ErdVisualiza
     return()=>{alive=false;cancelAnimationFrame(frame);observer.disconnect();};
   },[model,view]);
   const connected=(edge:RoutedConnection)=>edge.child===selected||edge.parent===selected;
-  return <><div className="da-overview-tools"><div className="da-relationship-tools" role="group" aria-label="관계선 표시"><button type="button" aria-pressed={!focusedOnly} onClick={()=>setFocusedOnly(false)}>전체 관계</button><button type="button" aria-pressed={focusedOnly} onClick={()=>setFocusedOnly(true)}>선택 테이블 관계</button></div><p>PK 기본키 · FK 외래키</p></div><div className="da-overview" ref={root} style={{'--erd-lanes':lanes.length} as CSSProperties} aria-label="ERD 전체 구조" data-erd-overview data-columns="all">
-    <svg className="da-overview-lines" width={drawing.width} height={drawing.height} aria-hidden="true">{[...drawing.edges].sort((a,b)=>Number(connected(a))-Number(connected(b))).filter(edge=>!focusedOnly||connected(edge)).map(edge=><g className={connected(edge)?'is-connected':''} key={edge.id} data-source-table={edge.child} data-source-column={edge.childColumn} data-target-table={edge.parent} data-target-column={edge.parentColumn} data-reused-segments={edge.reusedSegments}><title>{edge.label}</title><path className="da-edge-halo" d={edge.path}/><path className="erd-connection-path" d={edge.path}/><path d={edge.ending}/></g>)}</svg>
+  return <><div className="da-overview-tools"><div className="da-relationship-tools" role="group" aria-label="관계선 표시"><button type="button" aria-pressed={!focusedOnly} onClick={()=>setFocusedOnly(false)}>전체 관계</button><button type="button" aria-pressed={focusedOnly} onClick={()=>setFocusedOnly(true)}>선택 테이블 관계</button></div><p>PK 기본키 · FK 외래키</p>{large&&<p>전체 모델은 좌우로 이동해 볼 수 있습니다. 영역별 보기에서는 화면 너비에 맞춰 표시합니다.</p>}</div><div className={large?'da-overview-scroll':undefined}><div className="da-overview" ref={root} style={{'--erd-lanes':lanes.length} as CSSProperties} aria-label="ERD 전체 구조" data-erd-overview data-columns="all">
+    <svg className="da-overview-lines" width={drawing.width} height={drawing.height} aria-hidden="true">{[...drawing.edges].sort((a,b)=>Number(connected(a))-Number(connected(b))).filter(edge=>!focusedOnly||connected(edge)).map(edge=><g className={connected(edge)?'is-connected':''} key={edge.id} data-source-table={edge.child} data-source-column={edge.childColumn} data-target-table={edge.parent} data-target-column={edge.parentColumn} data-reused-segments={edge.reusedSegments}><title>{edge.label}</title><path className="da-edge-halo" d={edge.path}/><path className="erd-connection-path" d={edge.path}/><path d={edge.ending}/></g>)}<ErdRelationshipLabels labels={drawing.labels.filter(label=>!focusedOnly||drawing.edges.some(edge=>edge.id===label.id&&connected(edge)))}/></svg>
     <div className="da-overview-grid">{lanes.map((lane,index)=><div className="da-overview-lane" key={index}>{lane.map(id=>{
       const table=model.tables.find(table=>table.name===id)!;
       const columns=table.columns;
@@ -60,5 +62,5 @@ export function DaErdOverview({model,view,selected,onSelect}:{model:ErdVisualiza
         {attributes.length>0&&<span className="da-entity-attributes">{attributes.map(field)}</span>}
       </button>;
     })}</div>)}</div>
-  </div></>;
+  </div></div></>;
 }

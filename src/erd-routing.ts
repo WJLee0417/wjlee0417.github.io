@@ -1,6 +1,6 @@
 export interface ErdBox { x:number; y:number; width:number; height:number }
 export interface ErdColumnAnchor { y:number; height:number }
-export interface ErdConnection { id:string; parent:string; child:string; unique:boolean; label:string; parentColumn?:string;childColumn?:string;parentAnchor?:ErdColumnAnchor;childAnchor?:ErdColumnAnchor }
+export interface ErdConnection { id:string; parent:string; child:string; unique:boolean|null; label:string; relationshipName?:string; parentColumn?:string;childColumn?:string;parentAnchor?:ErdColumnAnchor;childAnchor?:ErdColumnAnchor }
 export interface RoutedConnection extends ErdConnection { path:string; ending:string; reusedSegments:number }
 type Point={x:number;y:number};
 type Side='left'|'right'|'top'|'bottom';
@@ -21,15 +21,8 @@ class MinHeap {
 
 /** Give every FK distinct ports and route orthogonal connectors outside entities. */
 export function routeErdConnections(boxes:Map<string,ErdBox>,connections:ErdConnection[],width:number,height:number):RoutedConnection[]{
-  const step=width<600||connections.some(edge=>edge.parentAnchor||edge.childAnchor)?5:10,columns=Math.floor(width/step)+1,rows=Math.floor(height/step)+1,total=columns*rows;
-  const blocked=new Uint8Array(total),usage=new Map<number,number>(),pointsUsed=new Uint16Array(total),reserved=new Map<number,string>();
-  const node=(p:Point)=>Math.round(p.y/step)*columns+Math.round(p.x/step);
-  const point=(index:number)=>({x:(index%columns)*step,y:Math.floor(index/columns)*step});
-  const segment=(a:number,b:number)=>Math.min(a,b)*total+Math.max(a,b);
-  const obstacles=[...boxes.values()];
-  for(let y=0;y<rows;y++)for(let x=0;x<columns;x++){
-    if(obstacles.some(b=>x*step>=b.x-5&&x*step<=b.x+b.width+5&&y*step>=b.y-5&&y*step<=b.y+b.height+5))blocked[y*columns+x]=1;
-  }
+  if(!connections.length)return [];
+  const dense=connections.length>30,step=dense?2.5:width<600||connections.some(edge=>edge.parentAnchor||edge.childAnchor)?5:10,columns=Math.floor(width/step)+1;
   const ports=new Map<string,Port[]>();
   const register=(id:string,port:Port)=>{const key=id+':'+port.side;const list=ports.get(key)??[];list.push(port);ports.set(key,list);return port;};
   const edges=connections.map((connection,index)=>{
@@ -48,9 +41,27 @@ export function routeErdConnections(boxes:Map<string,ErdBox>,connections:ErdConn
       const siblings=port.anchor?group.filter(p=>p.anchor?.y===port.anchor!.y):[];
       const slot=siblings.indexOf(port),spacing=port.anchor&&siblings.length>1?Math.min(step,(port.anchor.height-4)/(siblings.length-1)):step;
       const along=port.anchor?port.anchor.y+(slot-(siblings.length-1)/2)*spacing:Math.round(((horizontal?b.y:b.x)+12+(i+1)*((horizontal?b.height:b.width)-24)/(group.length+1))/step)*step;
-      if(horizontal){const x=port.side==='right'?b.x+b.width:b.x;port.point={x,y:along};port.exit={x:port.side==='right'?(Math.ceil(x/step)+1)*step:(Math.floor(x/step)-1)*step,y:Math.round(along/step)*step};}
+      if(horizontal){
+        const x=port.side==='right'?b.x+b.width:b.x;
+        port.point={x,y:along};
+        const clearance=dense?3:1;
+        port.exit={x:port.side==='right'?(Math.ceil(x/step)+clearance)*step:(Math.floor(x/step)-clearance)*step,y:along};
+      }
       else {const y=port.side==='bottom'?b.y+b.height:b.y;port.point={x:along,y};port.exit={x:along,y:port.side==='bottom'?(Math.ceil(y/step)+1)*step:(Math.floor(y/step)-1)*step};}
     });
+  }
+  // Preserve every exact row port in the routing grid. Rounding many links to
+  // a shared dimension PK onto 5px rows collapses distinct endpoints.
+  const verticalStep=dense?5:step;
+  const ys=[...new Set([...Array.from({length:Math.floor(height/verticalStep)+1},(_,i)=>i*verticalStep),...edges.flatMap(e=>[e.start.exit!.y,e.end.exit!.y])])].sort((a,b)=>a-b);
+  const yIndices=new Map(ys.map((y,i)=>[y,i])),rows=ys.length,total=columns*rows;
+  const node=(p:Point)=>yIndices.get(p.y)!*columns+Math.round(p.x/step);
+  const point=(index:number)=>({x:(index%columns)*step,y:ys[Math.floor(index/columns)]});
+  const segment=(a:number,b:number)=>Math.min(a,b)*total+Math.max(a,b);
+  const blocked=new Uint8Array(total),usage=new Map<number,number>(),pointsUsed=new Uint16Array(total),reserved=new Map<number,string>();
+  const obstacles=[...boxes.values()];
+  for(let y=0;y<rows;y++)for(let x=0;x<columns;x++){
+    if(obstacles.some(b=>x*step>=b.x-5&&x*step<=b.x+b.width+5&&ys[y]>=b.y-5&&ys[y]<=b.y+b.height+5))blocked[y*columns+x]=1;
   }
   for(const edge of edges)for(const port of [edge.start,edge.end]){
     const exit=port.exit!,outward={x:exit.x+(port.side==='left'?-step:port.side==='right'?step:0),y:exit.y+(port.side==='top'?-step:port.side==='bottom'?step:0)};
@@ -62,7 +73,7 @@ export function routeErdConnections(boxes:Map<string,ErdBox>,connections:ErdConn
   });
   return edges.map(({connection,start,end})=>{
     const origin=node(start.exit!),target=node(end.exit!),costs=new Float64Array(total*3).fill(Infinity),parents=new Int32Array(total*3).fill(-1),heap=new MinHeap();
-    const heuristic=(index:number)=>Math.abs(index%columns-target%columns)*step+Math.abs(Math.floor(index/columns)-Math.floor(target/columns))*step;
+    const heuristic=(index:number)=>Math.abs(index%columns-target%columns)*step+Math.abs(ys[Math.floor(index/columns)]-ys[Math.floor(target/columns)]);
     costs[origin*3]=0;heap.push({state:origin*3,cost:0,priority:heuristic(origin)});let found=-1;
     while(heap.entries.length){
       const current=heap.pop();if(current.cost!==costs[current.state])continue;
@@ -74,7 +85,7 @@ export function routeErdConnections(boxes:Map<string,ErdBox>,connections:ErdConn
         const next=ny*columns+nx;if(blocked[next]&&next!==target)continue;
         if(usage.has(segment(index,next)))continue;
         const owner=reserved.get(segment(index,next));if(owner&&owner!==connection.id)continue;
-        const weight=step+(previousAxis&&previousAxis!==axis?9:0)+pointsUsed[next]*30;
+        const weight=(dx?step:Math.abs(ys[ny]-ys[y]))+(previousAxis&&previousAxis!==axis?9:0)+pointsUsed[next]*30;
         const cost=current.cost+weight,state=next*3+axis;
         if(cost>=costs[state])continue;costs[state]=cost;parents[state]=current.state;heap.push({state,cost,priority:cost+heuristic(next)});
       }
@@ -90,7 +101,7 @@ export function routeErdConnections(boxes:Map<string,ErdBox>,connections:ErdConn
     const all=[start.point!,...(start.anchor?lead(start):[]),...route.map(point),...(end.anchor?lead(end).reverse():[]),end.point!];
     const corners=all.filter((p,i)=>i===0||i===all.length-1||!((all[i-1].x===p.x&&p.x===all[i+1].x)||(all[i-1].y===p.y&&p.y===all[i+1].y)));
     const path=corners.map((p,i)=>`${i?'L':'M'}${p.x},${p.y}`).join(' '),p=start.point!;
-    const cardinality=start.side==='left'||start.side==='right'?
+    const cardinality=connection.unique===null?'':start.side==='left'||start.side==='right'?
       connection.unique?`M${p.x+(start.side==='left'?-5:5)},${p.y-6} v12`:`M${p.x+(start.side==='left'?-10:10)},${p.y} L${p.x},${p.y-6} M${p.x+(start.side==='left'?-10:10)},${p.y} L${p.x},${p.y+6}`:
       connection.unique?`M${p.x-6},${p.y+(start.side==='top'?-5:5)} h12`:`M${p.x},${p.y+(start.side==='top'?-10:10)} L${p.x-6},${p.y} M${p.x},${p.y+(start.side==='top'?-10:10)} L${p.x+6},${p.y}`;
     const targetPoint=end.point!,dx=end.side==='left'?-5:5;

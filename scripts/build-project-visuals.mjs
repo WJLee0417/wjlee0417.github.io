@@ -3,23 +3,33 @@ import {execFileSync} from 'node:child_process';
 import {createHash} from 'node:crypto';
 import assert from 'node:assert/strict';
 import {parseSchema} from './schema-parser.mjs';
-import {commercialColumnNames,commercialTableNames} from './commercial-column-names.mjs';
 const file='portfolio_codex_bundle/portfolio-data.json',data=JSON.parse(readFileSync(file,'utf8'));
 const evidence=id=>data.dimensions.evidence.find(e=>e.id===id);
 const project=id=>data.dimensions.projects.find(p=>p.id===id);
 function source(repo,revision,path){const bytes=execFileSync('git',['-C',repo,'show',`${revision}:${path}`]);return {sql:bytes.toString('utf8'),sha256:createHash('sha256').update(bytes).digest('hex')};}
-const commercial=evidence('E004').artifact.source,rental=evidence('E029').source;
-const c=source('sources.local/Franchise_Recommendation_DB',commercial.revision,commercial.path);
+const rental=evidence('E029').source;
 const r=source('sources.local/RentalTrack',rental.revision,rental.path);
 const r12path='backend/src/main/resources/db/migration/V12__add_legacy_import_tracking.sql';
 const r12=source('sources.local/RentalTrack',rental.revision,r12path);
-assert.equal(c.sha256,commercial.sourceSha256);assert.equal(r.sha256,rental.sourceSha256);
-const ct=parseSchema(c.sql),rt=parseSchema(r.sql+'\n'+r12.sql);
-assert.equal(ct.length,7);assert.equal(rt.length,17);
-ct.forEach(table=>{assert.ok(commercialTableNames[table.name],`English table name missing: ${table.name}`);table.displayName=commercialTableNames[table.name];table.columns.forEach(column=>{assert.ok(commercialColumnNames[column.name],`English name missing: ${table.name}.${column.name}`);column.displayName=commercialColumnNames[column.name];});});
+assert.equal(r.sha256,rental.sourceSha256);
+const damxBytes=readFileSync('public/models/commercial-district.damx.json'),damx=JSON.parse(damxBytes);
+const ct=damx.tables,rt=parseSchema(r.sql+'\n'+r12.sql);
+assert.equal(ct.length,49);assert.equal(rt.length,17);
 const labels={common_code_group:'공통 코드 그룹',common_code:'공통 코드',member:'회원',business:'사업자',rental_item:'대여 상품',rental_contract:'대여 계약',condition_record:'상태 기록',condition_photo:'상태 사진',damage_observation:'손상 관찰',damage_photo:'손상·사진 연결',image_analysis_result:'분석 후보 저장',return_inspection:'반납 검수',damage_assessment:'손상 판정',member_credential:'회원 인증',legacy_import_mutex:'이전 직렬화',legacy_import_run:'이전 실행',legacy_entity_map:'이전 ID 대응표'};
 rt.forEach(table=>table.label=labels[table.name]);
-project('P001').visualization={kind:'erd',title:'업종과 상권을 연결하는 데이터 모델',summary:'공통 코드 기준 테이블 분리\n상권·업종 복합키로 집계 단위 고정\n프랜차이즈 업종에서 상권 매출로 연결',sources:[{url:evidence('E004').url,sha256:c.sha256}],tables:ct,views:[{id:'all',label:'전체 7개 테이블',lanes:[['상권_구분','자치구','행정동'],['상권정보','점포'],['서비스_업종','프랜차이즈']],focus:'점포'}]};
+const sourceTables=ct.filter(t=>t.name.startsWith('SRC_')).map(t=>t.name);
+const spread=(names,count=3)=>{const lanes=Array.from({length:count},()=>[]),heights=Array(count).fill(0);for(const name of names){const lane=heights.indexOf(Math.min(...heights));lanes[lane].push(name);heights[lane]+=ct.find(t=>t.name===name).columns.length+5;}return lanes;};
+const analysisTables=ct.filter(t=>!t.name.startsWith('SRC_')).map(t=>t.name);
+project('P001').visualization={kind:'erd',title:'상권·프랜차이즈 확장 분석 모델',summary:'SRC 21 · DIM 10 · FACT 18 — 전체 49개 테이블\n상권·업종·기간별 분석 단위와 관측기간 분리\n가맹본부·브랜드·공시 버전별 지표 연결',sourceModel:damx.source,sources:[{url:'https://wjlee0417.github.io/models/commercial-district.damx.json',sha256:createHash('sha256').update(damxBytes).digest('hex'),label:'DA# 모델 정의'}],tables:ct,views:[
+ {id:'core',label:'상권·매출·점포',lanes:[['DIM_AREA_TYPE','DIM_DISTRICT','DIM_DONG'],['DIM_AREA','DIM_INDUSTRY'],['DIM_PERIOD','FACT_AREA_SALES','FACT_AREA_STORE']],focus:'FACT_AREA_SALES'},
+ {id:'population',label:'인구·소득·소비',lanes:[['DIM_AREA'],['FACT_AREA_FLOW_POP','FACT_AREA_RESIDENT_POP','FACT_AREA_WORK_POP'],['DIM_PERIOD','FACT_AREA_INCOME','FACT_AREA_CONSUMPTION']],focus:'FACT_AREA_FLOW_POP'},
+ {id:'facilities',label:'시설·아파트',lanes:[['DIM_AREA'],['FACT_AREA_FACILITY','FACT_AREA_APARTMENT'],['DIM_PERIOD']],focus:'FACT_AREA_FACILITY'},
+ {id:'franchise',label:'브랜드·점포·매출',lanes:[['DIM_HEADQUARTER','DIM_INDUSTRY','DIM_REGION'],['DIM_FRANCHISE','DIM_DISCLOSURE_VERSION'],['DIM_PERIOD','FACT_FRANCHISE_STORE','FACT_FRANCHISE_CHANGE','FACT_FRANCHISE_AVG_SALES']],focus:'DIM_FRANCHISE'},
+ {id:'headquarter',label:'본부·공시·비용',lanes:[['DIM_HEADQUARTER','DIM_FRANCHISE'],['FACT_HQ_FINANCE','FACT_HQ_EMPLOYEE','FACT_HQ_LEGAL','FACT_AD_PROMOTION'],['DIM_PERIOD','DIM_DISCLOSURE_VERSION','FACT_FRANCHISE_STARTUP_COST','FACT_FRANCHISE_INTERIOR']],focus:'DIM_DISCLOSURE_VERSION'},
+ {id:'sources',label:'원천 SRC 21개',lanes:spread(sourceTables),focus:'SRC_SEOUL_AREA'},
+ {id:'analysis',label:'분석 DIM·FACT 28개',lanes:spread(analysisTables),focus:'DIM_AREA'},
+ {id:'all',label:'전체 49개 테이블',lanes:spread([...analysisTables,...sourceTables]),focus:'DIM_AREA'},
+]};
 project('P004').visualization={kind:'erd',title:'계약을 중심으로 연결한 대여 이력',summary:'상품과 계약을 분리한 반복 대여 모델\n계약·단계·차수의 복합 UNIQUE\n인수·반납 기록을 참조하는 검수와 손상 판정',sources:[{url:evidence('E029').url,sha256:r.sha256},{url:`${rental.repositoryUrl}/blob/${rental.revision}/${r12path}`,sha256:r12.sha256}],tables:rt,views:[
  {id:'model',label:'전체 업무 모델',lanes:[['common_code_group','common_code','member'],['business','rental_item','rental_contract'],['condition_record','condition_photo'],['return_inspection','damage_observation','damage_assessment'],['image_analysis_result','damage_photo']],focus:'rental_contract'},
  {id:'rental',label:'대여·상태 기록',lanes:[['business','member'],['rental_item','rental_contract'],['condition_record']],focus:'condition_record'},
@@ -51,5 +61,5 @@ project('P002').visualization={kind:'routing',title:'시간창 검사에 따른 
 if(process.argv.includes('--check')){
  const current=JSON.parse(readFileSync(file,'utf8'));
  for(const p of data.dimensions.projects)assert.deepEqual(p.visualization,current.dimensions.projects.find(item=>item.id===p.id).visualization);
- console.log('PASS: visual data matches pinned SQL and reviewed control flow.');
+ console.log('PASS: visual data matches supplied DAMX metadata, pinned RentalTrack SQL and reviewed control flow.');
 }else {writeFileSync(file,JSON.stringify(data,null,2)+'\n');console.log(`Generated ERDs: ${ct.length} commercial tables, ${rt.length} rental tables; report branches and measured result view.`);}

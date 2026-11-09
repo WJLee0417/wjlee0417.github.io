@@ -130,7 +130,7 @@ export function WebProjects() {
 }
 
 function Implementation({project}: {project: Project}) {
-  return <section className="web-implementation" data-reveal><p className="web-eyebrow">PROJECT IMPLEMENTATION</p><h2>핵심 구현</h2><div>{project.implementationNotes?.map(note=><article key={note.title}><h3>{note.title}</h3><Bullets text={note.body}/></article>)}</div></section>;
+  return <section className="web-implementation" data-reveal><p className="web-eyebrow">{project.implementationEyebrow??'PROJECT IMPLEMENTATION'}</p><h2>{project.implementationTitle??'핵심 구현'}</h2><div>{project.implementationNotes?.map(note=><article key={note.title}><h3>{note.title}</h3><Bullets text={note.body}/></article>)}</div><ProjectLinks project={project}/></section>;
 }
 
 export function WebProject() {
@@ -154,7 +154,7 @@ export function WebProject() {
   },[slug,active]);
   if(!project)return <WebNotFound/>;
   const visualLabel=project.visualization?.kind==='erd'?'ERD':project.visualization?.kind==='report-flow'?'처리 흐름':'탐색 비교';
-  const tabs=[{id:'overview',title:'개요'},...(project.visualization?[{id:'visualization',title:visualLabel}]:[]),...(project.implementationNotes?.length?[{id:'implementation',title:'핵심 구현'}]:[]),...groups.map(group=>({id:group.id,title:group.title})),...(project.comparison?[{id:'validation-results',title:'검증 결과'}]:[])];
+  const tabs=[{id:'overview',title:'개요'},...(project.visualization?[{id:'visualization',title:visualLabel}]:[]),...(project.implementationNotes?.length?[{id:'implementation',title:project.implementationTitle??'핵심 구현'}]:[]),...groups.map(group=>({id:group.id,title:group.title})),...(project.comparison?[{id:'validation-results',title:'검증 결과'}]:[])];
   const work=group?.contributionIds.map(id=>data.facts.contributions.find(work=>work.id===id)!) ?? [];
   const visual=data.diagrams.find(diagram=>diagram.id===group?.diagramId);
   return <main className="web-project-page" data-project-view={active}><div className="web-wrap">
@@ -166,7 +166,7 @@ export function WebProject() {
       {active==='implementation' && <Implementation project={project}/>}
       {active==='visualization' && <ProjectVisual project={project}/>}
       {active==='validation-results' && <ExperimentComparison project={project}/>}
-      {group && <section className="web-work-section" id={group.id} data-reveal><div className="web-work-heading"><p className="web-eyebrow">{slideNumber(index)} / {group.eyebrow.split(' / ')[1]}</p><h2>{group.title}</h2></div><div className="web-work-grid">{work.map(item=><WorkCard work={item} key={item.id}/>)}</div>{project.visualization?.kind==='erd' && ['commercial-model','rental-model'].includes(group.id)?<ProjectVisual project={project}/>:visual && <DeckDiagram diagram={visual}/>}</section>}
+      {group && <section className="web-work-section" id={group.id} data-reveal><div className="web-work-heading"><p className="web-eyebrow">{slideNumber(index)} / {group.eyebrow.split(' / ')[1]}</p><h2>{group.title}</h2></div><div className="web-work-grid">{work.map(item=><WorkCard work={item} key={item.id}/>)}</div>{project.visualization?.kind==='erd' && group.id==='rental-model'?<ProjectVisual project={project}/>:visual && <DeckDiagram diagram={visual}/>}</section>}
     </div>
     <nav className="web-project-pagination" aria-label="다른 프로젝트"><Link to="/projects"><small>ALL PROJECTS</small><strong>프로젝트 목록 ↗</strong></Link><Link to={`/projects/${webProjects[(index+1)%webProjects.length].slug}`}><small>NEXT PROJECT →</small><strong>{webProjects[(index+1)%webProjects.length].name}</strong></Link></nav>
   </div></main>;

@@ -130,7 +130,7 @@ try {
         assert.ok(visualPage.includes('전체 구조') && visualPage.includes('컬럼 상세') && visualPage.includes('크게 보기'));
         const focus=model.tables.find(table=>table.name===model.views[0].focus);
         for(const column of focus.columns)assert.ok(visualPage.includes(`<th scope="row">${escape(column.displayName??column.name)}</th>`) && visualPage.includes(escape(column.type)),`ERD detail lost ${focus.name}/${column.name}`);
-        if(project.id==='P001')assert.ok(visualPage.includes('service_industry_code + commercial_area_code') && visualPage.includes('SQL 이름 대응표') && visualPage.replace(/<!--[\s\S]*?-->/g,'').includes('area_industry_metrics.'));
+        if(project.id==='P001')assert.ok(visualPage.includes('period_key + area_key + industry_key')&&visualPage.includes('DA# 모델 정의')&&visualPage.includes('전체 49개 테이블')&&visualPage.includes('미확인'));
       }else if(model.kind==='report-flow'){
         for(const scenario of model.scenarios)assert.ok(visualPage.includes(escape(scenario.label)));
         assert.ok(visualPage.includes('generationSource') && visualPage.includes('cacheHit'));
@@ -138,7 +138,14 @@ try {
     }
     if(project.implementationNotes?.length){
       const implementation=renderPage(`/projects/${project.slug}?section=implementation`);
+      assert.ok(implementation.includes(`<h2>${escape(project.implementationTitle??'핵심 구현')}</h2>`));
       for(const note of project.implementationNotes){assert.ok(implementation.includes(escape(note.title)));for(const line of note.body.split('\n'))assert.ok(implementation.includes(`<li>${escape(line)}</li>`));}
+      if(project.id==='P001'){
+        assert.ok(page.includes('SRC · 21개')&&page.includes('DIM · 10개')&&page.includes('FACT · 18개'),'commercial overview must summarize the supplied model');
+        const initial=renderPage(`/projects/${project.slug}?section=commercial-model`);
+        assert.ok(initial.includes('7개 테이블의 SQL DDL 작성')&&!initial.includes('data-visual-kind="erd"'),'initial implementation must remain separate from the expanded ERD');
+        assert.ok(implementation.includes('MODEL DESIGN')&&!implementation.includes('PROJECT IMPLEMENTATION'),'model discussion must use the design heading');
+      }
     }
     if(project.comparison){
       const comparison=renderPage(`/projects/${project.slug}?section=validation-results`);

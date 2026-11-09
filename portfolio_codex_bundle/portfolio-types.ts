@@ -21,20 +21,23 @@ export interface Project {
   periodLabel?: string;
   implementationStack?: string[];
   implementationNotes?: Array<{ title: string; body: string }>;
+  implementationTitle?:string;
+  implementationEyebrow?:string;
   links?: Array<{ label: string; url: string }>;
   comparison?: ProjectComparison;
   visualization?: ProjectVisualization;
 }
-export interface VisualSource { url: string; sha256: string }
-export interface SchemaColumn { name: string; displayName?: string; type: string; nullable: boolean }
+export interface VisualSource { url: string; sha256: string; label?: string }
+export interface SchemaColumn { name: string; displayName?: string; label?:string; type: string; nullable: boolean|null }
 export interface SchemaTable {
   name: string; displayName?: string; label: string; columns: SchemaColumn[]; primaryKey: string[]; uniqueKeys: string[][];
-  foreignKeys: Array<{columns: string[]; target: string; targetColumns: string[]}>;
+  foreignKeys: Array<{columns: string[]; target: string; targetColumns: string[];relationshipName?:string;cardinality?:'unspecified'}>;
 }
 export interface SchemaView { id: string; label: string; lanes: string[][]; focus: string }
 export interface ErdVisualization {
   kind: 'erd'; title: string; summary: string; sources: VisualSource[];
   tables: SchemaTable[]; views: SchemaView[];
+  sourceModel?:{kind:'DAMX';fileName:string;sha256:string};
 }
 export interface ReportScenario {
   id: string; label: string; description: string; path: string[];
